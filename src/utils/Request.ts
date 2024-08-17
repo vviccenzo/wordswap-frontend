@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { HttpMethods, IRequest } from './IRequest.ts';
 
 const BASE_URL = 'http://localhost:8080';
@@ -10,13 +11,19 @@ const api = axios.create({
     },
 });
 
-const doRequest = async ({ method, url, params = {}, data = {}, headers = {}, successCallback, errorCallback }: IRequest): Promise<void> => {
+
+const doRequest = async ({ method, url, params = {}, data = {}, headers = {}, successCallback, errorCallback, token }: IRequest): Promise<void> => {
+
     try {
         if (method === HttpMethods.GET && Object.keys(data).length !== 0) {
             throw new Error('GET requests cannot have a request body');
         }
 
-        const mergedHeaders = { ...api.defaults.headers, ...headers };
+        const mergedHeaders = {
+            ...api.defaults.headers,
+            ...headers,
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+        };
 
         const response: any = await api({
             method,
