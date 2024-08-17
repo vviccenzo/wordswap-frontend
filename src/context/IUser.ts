@@ -12,7 +12,8 @@ export interface User {
 export interface UserContextType {
     user: User | null;
     setUser: (user: User | null) => void;
-    doLogin: (user: string, password: string) => void;
     token: string | null;
     isLogged: boolean;
+    setToken: (token: string | null) => void;
+    setIsLogged: (isLogged: boolean) => void;
 }

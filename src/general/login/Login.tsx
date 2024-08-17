@@ -4,15 +4,31 @@ import { useUser } from '../../context/UserContext.tsx';
 
 import './style.css';
 import img1 from '../../imgs/logo.png';
+import doRequest from '../../utils/Request.ts';
+import { HttpMethods } from '../../utils/IRequest.ts';
+import { Notification } from '../../utils/Notification.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const { Content, Sider } = Layout;
 
 export function Login() {
 
-    const { doLogin } = useUser();
+    const { setToken, setIsLogged } = useUser();
+    const navigate = useNavigate();
 
     const onFinish = (values) => {
-        doLogin(values.username, values.password);
+        doRequest({
+            method: HttpMethods.POST,
+            url: '/auth/login?user=' + values.username + '&password=' + values.password,
+            successCallback: (data) => {
+                setToken(data);
+                setIsLogged(true);
+                navigate("/home");
+            },
+            errorCallback: (error) => {
+                Notification({ message: 'Erro', description: error.error, placement: 'top', type: 'error' });
+            }
+        });
     };
 
     return (
