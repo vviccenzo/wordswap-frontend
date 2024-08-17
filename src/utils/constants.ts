@@ -1,0 +1,1 @@
+export const BASE_URL_WS: string = "http://localhost:8080/ws";
