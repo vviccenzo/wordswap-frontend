@@ -1,14 +1,18 @@
 import React from 'react';
 import { Layout, Form, Input, Button } from 'antd';
-import './style.css';
+import { useUser } from '../../context/UserContext.tsx';
 
+import './style.css';
 import img1 from '../../imgs/logo.png';
 
 const { Content, Sider } = Layout;
 
 export function Login() {
+
+    const { doLogin } = useUser();
+
     const onFinish = (values) => {
-        console.log('Received values:', values);
+        doLogin(values.username, values.password);
     };
 
     return (

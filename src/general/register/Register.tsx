@@ -15,7 +15,6 @@ export function Register() {
     const form = Form.useForm()[0];
 
     const onFinish = (values) => {
-        console.log('Received values:', values);
         if (step === 1) {
             setStep(2);
         } else {
@@ -85,20 +84,20 @@ export function Register() {
                             </Form.Item>
                             <Form.Item
                                 name="password"
-                                // rules={[
-                                //     {
-                                //         required: true,
-                                //         message: '- Por favor, insira sua senha!',
-                                //     },
-                                //     {
-                                //         min: 8,
-                                //         message: '- A senha deve ter pelo menos 8 caracteres!',
-                                //     },
-                                //     {
-                                //         pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/,
-                                //         message: '- A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial!',
-                                //     },
-                                // ]}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: '- Por favor, insira sua senha!',
+                                    },
+                                    {
+                                        min: 8,
+                                        message: '- A senha deve ter pelo menos 8 caracteres!',
+                                    },
+                                    {
+                                        pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/,
+                                        message: '- A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial!',
+                                    },
+                                ]}
                                 hasFeedback
                             >
                                 <Input.Password placeholder="Senha" />

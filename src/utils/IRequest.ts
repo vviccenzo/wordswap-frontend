@@ -6,6 +6,7 @@ export interface IRequest {
     successCallback?: Function;
     errorCallback?: Function;
     headers?: any;
+    token?: string | null;
 }
 
 export enum HttpMethods {
