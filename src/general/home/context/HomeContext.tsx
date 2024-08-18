@@ -9,7 +9,9 @@ const defaultHomeState = {
     selectedConversation: null,
     handleConversationSelected: () => { },
     doStartConversartion: () => { },
-    fetchConversations: () => { }
+    fetchConversations: () => { },
+    stompClient: null,
+    handleStompClient: () => { }
 };
 
 const HomeContext = createContext<HomeContextType>(defaultHomeState);
@@ -18,6 +20,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedConversation, setSelectedConversation] = useState<any>(null);
     const [conversations, setConversartions] = useState<any[]>([]);
+    const [stompClient, setStompClient] = useState<any>(null);
 
     const doStartConversartion = (friend) => {
         const conversationStarted = {
@@ -49,6 +52,10 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
         setSelectedConversation(data);
     }
 
+    function handleStompClient(data: any) {
+        setStompClient(data);
+    }
+
     return (
         <HomeContext.Provider value={{
             isModalOpen,
@@ -58,6 +65,8 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             selectedConversation,
             handleConversationSelected,
             doStartConversartion,
+            stompClient,
+            handleStompClient
         }}>
             {children}
         </HomeContext.Provider>

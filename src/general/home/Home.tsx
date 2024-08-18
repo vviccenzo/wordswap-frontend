@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Divider, Typography } from 'antd';
 import { ConversationList } from './conversartion/ConversationList.tsx';
 import { Chat } from './conversartion/Chat.tsx';
 import { Profile } from './profile/Profile.tsx';
 import { useHomeContext } from './context/HomeContext.tsx';
 
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { BASE_URL_WS } from '../../utils/constants.ts';
+import { useUser } from '../../context/UserContext.tsx';
+import useWebSocket from '../../hook/useWebSocket.ts';
+
 const { Sider, Content } = Layout;
 const { Title } = Typography;
 
 export function Home() {
 
-    const { selectedConversation, handleConversationSelected } = useHomeContext();
+    const { token } = useUser();
+
+    const { selectedConversation, handleConversationSelected, handleConversations, handleStompClient } = useHomeContext();
 
     const handleSendMessage = (messageContent) => {
         if (selectedConversation) {
@@ -28,6 +36,26 @@ export function Home() {
             handleConversationSelected(updatedConversation);
         }
     };
+
+    function handleCallbackConversation(data: any) {
+        const conversationsMapped = data.map((conversation: any) => ({
+            id: conversation.id,
+            label: conversation.conversationName,
+            profilePic: conversation.profilePic,
+            targetUserMessages: conversation.targetUserMessages,
+            lastMessage: conversation.lastMessage,
+            userMessages: conversation.userMessages
+        }));
+
+        handleConversations(conversationsMapped);
+        if (selectedConversation) {
+            handleConversationSelected(
+                conversationsMapped.filter((conversation: any) => conversation.id === 4)[0]
+            )
+        }
+    };
+
+    useWebSocket(handleCallbackConversation, handleStompClient);
 
     return (
         <Layout style={{ minHeight: '100vh' }}>

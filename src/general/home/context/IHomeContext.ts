@@ -12,4 +12,6 @@ export interface HomeContextType {
     selectedConversation: any;
     handleConversationSelected: (conversation: any) => void;
     doStartConversartion: (friendId: number) => void;
+    stompClient: any;
+    handleStompClient: (stompClient: any) => void;
 }

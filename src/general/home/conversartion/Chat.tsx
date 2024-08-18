@@ -12,12 +12,10 @@ const { Title } = Typography;
 export function Chat({ conversation, onSendMessage }) {
 
     const { user } = useUser();
-    const { selectedConversation } = useHomeContext();
+    const { selectedConversation, stompClient } = useHomeContext();
 
     const [message, setMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-
-    const { request } = useRequest();
 
     const handleSend = () => {
         if (message.trim()) {
@@ -28,18 +26,7 @@ export function Chat({ conversation, onSendMessage }) {
                 content: message,
             };
 
-            request({
-                method: HttpMethods.POST,
-                url: '/message/send-message',
-                data: messageData,
-                successCallback: (data) => {
-                    console.log(data);
-                    // Opcionalmente, você pode chamar onSendMessage aqui para atualizar as mensagens
-                },
-                errorCallback: (error) => {
-                    console.log(error);
-                }
-            });
+            stompClient.send('/app/chat', {}, JSON.stringify(messageData));
 
             setMessage('');
         }
