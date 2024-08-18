@@ -1,23 +1,66 @@
-// src/components/Chat.jsx
 import React, { useState } from 'react';
 import { Input, List, Avatar, Typography, Button } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import { Message } from './Message.tsx';
+import { useRequest } from '../../../hook/useRequest.ts';
+import { HttpMethods } from '../../../utils/IRequest.ts';
+import { useUser } from '../../../context/UserContext.tsx';
+import { useHomeContext } from '../context/HomeContext.tsx';
 
 const { Title } = Typography;
 
 export function Chat({ conversation, onSendMessage }) {
+
+    const { user } = useUser();
+    const { selectedConversation } = useHomeContext();
+
     const [message, setMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
+    const { request } = useRequest();
+
     const handleSend = () => {
         if (message.trim()) {
-            onSendMessage(message);
+            const messageData = {
+                senderId: user?.id,
+                receiverId: selectedConversation?.friendId,
+                conversationId: selectedConversation?.id,
+                content: message,
+            };
+
+            request({
+                method: HttpMethods.POST,
+                url: '/message/send-message',
+                data: messageData,
+                successCallback: (data) => {
+                    console.log(data);
+                    // Opcionalmente, você pode chamar onSendMessage aqui para atualizar as mensagens
+                },
+                errorCallback: (error) => {
+                    console.log(error);
+                }
+            });
+
             setMessage('');
         }
     };
 
-    const filteredMessages = conversation.messages.filter((msg) =>
+    const combinedMessages = [
+        ...conversation.userMessages.map((msg: any) => ({
+            content: msg.text,
+            sender: 'me',
+            timestamp: msg.timestamp,
+        })),
+        ...conversation.targetUserMessages.map((msg: any) => ({
+            content: msg.text,
+            sender: 'them',
+            timestamp: msg.timestamp,
+        })),
+    ];
+
+    combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+    const filteredMessages = combinedMessages?.filter((msg) =>
         msg.content.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -56,4 +99,4 @@ export function Chat({ conversation, onSendMessage }) {
             </div>
         </div>
     );
-};
+}

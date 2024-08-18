@@ -9,7 +9,7 @@ import { useHomeContext } from '../context/HomeContext.tsx';
 export function Profile() {
 
     const { user, doLogout } = useUser();
-    const { isModalOpen, handleModalStatus } = useHomeContext();
+    const { handleModalStatus } = useHomeContext();
 
     const hasProfilePicture = user?.profilePic && user?.profilePic?.length > 0;
     const imageUrl = hasProfilePicture ? byteArrayToDataUrl(user.profilePic) : '';

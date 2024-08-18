@@ -45,8 +45,8 @@ export function FriendsListTab() {
         });
     }
 
-    function handleStartConversartion(friendId: number) {
-        doStartConversartion(friendId);
+    function handleStartConversartion(friend) {
+        doStartConversartion(friend);
         handleModalStatus(false);
     }
 
@@ -72,7 +72,7 @@ export function FriendsListTab() {
                         title={item.label}
                     />
                     <div style={{ gap: 20, display: 'flex' }}>
-                        <MessageOutlined style={{ fontSize: '18px', cursor: 'pointer' }} onClick={() => handleStartConversartion(item.id)} />
+                        <MessageOutlined style={{ fontSize: '18px', cursor: 'pointer' }} onClick={() => handleStartConversartion(item)} />
                         <Dropdown overlay={menu(item)} trigger={['click']}>
                             <Space>
                                 <EllipsisOutlined style={{ fontSize: '20px' }} />

@@ -11,5 +11,5 @@ export interface HomeContextType {
     handleConversations: (conversations: any[]) => void;
     selectedConversation: any;
     handleConversationSelected: (conversation: any) => void;
-    useStartConversartion: (friendId: number) => void;
+    doStartConversartion: (friendId: number) => void;
 }
