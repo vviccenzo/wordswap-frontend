@@ -3,6 +3,7 @@ import { Layout, Form, Input, Button, Upload, message } from 'antd';
 import { DoubleLeftOutlined, DoubleRightOutlined, UploadOutlined } from '@ant-design/icons';
 import { HttpMethods } from '../../utils/IRequest.ts';
 import { Notification } from '../../utils/Notification.tsx';
+import { useNavigate } from 'react-router-dom';
 
 import img1 from '../../imgs/logo.png';
 import doRequest from '../../utils/Request.ts';
@@ -10,6 +11,9 @@ import doRequest from '../../utils/Request.ts';
 const { Content, Sider } = Layout;
 
 export function Register() {
+
+    const navigate = useNavigate();
+
     const [step, setStep] = useState<number>(1);
     const [fileList, setFileList] = useState<any[]>([]);
     const form = Form.useForm()[0];
@@ -29,10 +33,11 @@ export function Register() {
                 url: '/user',
                 data: formData,
                 successCallback: () => {
-                    console.log('Cadastrado com sucesso!');
+                    navigate('/login')
+                    Notification({ message: 'Sucesso', description: "Conta criada com sucesso", placement: 'top', type: "success" });
                 },
                 errorCallback: (error) => {
-                    Notification({ message: 'Erro', description: error.message, placement: 'top', type: "error" });
+                    Notification({ message: 'Erro', description: error, placement: 'top', type: "error" });
                 },
                 headers: {
                     'Content-Type': 'multipart/form-data',
