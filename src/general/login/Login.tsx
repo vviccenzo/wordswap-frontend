@@ -21,6 +21,10 @@ export function Login() {
             method: HttpMethods.POST,
             url: '/auth/login?user=' + values.username + '&password=' + values.password,
             successCallback: (data) => {
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.userInfo));
+
                 setUser({ id: data.userInfo.id, profilePic: data.userInfo.profilePic });
                 setToken(data.token);
                 setIsLogged(true);

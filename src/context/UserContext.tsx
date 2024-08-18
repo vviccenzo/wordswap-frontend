@@ -21,6 +21,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     function doLogout() {
         setToken(null);
         setIsLogged(false);
+
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
     }
 
     return (
