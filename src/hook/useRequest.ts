@@ -2,7 +2,8 @@ import { useUser } from '../context/UserContext.tsx';
 import { IRequest } from '../utils/IRequest.ts';
 import doRequest from '../utils/Request.ts';
 
-const useRequest = () => {
+export function useRequest() {
+
     const { token } = useUser();
 
     const request = async (requestOptions: Omit<IRequest, 'token'>) => {
@@ -14,5 +15,3 @@ const useRequest = () => {
 
     return { request };
 };
-
-export default useRequest;

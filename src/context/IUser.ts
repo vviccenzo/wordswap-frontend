@@ -5,13 +5,15 @@ export interface UserProviderProps {
 }
 
 export interface User {
-    name: string;
-    email: string;
+    id: number;
+    name?: string;
+    email?: string;
+    profilePic?: any[];
 }
 
 export interface UserContextType {
     user: User | null;
-    setUser: (user: User | null) => void;
+    setUser: (user: User) => void;
     token: string | null;
     isLogged: boolean;
     setToken: (token: string | null) => void;
