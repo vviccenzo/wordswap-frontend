@@ -7,7 +7,8 @@ const defaultUserState: UserContextType = {
     token: "",
     isLogged: false,
     setToken: (token) => { },
-    setIsLogged: (isLogged) => { }
+    setIsLogged: (isLogged) => { },
+    doLogout: () => { }
 };
 
 const UserContext = createContext<UserContextType>(defaultUserState);
@@ -17,8 +18,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [token, setToken] = useState<string | null>(null);
     const [isLogged, setIsLogged] = useState<boolean>(false);
 
+    function doLogout() {
+        setToken(null);
+        setIsLogged(false);
+    }
+
     return (
-        <UserContext.Provider value={{ user, setUser, token, isLogged, setToken, setIsLogged  }}>
+        <UserContext.Provider value={{ user, setUser, token, isLogged, setToken, setIsLogged, doLogout  }}>
             {children}
         </UserContext.Provider>
     );

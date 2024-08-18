@@ -18,4 +18,5 @@ export interface UserContextType {
     isLogged: boolean;
     setToken: (token: string | null) => void;
     setIsLogged: (isLogged: boolean) => void;
+    doLogout: () => void;
 }

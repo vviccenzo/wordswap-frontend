@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Tabs, Input, Button, List, Tooltip } from 'antd';
+import { Modal, Tabs, Input, Button, List, Tooltip, Menu, Dropdown, Space } from 'antd';
 import { useRequest } from '../../../hook/useRequest.ts';
 import { HttpMethods } from '../../../utils/IRequest.ts';
 import { useUser } from '../../../context/UserContext.tsx';
 import { Notification } from '../../../utils/Notification.tsx';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, EllipsisOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 
@@ -19,12 +19,8 @@ export function FriendshipRequestModal({ isModalOpen, setIsModalOpen }) {
 
     useEffect(() => {
         fetchFriendRequests();
+        fetchFriends();
     }, []);
-
-    const mockFriendsList = [
-        { id: 1, name: 'Alice Doe' },
-        { id: 2, name: 'Charlie Brown' },
-    ];
 
     function fetchFriendRequests() {
         request({
@@ -38,6 +34,19 @@ export function FriendshipRequestModal({ isModalOpen, setIsModalOpen }) {
             }
         });
     };
+
+    function fetchFriends() {
+        request({
+            method: HttpMethods.GET,
+            url: '/user/find-friends?userId=' + user?.id,
+            successCallback: (data) => {
+                setFriendsList(data);
+            },
+            errorCallback: (error) => {
+                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+            }
+        });
+    }
 
     function handleAddFriend() {
         request({
@@ -64,12 +73,35 @@ export function FriendshipRequestModal({ isModalOpen, setIsModalOpen }) {
             url: '/friendship/change-invite?status=' + status + '&inviteId=' + id,
             successCallback: (data) => {
                 fetchFriendRequests();
+                fetchFriends();
             },
             errorCallback: (error) => {
                 Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
             }
         });
     }
+
+    function handleDeleteFriend(id) {
+        request({
+            method: HttpMethods.PUT,
+            url: '/friendship/delete-friendship?friendId=' + id + '&userId=' + user?.id,
+            successCallback: (data) => {
+                fetchFriendRequests();
+                fetchFriends();
+            },
+            errorCallback: (error) => {
+                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+            }
+        });
+    }
+
+    const menu = (item: any) => (
+        <Menu>
+            <Menu.Item key="1" onClick={() => handleDeleteFriend(item.id)}>
+                Apagar Amizade
+            </Menu.Item>
+        </Menu>
+    );
 
     return (
         <Modal
@@ -96,12 +128,17 @@ export function FriendshipRequestModal({ isModalOpen, setIsModalOpen }) {
                 </TabPane>
                 <TabPane tab="Lista de Amigos" key="2">
                     <List
-                        dataSource={mockFriendsList}
-                        renderItem={(item) => (
+                        dataSource={friendsList}
+                        renderItem={(item: any) => (
                             <List.Item>
                                 <List.Item.Meta
-                                    title={item.name}
+                                    title={item.label}
                                 />
+                                <Dropdown overlay={menu(item)} trigger={['click']}>
+                                    <Space>
+                                        <EllipsisOutlined style={{ fontSize: '20px' }} />
+                                    </Space>
+                                </Dropdown>
                             </List.Item>
                         )}
                     />
