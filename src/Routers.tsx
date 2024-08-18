@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { Login } from './general/login/Login.tsx';
 import { Register } from './general/register/Register.tsx';
 import { Home } from './general/home/Home.tsx';
+
 import PrivateRoute from './PrivateRoute.tsx';
 
 export function Routers() {

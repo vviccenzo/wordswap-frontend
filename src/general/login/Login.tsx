@@ -13,7 +13,7 @@ const { Content, Sider } = Layout;
 
 export function Login() {
 
-    const { setToken, setIsLogged } = useUser();
+    const { setToken, setIsLogged, setUser } = useUser();
     const navigate = useNavigate();
 
     const onFinish = (values) => {
@@ -21,7 +21,8 @@ export function Login() {
             method: HttpMethods.POST,
             url: '/auth/login?user=' + values.username + '&password=' + values.password,
             successCallback: (data) => {
-                setToken(data);
+                setUser({ id: data.userInfo.id, profilePic: data.userInfo.profilePic });
+                setToken(data.token);
                 setIsLogged(true);
                 navigate("/home");
             },
