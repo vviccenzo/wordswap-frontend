@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, List, Avatar, Typography, Button } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import { Message } from './Message.tsx';
-import { useRequest } from '../../../hook/useRequest.ts';
-import { HttpMethods } from '../../../utils/IRequest.ts';
 import { useUser } from '../../../context/UserContext.tsx';
 import { useHomeContext } from '../context/HomeContext.tsx';
+import "./Chat.css";
 
 const { Title } = Typography;
 
-export function Chat({ conversation, onSendMessage }) {
+
+export function Chat() {
 
     const { user } = useUser();
-    const { selectedConversation, stompClient } = useHomeContext();
+    const { selectedConversation, stompClient, conversations } = useHomeContext();
+    const [combinedMessages, setCombinedMessages] = useState<any[]>([]);
 
     const [message, setMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,47 +27,43 @@ export function Chat({ conversation, onSendMessage }) {
                 content: message,
             };
 
-            stompClient.send('/app/chat', {}, JSON.stringify(messageData));
+            stompClient.send('/app/chat/' + selectedConversation?.id, {}, JSON.stringify(messageData));
 
             setMessage('');
         }
     };
 
-    const combinedMessages = [
-        ...conversation.userMessages.map((msg: any) => ({
-            content: msg.text,
-            sender: 'me',
-            timestamp: msg.timestamp,
-        })),
-        ...conversation.targetUserMessages.map((msg: any) => ({
-            content: msg.text,
-            sender: 'them',
-            timestamp: msg.timestamp,
-        })),
-    ];
+    useEffect(() => {
+        if (selectedConversation) {
+            let combinedMessagesNow: any[] = selectedConversation.messages.map((msg: any) => ({
+                id: msg.id,
+                content: msg.text,
+                sender: msg.sender,
+                timeStamp: msg.timestamp
+            }))
 
-    combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+            combinedMessagesNow.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
-    const filteredMessages = combinedMessages?.filter((msg) =>
-        msg.content.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+            setCombinedMessages(combinedMessagesNow);
+        }
+    }, [selectedConversation, conversations]);
 
     return (
         <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column' }}>
             <div style={{ marginBottom: '16px', display: 'flex', gap: 20 }}>
-                <Avatar size={64} src={conversation.profilePicture} />
-                <Title level={4} style={{ margin: '16px 0' }}>{conversation.name}</Title>
+                <Avatar size={64} src={selectedConversation?.profilePicture} />
+                <Title level={4} style={{ margin: '16px 0' }}>{selectedConversation?.name}</Title>
             </div>
-            <div style={{ flex: 1, overflowY: 'scroll', marginBottom: '16px' }}>
+            <div className="chat-container">
                 <List
                     itemLayout="horizontal"
-                    dataSource={filteredMessages}
-                    renderItem={(msg: any) => (
+                    dataSource={combinedMessages}
+                    renderItem={(msg) => (
                         <Message
                             message={{
                                 content: msg.content,
-                                avatar: msg.sender === 'me' ? null : conversation.profilePicture,
-                                senderName: msg.sender === 'me' ? 'You' : conversation.name,
+                                avatar: msg.sender === 'me' ? null : selectedConversation?.profilePicture,
+                                senderName: msg.sender === 'me' ? 'You' : selectedConversation?.name,
                             }}
                             isMe={msg.sender === 'me'}
                         />

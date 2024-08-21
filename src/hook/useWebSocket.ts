@@ -5,8 +5,9 @@ import { useUser } from '../context/UserContext.tsx';
 import { BASE_URL_WS } from '../utils/constants.ts';
 
 
-const useWebSocket = (handleCallbackConversation: (messages: any[]) => void, handleStompClient: (client: any) => void) => {
+const useWebSocket = (handleCallbackConversation: (messages: any[]) => void, handleStompClient: (client: any) => void, id: number) => {
     const { token } = useUser();
+    const { user } = useUser();
 
     useEffect(() => {
         const socket = new SockJS(BASE_URL_WS);
@@ -17,10 +18,7 @@ const useWebSocket = (handleCallbackConversation: (messages: any[]) => void, han
         };
 
         client.connect(headers, (frame: any) => {
-            console.log('Connected: ' + frame);
-
-            client.subscribe('/topic/messages', (message: any) => {
-                console.log(message);
+            client.subscribe('/topic/messages/' + id, (message: any) => {
                 const conversationsResponse: any[] = JSON.parse(message.body);
                 handleCallbackConversation(conversationsResponse);
             });

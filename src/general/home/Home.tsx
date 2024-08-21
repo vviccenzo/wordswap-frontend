@@ -1,65 +1,59 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout, Divider, Typography } from 'antd';
 import { ConversationList } from './conversartion/ConversationList.tsx';
 import { Chat } from './conversartion/Chat.tsx';
 import { Profile } from './profile/Profile.tsx';
 import { useHomeContext } from './context/HomeContext.tsx';
 
-import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
-import { BASE_URL_WS } from '../../utils/constants.ts';
-import { useUser } from '../../context/UserContext.tsx';
 import useWebSocket from '../../hook/useWebSocket.ts';
+import { useUser } from '../../context/UserContext.tsx';
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
 
 export function Home() {
 
-    const { token } = useUser();
-
-    const { selectedConversation, handleConversationSelected, handleConversations, handleStompClient } = useHomeContext();
-
-    const handleSendMessage = (messageContent) => {
-        if (selectedConversation) {
-            const newMessage = {
-                id: selectedConversation.messages.length + 1,
-                sender: 'me',
-                content: messageContent,
-            };
-
-            const updatedConversation = {
-                ...selectedConversation,
-                messages: [...selectedConversation.messages, newMessage],
-            };
-
-            handleConversationSelected(updatedConversation);
-        }
-    };
+    const { user } = useUser();
+    const { handleConversationSelected, handleConversations, handleStompClient } = useHomeContext();
+    const selectedConversationId = localStorage.getItem('conversationId');
 
     function handleCallbackConversation(data: any) {
-        const conversationsMapped = data.map((conversation: any) => ({
-            id: conversation.id,
-            label: conversation.conversationName,
-            profilePic: conversation.profilePic,
-            targetUserMessages: conversation.targetUserMessages,
-            lastMessage: conversation.lastMessage,
-            userMessages: conversation.userMessages
-        }));
+        const conversationsMapped = data.map((conversation: any) => {
+            const combinedMessages = [
+                ...conversation.userMessages.map((msg: any) => ({
+                    ...msg,
+                    sender: msg.senderId === user.id ? 'me' : 'them'
+                })),
+                ...conversation.targetUserMessages.map((msg: any) => ({
+                    ...msg,
+                    sender: msg.senderId === user.id ? 'me' : 'them'
+                })),
+            ];
+
+            combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+            return {
+                id: conversation.id,
+                label: conversation.conversationName,
+                profilePic: conversation.profilePic,
+                messages: combinedMessages,
+                lastMessage: conversation.lastMessage,
+            };
+        });
 
         handleConversations(conversationsMapped);
-        if (selectedConversation) {
+
+        if (selectedConversationId) {
             handleConversationSelected(
-                conversationsMapped.filter((conversation: any) => conversation.id === 4)[0]
+                conversationsMapped.filter((conversation: any) => conversation.id === Number(selectedConversationId))[0]
             )
         }
     };
 
-    useWebSocket(handleCallbackConversation, handleStompClient);
+    useWebSocket(handleCallbackConversation, handleStompClient, Number(selectedConversationId));
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Sider width={300} style={{ background: '#fff' }}>
+        <Layout>
+            <Sider width={300} style={{ background: 'black' }}>
                 <Profile />
                 <Divider />
                 <ConversationList />
@@ -73,11 +67,8 @@ export function Home() {
                         background: '#fff',
                     }}
                 >
-                    {selectedConversation ? (
-                        <Chat
-                            conversation={selectedConversation}
-                            onSendMessage={handleSendMessage}
-                        />
+                    {selectedConversationId ? (
+                        <Chat />
                     ) : (
                         <Title level={2}>Select a conversation</Title>
                     )}

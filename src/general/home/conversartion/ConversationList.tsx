@@ -22,7 +22,30 @@ export function ConversationList() {
                 method: HttpMethods.GET,
                 url: '/conversation/load-conversations?userId=' + user.id,
                 successCallback: (data) => {
-                    handleConversations(data);
+                    const conversationsMapped = data.map((conversation: any) => {
+                        const combinedMessages = [
+                            ...conversation.userMessages.map((msg: any) => ({
+                                ...msg,
+                                sender: msg.senderId === user.id ? 'me' : 'them'
+                            })),
+                            ...conversation.targetUserMessages.map((msg: any) => ({
+                                ...msg,
+                                sender: msg.senderId === user.id ? 'me' : 'them'
+                            })),
+                        ];
+
+                        combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+                        return {
+                            id: conversation.id,
+                            label: conversation.conversationName,
+                            profilePic: conversation.profilePic,
+                            messages: combinedMessages,
+                            lastMessage: conversation.lastMessage,
+                        };
+                    });
+
+                    handleConversations(conversationsMapped);
                 },
                 errorCallback: (error) => {
                     Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
@@ -32,20 +55,26 @@ export function ConversationList() {
     }, [user.id]);
 
     const getLastMessage = (conv) => {
-        const allMessages = [
-            ...conv.userMessages,
-            ...conv.targetUserMessages,
+        const combinedMessages = [
+            ...(conv.userMessages || []).map((msg: any) => ({
+                ...msg,
+                sender: msg.senderId === user.id ? 'me' : 'them'
+            })),
+            ...(conv.targetUserMessages || []).map((msg: any) => ({
+                ...msg,
+                sender: msg.senderId === user.id ? 'me' : 'them'
+            })),
         ];
 
-        allMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+        combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
-        const lastMessage = allMessages[allMessages.length - 1];
+        const lastMessage = combinedMessages.length > 0 ? combinedMessages[combinedMessages.length - 1].content : '';
 
         return lastMessage ? lastMessage.text : '';
     };
 
     return (
-        <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#DCDCDC' }}>
+        <div style={{ padding: '16px', height: '84.4%', display: 'flex', flexDirection: 'column', backgroundColor: '#DCDCDC' }}>
             <Menu mode="inline" theme="light" style={{ borderRadius: 10 }}>
                 {conversations.map((conv) => (
                     <Menu.Item
