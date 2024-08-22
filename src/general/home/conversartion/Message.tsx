@@ -10,6 +10,7 @@ export function Message({ message, isMe }) {
                 display: 'flex',
                 justifyContent: isMe ? 'flex-end' : 'flex-start',
                 marginBottom: '8px',
+                marginRight: isMe ? 10 : '0',
             }}
         >
             <div
@@ -19,20 +20,18 @@ export function Message({ message, isMe }) {
                     padding: '8px 16px',
                     maxWidth: '60%',
                     wordBreak: 'break-word',
-                    position: 'relative',
                 }}
             >
-                <Text>{message.content}</Text>
-                <div
-                    style={{
-                        fontSize: '12px',
+                <div className="message-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                    <Text style={{ marginRight: '10px' }}>{message.content}</Text>
+                    <span style={{
+                        fontSize: '10px',
                         color: '#888',
-                        position: 'absolute',
-                        bottom: '4px',
-                        right: '8px',
-                    }}
-                >
-                    {message.timestamp}
+                        flexShrink: 0,
+                        marginBottom: '1px',
+                    }}>
+                        {message.timestamp}
+                    </span>
                 </div>
             </div>
         </List.Item>

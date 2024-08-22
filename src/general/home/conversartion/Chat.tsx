@@ -65,7 +65,7 @@ export function Chat() {
                                 content: msg.content,
                                 avatar: msg.sender === 'me' ? null : selectedConversation?.profilePicture,
                                 senderName: msg.sender === 'me' ? 'You' : selectedConversation?.conversationName,
-                                timeStamp: formatTimestamp(msg.timeStamp)
+                                timestamp: formatTimestamp(msg.timeStamp)
                             }}
                             isMe={msg.sender === 'me'}
                         />
