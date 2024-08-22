@@ -5,6 +5,7 @@ import { Message } from './Message.tsx';
 import { useUser } from '../../../context/UserContext.tsx';
 import { useHomeContext } from '../context/HomeContext.tsx';
 import "./Chat.css";
+import formatTimestamp from '../../../utils/formatTimestamp.ts';
 
 const { Title } = Typography;
 
@@ -52,7 +53,7 @@ export function Chat() {
         <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column' }}>
             <div style={{ marginBottom: '16px', display: 'flex', gap: 20 }}>
                 <Avatar size={64} src={selectedConversation?.profilePicture} />
-                <Title level={4} style={{ margin: '16px 0' }}>{selectedConversation?.name}</Title>
+                <Title level={4} style={{ margin: '16px 0' }}>{selectedConversation?.conversationName}</Title>
             </div>
             <div className="chat-container">
                 <List
@@ -63,7 +64,8 @@ export function Chat() {
                             message={{
                                 content: msg.content,
                                 avatar: msg.sender === 'me' ? null : selectedConversation?.profilePicture,
-                                senderName: msg.sender === 'me' ? 'You' : selectedConversation?.name,
+                                senderName: msg.sender === 'me' ? 'You' : selectedConversation?.conversationName,
+                                timeStamp: formatTimestamp(msg.timeStamp)
                             }}
                             isMe={msg.sender === 'me'}
                         />

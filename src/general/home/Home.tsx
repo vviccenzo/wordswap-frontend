@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Divider, Typography } from 'antd';
 import { ConversationList } from './conversartion/ConversationList.tsx';
 import { Chat } from './conversartion/Chat.tsx';
@@ -7,6 +7,7 @@ import { useHomeContext } from './context/HomeContext.tsx';
 
 import useWebSocket from '../../hook/useWebSocket.ts';
 import { useUser } from '../../context/UserContext.tsx';
+import mapConversation from '../../utils/mapper/conversationMapper.ts';
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
@@ -14,46 +15,27 @@ const { Title } = Typography;
 export function Home() {
 
     const { user } = useUser();
-    const { handleConversationSelected, handleConversations, handleStompClient } = useHomeContext();
-    const selectedConversationId = localStorage.getItem('conversationId');
+    const { handleConversationSelected, handleConversations, handleStompClient, selectedConversation } = useHomeContext();
 
     function handleCallbackConversation(data: any) {
         const conversationsMapped = data.map((conversation: any) => {
-            const combinedMessages = [
-                ...conversation.userMessages.map((msg: any) => ({
-                    ...msg,
-                    sender: msg.senderId === user.id ? 'me' : 'them'
-                })),
-                ...conversation.targetUserMessages.map((msg: any) => ({
-                    ...msg,
-                    sender: msg.senderId === user.id ? 'me' : 'them'
-                })),
-            ];
-
-            combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-            return {
-                id: conversation.id,
-                label: conversation.conversationName,
-                profilePic: conversation.profilePic,
-                messages: combinedMessages,
-                lastMessage: conversation.lastMessage,
-            };
+            return mapConversation(conversation, user.id);
         });
 
         handleConversations(conversationsMapped);
 
-        if (selectedConversationId) {
+        if (selectedConversation.id) {
             handleConversationSelected(
-                conversationsMapped.filter((conversation: any) => conversation.id === Number(selectedConversationId))[0]
+                conversationsMapped.filter((conversation: any) => conversation.id === Number(selectedConversation.id))[0]
             )
         }
     };
 
-    useWebSocket(handleCallbackConversation, handleStompClient, Number(selectedConversationId));
+    useWebSocket(handleCallbackConversation, handleStompClient, selectedConversation ? selectedConversation : null);
 
     return (
         <Layout>
-            <Sider width={300} style={{ background: 'black' }}>
+            <Sider width={300}>
                 <Profile />
                 <Divider />
                 <ConversationList />
@@ -67,7 +49,7 @@ export function Home() {
                         background: '#fff',
                     }}
                 >
-                    {selectedConversationId ? (
+                    {selectedConversation ? (
                         <Chat />
                     ) : (
                         <Title level={2}>Select a conversation</Title>

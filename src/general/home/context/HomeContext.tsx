@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
 
 const defaultHomeState = {
@@ -36,7 +36,6 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
         };
 
         setConversartions([conversationStarted, ...conversations]);
-        localStorage.setItem('conversationId', conversationStarted.id);
         setSelectedConversation(conversationStarted);
         setIsModalOpen(false);
     }
@@ -50,7 +49,6 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     }
 
     function handleConversationSelected(data: any) {
-        localStorage.setItem('conversationId', data.id);
         setSelectedConversation(data);
     }
 

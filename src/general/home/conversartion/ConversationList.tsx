@@ -6,6 +6,7 @@ import { useUser } from '../../../context/UserContext.tsx';
 import { HttpMethods } from '../../../utils/IRequest.ts';
 import { Notification } from '../../../utils/Notification.tsx';
 import { useRequest } from '../../../hook/useRequest.ts';
+import mapConversations from '../../../utils/mapper/conversationMapper.ts';
 
 const { Title, Text } = Typography;
 
@@ -22,28 +23,9 @@ export function ConversationList() {
                 method: HttpMethods.GET,
                 url: '/conversation/load-conversations?userId=' + user.id,
                 successCallback: (data) => {
-                    const conversationsMapped = data.map((conversation: any) => {
-                        const combinedMessages = [
-                            ...conversation.userMessages.map((msg: any) => ({
-                                ...msg,
-                                sender: msg.senderId === user.id ? 'me' : 'them'
-                            })),
-                            ...conversation.targetUserMessages.map((msg: any) => ({
-                                ...msg,
-                                sender: msg.senderId === user.id ? 'me' : 'them'
-                            })),
-                        ];
-
-                        combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-
-                        return {
-                            id: conversation.id,
-                            label: conversation.conversationName,
-                            profilePic: conversation.profilePic,
-                            messages: combinedMessages,
-                            lastMessage: conversation.lastMessage,
-                        };
-                    });
+                    const conversationsMapped: any[] = data.map((conversation: any) => {
+                        return mapConversations(conversation, user.id);
+                    })
 
                     handleConversations(conversationsMapped);
                 },
