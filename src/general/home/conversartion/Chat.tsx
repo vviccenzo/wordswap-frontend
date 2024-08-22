@@ -50,8 +50,8 @@ export function Chat() {
     }, [selectedConversation, conversations]);
 
     return (
-        <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ marginBottom: '16px', display: 'flex', gap: 20 }}>
+        <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#DCDCDC', borderRadius: 20 }}>
+            <div className='chat-header' style={{ marginBottom: '16px', display: 'flex', gap: 20 }}>
                 <Avatar size={64} src={selectedConversation?.profilePicture} />
                 <Title level={4} style={{ margin: '16px 0' }}>{selectedConversation?.conversationName}</Title>
             </div>
@@ -72,7 +72,7 @@ export function Chat() {
                     )}
                 />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="chat-footer" style={{ display: 'flex', alignItems: 'center' }}>
                 <Input
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

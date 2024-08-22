@@ -35,9 +35,9 @@ export function Home() {
 
     return (
         <Layout>
-            <Sider width={300}>
+            <Sider width={300} style={{ background: '#fff' }}>
                 <Profile />
-                <Divider />
+                <Divider style={{ backgroundColor: 'white' }} />
                 <ConversationList />
             </Sider>
             <Layout style={{ padding: '0 24px', minHeight: '100vh' }}>

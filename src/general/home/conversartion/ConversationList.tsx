@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Menu, Typography } from 'antd';
-import { MessageOutlined } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 import { useHomeContext } from '../context/HomeContext.tsx';
 import { useUser } from '../../../context/UserContext.tsx';
 import { HttpMethods } from '../../../utils/IRequest.ts';
 import { Notification } from '../../../utils/Notification.tsx';
 import { useRequest } from '../../../hook/useRequest.ts';
 import mapConversations from '../../../utils/mapper/conversationMapper.ts';
+import * as moment from 'moment';
 
 const { Title, Text } = Typography;
 
@@ -37,22 +38,22 @@ export function ConversationList() {
     }, [user.id]);
 
     const getLastMessage = (conv) => {
-        const combinedMessages = [
-            ...(conv.userMessages || []).map((msg: any) => ({
-                ...msg,
-                sender: msg.senderId === user.id ? 'me' : 'them'
-            })),
-            ...(conv.targetUserMessages || []).map((msg: any) => ({
-                ...msg,
-                sender: msg.senderId === user.id ? 'me' : 'them'
-            })),
-        ];
+        if (conv && Object.keys(conv.lastMessage).length > 0) {
+            const firstKey = Object.keys(conv.lastMessage)[0];
+            return conv.lastMessage[firstKey];
+        }
 
-        combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+        return '';
+    };
 
-        const lastMessage = combinedMessages.length > 0 ? combinedMessages[combinedMessages.length - 1].content : '';
+    const getLastTimeMessage = (conv) => {
+        if (conv && Object.keys(conv.lastMessage).length > 0) {
+            const timeMessage = Object.keys(conv.lastMessage)[0];
 
-        return lastMessage ? lastMessage.text : '';
+            return moment(timeMessage).format('HH:mm');
+        }
+
+        return '';
     };
 
     return (
@@ -61,12 +62,28 @@ export function ConversationList() {
                 {conversations.map((conv) => (
                     <Menu.Item
                         key={conv.id}
-                        icon={<MessageOutlined />}
+                        icon={<UserOutlined
+                            style={{
+                                width: 30,
+                                height: 30,
+                                border: '1px solid #777777',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                overflow: 'hidden',
+                            }}
+                        />}
                         onClick={() => handleConversationSelected(conv)}
-                        style={{ height: 70, padding: '0 24px' }}
+                        style={{ height: 55 }}
                     >
-                        <Title level={5} style={{ margin: 0 }}>{conv.conversationName}</Title>
-                        <Text type="secondary">{getLastMessage(conv)}</Text>
+                        <div className="ant-menu-title-content" style={{ display: 'flex', flexDirection: 'column', gap: 5, marginLeft: 5 }}>
+                            <div style={{ display: 'flex', flexDirection: 'row', gap: 110 }}>
+                                <Title level={5} style={{ margin: 0 }}>{conv.conversationName}</Title>
+                                <Text type="secondary" style={{ fontSize: 11, marginTop: 4 }}>{getLastTimeMessage(conv)}</Text>
+                            </div>
+                            <Text type="secondary">{getLastMessage(conv)}</Text>
+                        </div>
                     </Menu.Item>
                 ))}
             </Menu>
