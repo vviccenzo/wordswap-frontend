@@ -12,7 +12,7 @@ export interface User {
 }
 
 export interface UserContextType {
-    user: User | null;
+    user: User;
     setUser: (user: User) => void;
     token: string | null;
     isLogged: boolean;
