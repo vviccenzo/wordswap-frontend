@@ -7,7 +7,6 @@ import { BASE_URL_WS } from '../utils/constants.ts';
 
 const useWebSocket = (handleCallbackConversation: (messages: any[]) => void, handleStompClient: (client: any) => void, selectedConversation: any) => {
     const { token } = useUser();
-    const { user } = useUser();
 
     useEffect(() => {
         if (!selectedConversation) return;

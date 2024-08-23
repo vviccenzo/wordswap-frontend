@@ -1,29 +1,62 @@
-import React from 'react';
-import { List, Typography, Menu, Dropdown } from 'antd';
+import React, { useState } from 'react';
+import { List, Typography, Menu, Dropdown, Input, Button } from 'antd';
+import { useHomeContext } from '../context/HomeContext.tsx';
 
 const { Text } = Typography;
 
 export function Message({ message, isMe }) {
 
+    const { stompClient, selectedConversation } = useHomeContext();
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedMessage, setEditedMessage] = useState(message.content);
+
+    function handlEditMessage() {
+        const data = {
+            id: message.id,
+            content: editedMessage
+        }
+
+        stompClient.send('/app/chat/edit/' + selectedConversation?.id, {}, JSON.stringify(data));
+    }
+
+    const handleMenuClick = (key) => {
+        if (key === 'edit') {
+            setIsEditing(true);
+            handlEditMessage();
+        } else if (key === 'delete') {
+            console.log('delete');
+        }
+    };
+
+    const handleSave = () => {
+        handlEditMessage();
+        setIsEditing(false);
+    };
+
+    const handleCancel = () => {
+        setEditedMessage(message.content);
+        setIsEditing(false);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+            handleCancel();
+        }
+    };
 
     const menu = (
         <Menu>
-            <Menu.Item key="edit" onClick={() => handleMenuClick('edit')}>
-                Editar mensagem
-            </Menu.Item>
+            {isMe && (
+                <Menu.Item key="edit" onClick={() => setIsEditing(true)}>
+                    Editar mensagem
+                </Menu.Item>
+            )}
             <Menu.Item key="delete" onClick={() => handleMenuClick('delete')}>
                 Apagar mensagem
             </Menu.Item>
         </Menu>
     );
-
-    const handleMenuClick = (key) => {
-        if (key === 'edit') {
-            console.log(key);
-        } else if (key === 'delete') {
-            console.log(key);
-        }
-    };
 
     return (
         <List.Item
@@ -47,20 +80,34 @@ export function Message({ message, isMe }) {
                         wordBreak: 'break-word',
                     }}
                 >
-                    <div className="message-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                        <Text style={{ marginRight: '10px' }}>{message.content}</Text>
-                        <span style={{
-                            fontSize: '10px',
-                            color: '#888',
-                            flexShrink: 0,
-                            marginBottom: '1px',
-                        }}>
-                            {message.timestamp}
-                        </span>
-                    </div>
+                    {isEditing ? (
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Input
+                                value={editedMessage}
+                                onChange={(e) => setEditedMessage(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                style={{ marginRight: '8px' }}
+                            />
+                            <Button type="primary" onClick={handleSave} style={{ marginRight: '8px' }}>Salvar</Button>
+                            <Button onClick={handleCancel}>Cancelar</Button>
+                        </div>
+                    ) : (
+                        <div className="message-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                            <Text style={{ marginRight: '10px' }}>
+                                {message.content} {message.isEdited && <em style={{ fontSize: '10px', color: '#888' }}>(editada)</em>}
+                            </Text>
+                            <span style={{
+                                fontSize: '10px',
+                                color: '#888',
+                                flexShrink: 0,
+                                marginBottom: '1px',
+                            }}>
+                                {message.timestamp}
+                            </span>
+                        </div>
+                    )}
                 </div>
             </Dropdown>
         </List.Item>
-
     );
 }
