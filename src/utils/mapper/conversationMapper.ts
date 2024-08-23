@@ -10,7 +10,7 @@ export default function mapConversation(conversation: any, userId: any): any {
         })),
     ];
 
-    combinedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    combinedMessages.sort((a, b) => new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime());
 
     return {
         id: conversation.id,

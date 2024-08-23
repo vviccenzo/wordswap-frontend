@@ -17,7 +17,6 @@ export function Chat() {
     const [combinedMessages, setCombinedMessages] = useState<any[]>([]);
 
     const [message, setMessage] = useState('');
-    const [searchTerm, setSearchTerm] = useState('');
 
     const handleSend = () => {
         if (message.trim()) {
@@ -36,16 +35,7 @@ export function Chat() {
 
     useEffect(() => {
         if (selectedConversation) {
-            let combinedMessagesNow: any[] = selectedConversation.messages.map((msg: any) => ({
-                id: msg.id,
-                content: msg.text,
-                sender: msg.sender,
-                timeStamp: msg.timestamp
-            }))
-
-            combinedMessagesNow.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-
-            setCombinedMessages(combinedMessagesNow);
+            setCombinedMessages(selectedConversation.messages);
         }
     }, [selectedConversation, conversations]);
 
@@ -62,10 +52,12 @@ export function Chat() {
                     renderItem={(msg) => (
                         <Message
                             message={{
+                                id: msg.id,
                                 content: msg.content,
                                 avatar: msg.sender === 'me' ? null : selectedConversation?.profilePicture,
                                 senderName: msg.sender === 'me' ? 'You' : selectedConversation?.conversationName,
-                                timeStamp: formatTimestamp(msg.timeStamp)
+                                timestamp: formatTimestamp(msg.timeStamp),
+                                isEdited: msg.isEdited
                             }}
                             isMe={msg.sender === 'me'}
                         />

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout, Divider, Typography } from 'antd';
 import { ConversationList } from './conversartion/ConversationList.tsx';
 import { Chat } from './conversartion/Chat.tsx';

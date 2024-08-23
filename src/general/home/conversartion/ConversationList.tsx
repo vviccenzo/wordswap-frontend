@@ -78,9 +78,9 @@ export function ConversationList() {
                         style={{ height: 55 }}
                     >
                         <div className="ant-menu-title-content" style={{ display: 'flex', flexDirection: 'column', gap: 5, marginLeft: 5 }}>
-                            <div style={{ display: 'flex', flexDirection: 'row', gap: 110 }}>
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
                                 <Title level={5} style={{ margin: 0 }}>{conv.conversationName}</Title>
-                                <Text type="secondary" style={{ fontSize: 11, marginTop: 4 }}>{getLastTimeMessage(conv)}</Text>
+                                <Text type="secondary" style={{ fontSize: 11, marginTop: 4, marginLeft: 5, fontWeight: 'bold' }}>{getLastTimeMessage(conv)}</Text>
                             </div>
                             <Text type="secondary">{getLastMessage(conv)}</Text>
                         </div>
