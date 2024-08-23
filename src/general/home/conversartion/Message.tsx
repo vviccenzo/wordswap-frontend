@@ -20,12 +20,16 @@ export function Message({ message, isMe }) {
         stompClient.send('/app/chat/edit/' + selectedConversation?.id, {}, JSON.stringify(data));
     }
 
+    function handleDeleteMessage() {
+        stompClient.send('/app/chat/delete/' + selectedConversation?.id, {}, JSON.stringify({ id: message.id }));
+    }
+
     const handleMenuClick = (key) => {
         if (key === 'edit') {
             setIsEditing(true);
             handlEditMessage();
         } else if (key === 'delete') {
-            console.log('delete');
+            handleDeleteMessage();
         }
     };
 
@@ -80,31 +84,53 @@ export function Message({ message, isMe }) {
                         wordBreak: 'break-word',
                     }}
                 >
-                    {isEditing ? (
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Input
-                                value={editedMessage}
-                                onChange={(e) => setEditedMessage(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                style={{ marginRight: '8px' }}
-                            />
-                            <Button type="primary" onClick={handleSave} style={{ marginRight: '8px' }}>Salvar</Button>
-                            <Button onClick={handleCancel}>Cancelar</Button>
-                        </div>
-                    ) : (
-                        <div className="message-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                            <Text style={{ marginRight: '10px' }}>
-                                {message.content} {message.isEdited && <em style={{ fontSize: '10px', color: '#888' }}>(editada)</em>}
-                            </Text>
+                    {message.isDeleted ? (
+                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <em style={{ fontStyle: 'italic', color: '#888' }}>(Mensagem Deletada)</em>
                             <span style={{
                                 fontSize: '10px',
                                 color: '#888',
                                 flexShrink: 0,
-                                marginBottom: '1px',
+                                marginTop: 6
                             }}>
                                 {message.timestamp}
                             </span>
                         </div>
+                    ) : (
+                        <>
+                            {isEditing ? (
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <Input
+                                        value={editedMessage}
+                                        onChange={(e) => setEditedMessage(e.target.value)}
+                                        onKeyDown={handleKeyDown}
+                                        style={{ marginRight: '8px' }}
+                                    />
+                                    <Button type="primary" onClick={handleSave} style={{ marginRight: '8px' }}>Salvar</Button>
+                                    <Button onClick={handleCancel}>Cancelar</Button>
+                                </div>
+                            ) : (
+                                <div className="message-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                                    <Text style={{ marginRight: '10px' }}>
+                                        {message.isDeleted ? (
+                                            <em style={{ fontStyle: 'italic', color: '#888' }}>(Mensagem Deletada)</em>
+                                        ) : (
+                                            <>
+                                                {message.content} {message.isEdited && <em style={{ fontSize: '10px', color: '#888' }}>(editada)</em>}
+                                            </>
+                                        )}
+                                    </Text>
+                                    <span style={{
+                                        fontSize: '10px',
+                                        color: '#888',
+                                        flexShrink: 0,
+                                        marginBottom: '1px',
+                                    }}>
+                                        {message.timestamp}
+                                    </span>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </Dropdown>
