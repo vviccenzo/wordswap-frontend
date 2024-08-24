@@ -25,9 +25,15 @@ export function Home() {
         handleConversations(conversationsMapped);
 
         if (selectedConversation.id) {
-            handleConversationSelected(
-                conversationsMapped.filter((conversation: any) => conversation.id === Number(selectedConversation.id))[0]
-            )
+            const conversation = conversationsMapped.filter((conversation: any) => conversation.id === Number(selectedConversation.id))[0];
+            const conversartionToUpdated = selectedConversation;
+
+            if (conversation) {
+                conversartionToUpdated.messages = conversation.messages;
+                conversartionToUpdated.lastMessage = conversation.lastMessage;
+            }
+
+            handleConversationSelected(conversartionToUpdated);
         }
     };
 

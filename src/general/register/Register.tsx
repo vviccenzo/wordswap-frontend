@@ -27,6 +27,7 @@ export function Register() {
             formData.append('password', form.getFieldValue("password"));
             formData.append('email', form.getFieldValue("email"));
             formData.append('file', fileList[0].originFileObj);
+            formData.append('name', form.getFieldValue("name"));
 
             doRequest({
                 method: HttpMethods.POST,
@@ -173,7 +174,11 @@ export function Register() {
                                 <Input placeholder="Confirmar Email" />
                             </Form.Item>
                             <Form.Item>
-                                <Input placeholder="Apelido" />
+                                <Input
+                                    placeholder="Nome"
+                                    name="name"
+                                    rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}
+                                />
                             </Form.Item>
                         </>
                     )}

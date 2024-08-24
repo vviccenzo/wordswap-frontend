@@ -11,7 +11,9 @@ const defaultHomeState = {
     doStartConversartion: () => { },
     fetchConversations: () => { },
     stompClient: null,
-    handleStompClient: () => { }
+    handleStompClient: () => { },
+    isEditModalOpen: false,
+    handleEditModalStatus: () => { },
 };
 
 const HomeContext = createContext<HomeContextType>(defaultHomeState);
@@ -21,6 +23,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     const [selectedConversation, setSelectedConversation] = useState<any>(null);
     const [conversations, setConversartions] = useState<any[]>([]);
     const [stompClient, setStompClient] = useState<any>(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
     const doStartConversartion = (friend) => {
         const conversationStarted = {
@@ -28,11 +31,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             friendId: friend.id,
             name: friend.label,
             profilePicture: friend.profilePicture,
-            messages: [
-                { id: 1, sender: 'other', content: 'Hey, how are you?' },
-                { id: 2, sender: 'me', content: 'I am good, thanks!' },
-                { id: 3, sender: 'other', content: 'Great to hear!' },
-            ],
+            messages: [],
         };
 
         setConversartions([conversationStarted, ...conversations]);
@@ -56,6 +55,10 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
         setStompClient(data);
     }
 
+    function handleEditModalStatus(status: boolean) {
+        setIsEditModalOpen(status);
+    }
+
     return (
         <HomeContext.Provider value={{
             isModalOpen,
@@ -66,7 +69,9 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             handleConversationSelected,
             doStartConversartion,
             stompClient,
-            handleStompClient
+            handleStompClient,
+            isEditModalOpen,
+            handleEditModalStatus
         }}>
             {children}
         </HomeContext.Provider>

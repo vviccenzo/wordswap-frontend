@@ -1,0 +1,75 @@
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.modal-container {
+    background-color: transparent;
+    border-radius: 20px;
+    box-shadow: none;
+}
+
+.upload-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #777;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-icon {
+    font-size: 40px;
+    color: #FFF;
+}
+
+.avatar-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.profile-name {
+    margin: 0;
+    color: #000;
+}
+
+.edit-icon {
+    margin-left: 10px;
+    color: #777;
+    margin-bottom: 8px
+}
+
+.bio-textarea {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+    background-color: #C4C4C4;
+    color: #555;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.cancel-button {
+    background-color: #C4C4C4;
+    color: #555;
+    border-radius: 20px;
+}
+
+.save-button {
+    border-radius: 20px;
+}

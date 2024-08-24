@@ -14,4 +14,6 @@ export interface HomeContextType {
     doStartConversartion: (friendId: number) => void;
     stompClient: any;
     handleStompClient: (stompClient: any) => void;
+    isEditModalOpen: boolean;
+    handleEditModalStatus: (isEditModalOpen: boolean) => void;
 }
