@@ -17,6 +17,6 @@ export default function mapConversation(conversation: any, userId: any): any {
         conversationName: conversation.conversationName,
         profilePic: conversation.profilePic,
         messages: combinedMessages,
-        lastMessage: conversation.lastMessage,
+        lastMessage: conversation.lastMessage
     };
 }

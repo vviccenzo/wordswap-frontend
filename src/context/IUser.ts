@@ -6,9 +6,9 @@ export interface UserProviderProps {
 
 export interface User {
     id: number;
-    name?: string;
-    email?: string;
-    profilePic?: any[];
+    name: string;
+    profilePic?: any;
+    bio?: string;
 }
 
 export interface UserContextType {

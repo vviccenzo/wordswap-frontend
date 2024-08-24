@@ -1,24 +1,82 @@
-import React from "react";
-
+import React, { useState } from "react";
 import Modal from "antd/es/modal/Modal";
+
 import { useHomeContext } from "../../context/HomeContext.tsx";
-import { Button, Input, Upload, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Button, Input, Upload, message, Typography, Avatar } from "antd";
+import { EditOutlined, UserOutlined } from "@ant-design/icons";
+import { useUser } from "../../../../context/UserContext.tsx";
+import { byteArrayToDataUrl } from "../../../../utils/byteArrayToDataUrl.ts";
+
+import { useRequest } from "../../../../hook/useRequest.ts";
+import { HttpMethods } from "../../../../utils/IRequest.ts";
+import { Notification } from "../../../../utils/Notification.tsx";
+
+import "./EditUserModal.css";
+
+const { TextArea } = Input;
 
 export function EditUserModal() {
 
+    const { user, setUser } = useUser();
+    const { request } = useRequest();
+
     const { isEditModalOpen, handleEditModalStatus } = useHomeContext();
-    const [profileName, setProfileName] = React.useState('');
-    const [profileEmail, setProfileEmail] = React.useState('');
-    const [profilePicture, setProfilePicture] = React.useState<any>(null);
-    const [fileList, setFileList] = React.useState<any>([]);
+
+    const [bio, setBio] = useState<string>(user.bio || '');
+    const [fileList, setFileList] = useState<any>([]);
+    const [isHovering, setIsHovering] = useState<boolean>(false);
+    const [profileName, setProfileName] = useState<string>(user.name);
+    const [isEditingName, setIsEditingName] = useState<boolean>(false);
+    const [nameInput, setNameInput] = useState<string>(profileName);
+    const [hasSelectedImage, setHasSelectedImage] = useState<boolean>(false);
+    const [imageNew, setImageNew] = useState<any>();
+
+    const hasProfilePicture = user?.profilePic && user?.profilePic?.length > 0;
+    const imageUrl = hasProfilePicture ? byteArrayToDataUrl(user.profilePic) : '';
 
     function handleSave() {
+        const formData = new FormData();
+        formData.append('id', user.id.toString());
+        formData.append('name', profileName);
+        formData.append('bio', bio);
+
+        if (fileList.length > 0) {
+            formData.append('file', fileList[0].originFileObj);
+        }
+
+        request({
+            method: HttpMethods.PUT,
+            url: '/user',
+            data: formData,
+            successCallback: (data) => {
+                setUser({
+                    id: data.id,
+                    name: data.label,
+                    profilePic: data.profilePic,
+                    bio: data.bio
+                });
+            },
+            errorCallback: (error) => {
+                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+            },
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
         handleEditModalStatus(false);
     }
 
-    function handleUploadChange({ fileList }: any) {
-        setFileList(fileList);
+    function handleUploadChange({ file }: any) {
+        setFileList([file]);
+        setHasSelectedImage(true);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImageNew(reader.result as string);
+            setIsHovering(false);
+        };
+        reader.readAsDataURL(file.originFileObj);
     }
 
     const uploadProps = {
@@ -41,32 +99,83 @@ export function EditUserModal() {
 
     return (
         <Modal
-            title="Editar Perfil"
             open={isEditModalOpen}
-            cancelButtonProps={{ style: { display: 'none' } }}
-            okButtonProps={{ style: { display: 'none' } }}
             onCancel={() => handleEditModalStatus(false)}
-            width={300}
+            footer={null}
+            className="modal-container"
+            width={500}
         >
-            <div>
-                <Upload {...uploadProps} listType="picture">
-                    <Button icon={<UploadOutlined />}>Carregar Avatar</Button>
-                </Upload>
-                <Input
-                    placeholder="Nome do usuário"
-                    value={profileName}
-                    onChange={(e) => setProfileName(e.target.value)}
-                    style={{ marginBottom: 10 }}
+            <div className="modal-body">
+                <div className="avatar-container">
+                    <Upload {...uploadProps} listType="picture-card" showUploadList={false}>
+                        <div className="upload-avatar">
+                            <div
+                                style={{ position: 'relative', display: 'inline-block' }}
+                                onMouseEnter={() => setIsHovering(true)}
+                                onMouseLeave={() => setIsHovering(false)}
+                            >
+                                <Avatar
+                                    size={82}
+                                    src={hasProfilePicture ? hasSelectedImage ? imageNew : imageUrl : undefined}
+                                    icon={isHovering ? <EditOutlined /> : <UserOutlined />}
+                                    style={{
+                                        cursor: 'pointer',
+                                        border: '1px solid #777777',
+                                        opacity: isHovering ? 0.8 : 1,
+                                        transition: 'opacity 0.3s'
+                                    }}
+                                    onClick={isHovering ? () => handleEditModalStatus(true) : undefined}
+                                />
+                            </div>
+                        </div>
+                    </Upload>
+                    <div className="profile-header">
+                        {isEditingName ? (
+                            <Input
+                                value={nameInput}
+                                onChange={(e) => setNameInput(e.target.value)}
+                                onBlur={() => {
+                                    setProfileName(nameInput);
+                                    setIsEditingName(false);
+                                }}
+                                onPressEnter={() => {
+                                    setProfileName(nameInput);
+                                    setIsEditingName(false);
+                                }}
+                                autoFocus
+                                className="profile-name-input"
+                            />
+                        ) : (
+                            <Typography.Title
+                                level={4}
+                                className="profile-name"
+                                onClick={() => setIsEditingName(true)}
+                            >
+                                {profileName}
+                            </Typography.Title>
+                        )}
+                        <EditOutlined
+                            className="edit-icon"
+                            onClick={() => setIsEditingName(true)}
+                        />
+                    </div>
+                </div>
+                <TextArea
+                    value={bio}
+                    placeholder="Biografia..."
+                    onChange={(e) => setBio(e.target.value)}
+                    rows={3}
+                    className="bio-textarea"
                 />
-                <Input
-                    placeholder="E-mail"
-                    value={profileEmail}
-                    onChange={(e) => setProfileEmail(e.target.value)}
-                    style={{ marginBottom: 10 }}
-                />
-                <Button type="primary" onClick={handleSave}>Cancelar</Button>
-                <Button type="primary" onClick={handleSave}>Salvar</Button>
+                <div className="button-group">
+                    <Button className="cancel-button" onClick={handleSave}>
+                        Cancelar
+                    </Button>
+                    <Button type="primary" className="save-button" onClick={handleSave}>
+                        Salvar
+                    </Button>
+                </div>
             </div>
-        </Modal>
+        </Modal >
     );
 }
