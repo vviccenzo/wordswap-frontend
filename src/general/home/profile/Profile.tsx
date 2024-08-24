@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Dropdown, Menu, Space, Typography } from 'antd';
+import { Avatar, Dropdown, Menu, Space } from 'antd';
 import { SettingOutlined, TeamOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
 import { useUser } from '../../../context/UserContext.tsx';
 import { byteArrayToDataUrl } from '../../../utils/byteArrayToDataUrl.ts';
@@ -31,7 +31,7 @@ export function Profile() {
     return (
         <div style={{ padding: '16px', gap: 20, display: 'flex', justifyContent: 'space-between', backgroundColor: '#DCDCDC', position: 'relative' }}>
             <div
-                style={{ position: 'relative', display: 'flex', alignItems: 'center' }} // Alinhando avatar e nome na horizontal
+                style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
             >
@@ -41,10 +41,10 @@ export function Profile() {
                     icon={isHovering ? <EditOutlined /> : <UserOutlined />}
                     style={{
                         cursor: 'pointer',
-                        border: '1px solid #777777',
+                        border: '3px solid #777777',
                         opacity: isHovering ? 0.8 : 1,
                         transition: 'opacity 0.3s',
-                        marginRight: '8px'
+                        marginRight: '8px',
                     }}
                     onClick={isHovering ? () => handleEditModalStatus(true) : undefined}
                 />
