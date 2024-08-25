@@ -168,7 +168,7 @@ export function EditUserModal() {
                     className="bio-textarea"
                 />
                 <div className="button-group">
-                    <Button className="cancel-button" onClick={handleSave}>
+                    <Button className="cancel-button" onClick={() => handleEditModalStatus(false)}>
                         Cancelar
                     </Button>
                     <Button type="primary" className="save-button" onClick={handleSave}>
