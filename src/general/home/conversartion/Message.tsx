@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { List, Typography, Menu, Dropdown, Input, Button } from 'antd';
 import { useHomeContext } from '../context/HomeContext.tsx';
+import { useUser } from '../../../context/UserContext.tsx';
 
 const { Text } = Typography;
 
-export function Message({ message, isMe }) {
+export function Message({ message, isMe, conv }) {
 
+    const { user } = useUser();
     const { stompClient, selectedConversation } = useHomeContext();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -62,6 +64,30 @@ export function Message({ message, isMe }) {
         </Menu>
     );
 
+    const getContent = () => {
+        const userId = user.id;
+        const config = conv.configsUser[userId];
+
+        if (config.isSendingTranslation && message.messageContent.contentSending) {
+            return message.messageContent.contentSending; // Mostrar mensagem traduzida que o remetente enviou
+        }
+
+        if (config.isReceivingTranslation && message.messageContent.contentReceiving) {
+            return message.messageContent.contentReceiving; // Mostrar mensagem traduzida que o remetente está recebendo
+        }
+
+        const configOtherUser = conv.configsUser[conv.receiverId];
+        if (configOtherUser.isSendingTranslation && message.messageContent.contentSending) {
+            return message.messageContent.contentSending; // Mostrar mensagem traduzida para o destinatário
+        }
+
+        if (configOtherUser.isReceivingTranslation && message.messageContent.contentReceiving) {
+            return message.messageContent.contentReceiving; // Mostrar mensagem que foi traduzida antes de ser enviada ao destinatário
+        }
+
+        return message.content; // Caso nenhuma tradução esteja ativada, mostrar o conteúdo original
+    }
+
     return (
         <List.Item
             style={{
@@ -116,7 +142,7 @@ export function Message({ message, isMe }) {
                                             <em style={{ fontStyle: 'italic', color: '#888' }}>(Mensagem Deletada)</em>
                                         ) : (
                                             <>
-                                                {message.content} {message.isEdited && <em style={{ fontSize: '10px', color: '#888' }}>(editada)</em>}
+                                                {getContent()} {message.isEdited && <em style={{ fontSize: '10px', color: '#888' }}>(editada)</em>}
                                             </>
                                         )}
                                     </Text>

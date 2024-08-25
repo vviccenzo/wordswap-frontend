@@ -166,9 +166,11 @@ export function Chat() {
                                 senderName: msg.sender === 'me' ? 'You' : selectedConversation?.conversationName,
                                 timestamp: formatTimestamp(msg.timeStamp),
                                 isEdited: msg.isEdited,
-                                isDeleted: msg.isDeleted
+                                isDeleted: msg.isDeleted,
+                                messageContent: msg.messageContent
                             }}
                             isMe={msg.sender === 'me'}
+                            conv={selectedConversation}
                         />
                     )}
                 />
