@@ -13,7 +13,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user');
-        const selectedConversationId = localStorage.getItem('conversationId');
 
         if (user) {
             setUser(JSON.parse(user));
@@ -22,10 +21,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
         if (token) {
             setToken(token);
         }
-
-        // if (selectedConversationId) {
-        //     localStorage.removeItem('conversationId');
-        // }
     }, [setUser, setToken]);
 
     const token = localStorage.getItem('token');
