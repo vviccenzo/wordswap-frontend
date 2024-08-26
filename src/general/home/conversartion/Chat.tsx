@@ -18,10 +18,11 @@ export function Chat() {
     const [message, setMessage] = useState('');
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [languageTo, setLanguageTo] = useState<string>('pt');
+    const [translationTo, setTranslationTo] = useState<string>('pt');
     const [languageFrom, setLanguageFrom] = useState<string>('pt');
+    const [translationFrom, setTranslationFrom] = useState<string>('pt');
     const [translationReceiving, setTranslationReceiving] = useState<boolean>(false);
     const [translationSending, setTranslationSending] = useState(false);
-    const [translationOptions, setTranslationOptions] = useState<any[]>([]);
 
     const handleSend = () => {
         if (message.trim()) {
@@ -41,8 +42,8 @@ export function Chat() {
         const data = {
             userId: user?.id,
             conversationId: selectedConversation?.id,
-            sendingTranslation: languageTo,
-            receivingTranslation: languageFrom,
+            sendingTranslation: translationTo,
+            receivingTranslation: translationFrom,
             isSendingTranslation: translationSending,
             isReceivingTranslation: translationReceiving
         };
@@ -52,10 +53,10 @@ export function Chat() {
             url: '/conversation/configuration',
             data: data,
             successCallback: (data) => {
-                setLanguageTo(data.sendingTranslation);
-                setLanguageFrom(data.receivingTranslation);
-                setTranslationReceiving(data.isReceivingTranslation);
-                setTranslationSending(data.isSendingTranslation);
+                setLanguageTo(translationTo.split('-')[0]);
+                setLanguageFrom(translationFrom.split('-')[0]);
+
+                setPopoverVisible(false);
             },
             errorCallback: (error) => {
                 Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
@@ -70,22 +71,15 @@ export function Chat() {
             if (userConfig) {
                 setLanguageTo(userConfig.sendingTranslation);
                 setLanguageFrom(userConfig.receivingTranslation);
+
+                setTranslationTo(userConfig.sendingTranslation);
+                setTranslationFrom(userConfig.receivingTranslation);
+
                 setTranslationReceiving(userConfig.isReceivingTranslation);
                 setTranslationSending(userConfig.isSendingTranslation);
             }
         }
     }, [selectedConversation, conversations]);
-
-    useEffect(() => {
-        if (popoverVisible) {
-            request({
-                method: HttpMethods.GET,
-                url: '/translation/find-options-translation',
-                successCallback: (data) => setTranslationOptions(data),
-                errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
-            });
-        }
-    }, [popoverVisible]);
 
     return (
         <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#DCDCDC', borderRadius: 20 }}>
@@ -111,8 +105,9 @@ export function Chat() {
                 setLanguageFrom={setLanguageFrom}
                 translationReceiving={translationReceiving}
                 setTranslationReceiving={setTranslationReceiving}
-                translationOptions={translationOptions}
                 configurateTranslation={configurateTranslation}
+                setTranslationTo={setTranslationTo}
+                setTranslationFrom={setTranslationFrom}
             />
         </div>
     );

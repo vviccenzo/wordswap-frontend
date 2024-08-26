@@ -20,8 +20,6 @@ export default function mapConversation(conversation: any, userId: any): any {
         profilePic: conversation.profilePic,
         messages: combinedMessages,
         lastMessage: conversation.lastMessage,
-        senderConfig: conversation.senderConfig,
-        receiverConfig: conversation.receiverConfig,
         configsUser: conversation.configsUser
     };
 }

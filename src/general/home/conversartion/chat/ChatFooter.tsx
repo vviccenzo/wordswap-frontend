@@ -17,15 +17,15 @@ interface ChatFooterProps {
     setLanguageFrom: (value: string) => void;
     translationReceiving: boolean;
     setTranslationReceiving: (value: boolean) => void;
-    translationOptions: any[];
     configurateTranslation: () => void;
+    setTranslationTo: (value: string) => void;
+    setTranslationFrom: (value: string) => void;
 }
 
 export function ChatFooter({
     message, setMessage, handleSend, popoverVisible, setPopoverVisible,
     languageTo, setLanguageTo, translationSending, setTranslationSending,
-    languageFrom, setLanguageFrom, translationReceiving, setTranslationReceiving,
-    translationOptions, configurateTranslation
+    languageFrom, setLanguageFrom, translationReceiving, setTranslationReceiving, configurateTranslation, setTranslationTo, setTranslationFrom
 }: ChatFooterProps) {
     return (
         <div className="chat-footer" style={{ display: 'flex', alignItems: 'center' }}>
@@ -38,10 +38,11 @@ export function ChatFooter({
                 setLanguageFrom={setLanguageFrom}
                 translationReceiving={translationReceiving}
                 setTranslationReceiving={setTranslationReceiving}
-                translationOptions={translationOptions}
                 configurateTranslation={configurateTranslation}
                 popoverVisible={popoverVisible}
                 setPopoverVisible={setPopoverVisible}
+                setTranslationTo={setTranslationTo}
+                setTranslationFrom={setTranslationFrom}
             />
             <Input
                 value={message}

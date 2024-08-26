@@ -16,4 +16,5 @@ export interface HomeContextType {
     handleStompClient: (stompClient: any) => void;
     isEditModalOpen: boolean;
     handleEditModalStatus: (isEditModalOpen: boolean) => void;
+    translationOptions: any[];
 }

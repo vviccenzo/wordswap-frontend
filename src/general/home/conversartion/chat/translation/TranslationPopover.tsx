@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Divider, Select, Switch, Tooltip, Popover } from 'antd';
 import { TranslationOutlined } from '@ant-design/icons';
+import { useHomeContext } from '../../../context/HomeContext.tsx';
 
 const { Option } = Select;
 
@@ -13,17 +14,21 @@ interface TranslationPopoverProps {
     setLanguageFrom: (value: string) => void;
     translationReceiving: boolean;
     setTranslationReceiving: (value: boolean) => void;
-    translationOptions: any[];
     configurateTranslation: () => void;
     popoverVisible: boolean;
     setPopoverVisible: (visible: boolean) => void;
+    setTranslationTo: (value: string) => void;
+    setTranslationFrom: (value: string) => void;
 }
 
 export function TranslationPopover({
     languageTo, setLanguageTo, translationSending, setTranslationSending,
     languageFrom, setLanguageFrom, translationReceiving, setTranslationReceiving,
-    translationOptions, configurateTranslation, popoverVisible, setPopoverVisible
+    configurateTranslation, popoverVisible, setPopoverVisible,
+    setTranslationTo, setTranslationFrom
 }: TranslationPopoverProps) {
+
+    const { translationOptions } = useHomeContext();
 
     const content = (
         <div>
@@ -32,7 +37,10 @@ export function TranslationPopover({
                     <span>Traduzir ao enviar:</span>
                     <Select
                         value={languageTo}
-                        onChange={value => setLanguageTo(value)}
+                        onChange={(value, option: any) => {
+                            setTranslationTo(option.children + ' - ' + value);
+                            setLanguageTo(value)
+                        }}
                         style={{ width: '150px', marginLeft: '18px' }}
                         defaultValue="pt-br"
                         showSearch
@@ -53,7 +61,10 @@ export function TranslationPopover({
                     <span style={{ marginRight: '20px' }}>Traduzir ao receber:</span>
                     <Select
                         value={languageFrom}
-                        onChange={value => setLanguageFrom(value)}
+                        onChange={(value, option: any) => {
+                            setTranslationFrom(option.children + ' - ' + value);
+                            setLanguageFrom(value)
+                        }}
                         style={{ width: '150px' }}
                         showSearch
                     >
