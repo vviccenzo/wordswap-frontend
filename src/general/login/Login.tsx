@@ -25,7 +25,7 @@ export function Login() {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.userInfo));
 
-                setUser({ id: data.userInfo.id, profilePic: data.userInfo.profilePic });
+                setUser({ id: data.userInfo.id, profilePic: data.userInfo.profilePic, name: data.userInfo.name });
                 setToken(data.token);
                 setIsLogged(true);
                 navigate("/home");

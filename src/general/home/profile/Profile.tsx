@@ -48,7 +48,6 @@ export function Profile() {
                     }}
                     onClick={isHovering ? () => handleEditModalStatus(true) : undefined}
                 />
-                <span style={{ color: '#777777', fontSize: '14px', opacity: 0.7 }}>{user.name}</span>
                 <EditUserModal />
             </div>
             <div style={{ display: 'flex', gap: 35, marginRight: 10 }}>

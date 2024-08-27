@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { List, Typography, Menu, Dropdown, Input, Button } from 'antd';
 import { useHomeContext } from '../context/HomeContext.tsx';
+import { useUser } from '../../../context/UserContext.tsx';
+import getContent from '../../../utils/getContent.ts';
 
 const { Text } = Typography;
 
-export function Message({ message, isMe }) {
+export function Message({ message, isMe, conv }) {
 
+    const { user } = useUser();
     const { stompClient, selectedConversation } = useHomeContext();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -116,7 +119,7 @@ export function Message({ message, isMe }) {
                                             <em style={{ fontStyle: 'italic', color: '#888' }}>(Mensagem Deletada)</em>
                                         ) : (
                                             <>
-                                                {message.content} {message.isEdited && <em style={{ fontSize: '10px', color: '#888' }}>(editada)</em>}
+                                                {getContent(user, conv, message)} {message.isEdited && <em style={{ fontSize: '10px', color: '#888' }}>(editada)</em>}
                                             </>
                                         )}
                                     </Text>

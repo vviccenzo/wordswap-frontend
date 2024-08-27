@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Dropdown, Menu, Typography } from 'antd';
+import { Avatar, Dropdown, Menu, Typography } from 'antd';
 import { DeleteOutlined, FolderOutlined, UserOutlined } from '@ant-design/icons';
 import { useHomeContext } from '../context/HomeContext.tsx';
 import { useUser } from '../../../context/UserContext.tsx';
@@ -8,6 +8,7 @@ import { Notification } from '../../../utils/Notification.tsx';
 import { useRequest } from '../../../hook/useRequest.ts';
 import mapConversations from '../../../utils/mapper/conversationMapper.ts';
 import * as moment from 'moment';
+import { byteArrayToDataUrl } from '../../../utils/byteArrayToDataUrl.ts';
 
 const { Title, Text } = Typography;
 
@@ -113,18 +114,19 @@ export function ConversationList() {
                         disabled={!conv}
                     >
                         <Menu.Item
-                            icon={<UserOutlined
-                                style={{
-                                    width: 30,
-                                    height: 30,
-                                    border: '1px solid #777777',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    overflow: 'hidden'
-                                }}
-                            />}
+                            icon={
+                                <Avatar
+                                    size={48}
+                                    style={{
+                                        border: '1px solid #777777',
+                                        borderRadius: '50%',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        overflow: 'hidden'
+                                    }}
+                                    src={byteArrayToDataUrl(conv.profilePic) || ''}
+                                />}
                             onClick={() => handleConversationSelected(conv)}
                             style={{ height: 55, paddingLeft: 20 }}
                         >

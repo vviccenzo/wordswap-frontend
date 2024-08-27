@@ -15,8 +15,11 @@ export default function mapConversation(conversation: any, userId: any): any {
     return {
         id: conversation.id,
         conversationName: conversation.conversationName,
+        receiverId: conversation.receiverId,
+        senderId: conversation.senderId,
         profilePic: conversation.profilePic,
         messages: combinedMessages,
-        lastMessage: conversation.lastMessage
+        lastMessage: conversation.lastMessage,
+        configsUser: conversation.configsUser
     };
 }

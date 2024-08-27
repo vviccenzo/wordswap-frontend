@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
+import { useRequest } from "../../../hook/useRequest.ts";
+import { HttpMethods } from "../../../utils/IRequest.ts";
+import { Notification } from "../../../utils/Notification.tsx";
 
 const defaultHomeState = {
     isModalOpen: false,
@@ -14,16 +17,21 @@ const defaultHomeState = {
     handleStompClient: () => { },
     isEditModalOpen: false,
     handleEditModalStatus: () => { },
+    translationOptions: [],
 };
 
 const HomeContext = createContext<HomeContextType>(defaultHomeState);
 
 export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
+
+    const { request } = useRequest();
+
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedConversation, setSelectedConversation] = useState<any>(null);
     const [conversations, setConversartions] = useState<any[]>([]);
     const [stompClient, setStompClient] = useState<any>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+    const [translationOptions, setTranslationOptions] = useState<any[]>([]);
 
     const doStartConversartion = (friend) => {
         const conversationStarted = {
@@ -38,6 +46,15 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
         setSelectedConversation(conversationStarted);
         setIsModalOpen(false);
     }
+
+    useEffect(() => {
+        request({
+            method: HttpMethods.GET,
+            url: '/translation/find-options-translation',
+            successCallback: (data) => setTranslationOptions(data),
+            errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
+        });
+    }, []);
 
     function handleModalStatus(status: boolean) {
         setIsModalOpen(status);
@@ -71,7 +88,8 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             stompClient,
             handleStompClient,
             isEditModalOpen,
-            handleEditModalStatus
+            handleEditModalStatus,
+            translationOptions
         }}>
             {children}
         </HomeContext.Provider>
