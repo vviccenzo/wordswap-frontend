@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { Avatar, Dropdown, Menu, Typography } from 'antd';
-import { DeleteOutlined, FolderOutlined, UserOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FolderOutlined } from '@ant-design/icons';
 import { useHomeContext } from '../context/HomeContext.tsx';
 import { useUser } from '../../../context/UserContext.tsx';
 import { HttpMethods } from '../../../utils/IRequest.ts';
 import { Notification } from '../../../utils/Notification.tsx';
 import { useRequest } from '../../../hook/useRequest.ts';
-import mapConversations from '../../../utils/mapper/conversationMapper.ts';
+import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.ts';
+
 import * as moment from 'moment';
-import { byteArrayToDataUrl } from '../../../utils/byteArrayToDataUrl.ts';
+import mapConversations from '../../../utils/mapper/conversationMapper.ts';
 
 const { Title, Text } = Typography;
 
@@ -17,11 +18,11 @@ export function ConversationList() {
     const { user } = useUser();
     const { request } = useRequest();
 
-    const { conversations, handleConversations, handleConversationSelected } = useHomeContext();
+    const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage } = useHomeContext();
 
     useEffect(() => {
         if (user.id) {
-            loadConversartions();
+            fetchConversations();
         }
     }, [user.id]);
 
@@ -55,7 +56,7 @@ export function ConversationList() {
             url: '/conversation/delete-conversation',
             data: data,
             successCallback: (data) => {
-                loadConversartions();
+                fetchConversations();
             },
             errorCallback: (error) => {
                 Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
@@ -63,15 +64,16 @@ export function ConversationList() {
         });
     }
 
-    function loadConversartions() {
+    function fetchConversations() {
         request({
             method: HttpMethods.GET,
-            url: '/conversation/load-conversations?userId=' + user.id,
+            url: '/conversation/load-conversations?userId=' + user.id + '&pageNumber=' + scrollPage,
             successCallback: (data) => {
                 const conversationsMapped: any[] = data.map((conversation: any) => {
                     return mapConversations(conversation, user.id);
                 })
 
+                setLoading(false);
                 handleConversations(conversationsMapped);
             },
             errorCallback: (error) => {

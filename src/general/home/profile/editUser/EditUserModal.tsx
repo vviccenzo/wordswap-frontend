@@ -5,7 +5,7 @@ import { useHomeContext } from "../../context/HomeContext.tsx";
 import { Button, Input, Upload, message, Typography, Avatar } from "antd";
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
 import { useUser } from "../../../../context/UserContext.tsx";
-import { byteArrayToDataUrl } from "../../../../utils/byteArrayToDataUrl.ts";
+import { byteArrayToDataUrl } from "../../../../utils/functions/byteArrayToDataUrl.ts";
 
 import { useRequest } from "../../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../../utils/IRequest.ts";

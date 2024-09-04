@@ -9,7 +9,7 @@ import { ChatHeader } from './chat/ChatHeader.tsx';
 import { ChatBody } from './chat/ChatBody.tsx';
 import { ChatFooter } from './chat/ChatFooter.tsx';
 
-export function Chat() {
+export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const { user } = useUser();
     const { request } = useRequest();
     const { selectedConversation, stompClient, conversations } = useHomeContext();
@@ -31,6 +31,7 @@ export function Chat() {
                 receiverId: user.id === selectedConversation?.receiverId ? selectedConversation?.senderId : selectedConversation?.receiverId,
                 conversationId: selectedConversation?.id,
                 content: message,
+                scrollPage
             };
 
             stompClient.send('/app/chat/' + selectedConversation?.id, {}, JSON.stringify(messageData));
@@ -90,6 +91,10 @@ export function Chat() {
             <ChatBody
                 messages={combinedMessages}
                 selectedConversation={selectedConversation}
+                setScrollPage={setScrollPage}
+                scrollPage={scrollPage}
+                loading={loading}
+                setLoading={setLoading}
             />
             <ChatFooter
                 message={message}

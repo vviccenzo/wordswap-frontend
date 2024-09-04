@@ -18,6 +18,10 @@ const defaultHomeState = {
     isEditModalOpen: false,
     handleEditModalStatus: () => { },
     translationOptions: [],
+    scrollPage: 0,
+    setScrollPage: () => { },
+    loading: false,
+    setLoading: () => { },
 };
 
 const HomeContext = createContext<HomeContextType>(defaultHomeState);
@@ -32,6 +36,9 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     const [stompClient, setStompClient] = useState<any>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [translationOptions, setTranslationOptions] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [scrollPage, setScrollPage] = useState<number>(0);
+    const [loadConversartions, setLoadConversartions] = useState<boolean>(false);
 
     const doStartConversartion = (friend) => {
         const conversationStarted = {
@@ -89,7 +96,11 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             handleStompClient,
             isEditModalOpen,
             handleEditModalStatus,
-            translationOptions
+            translationOptions,
+            scrollPage,
+            setScrollPage,
+            loading,
+            setLoading,
         }}>
             {children}
         </HomeContext.Provider>

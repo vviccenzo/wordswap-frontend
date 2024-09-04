@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, Dropdown, Menu, Space } from 'antd';
 import { SettingOutlined, TeamOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
 import { useUser } from '../../../context/UserContext.tsx';
-import { byteArrayToDataUrl } from '../../../utils/byteArrayToDataUrl.ts';
+import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.ts';
 import { FriendshipRequestModal } from './FriendshipRequestModal.tsx';
 import { useHomeContext } from '../context/HomeContext.tsx';
 import { EditUserModal } from './editUser/EditUserModal.tsx';

@@ -21,7 +21,8 @@
     "react-stomp": "^5.1.0",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "wordswap-frontend": "file:"
   },
   "scripts": {
     "start": "react-scripts start",
