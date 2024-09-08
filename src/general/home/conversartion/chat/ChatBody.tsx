@@ -39,17 +39,16 @@ function formatDateForSeparator(date) {
 
 let previousDate = null;
 export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
-    const listRef = useRef<ListRef>(null);
-
-    const [containerHeight, setContainerHeight] = useState(1000);
-
     const { user } = useUser();
     const { request } = useRequest();
+    const { loading, setLoading, setScrollPage, scrollPage, handleConversationSelected, totalMessages } = useHomeContext();
+    const [containerHeight, setContainerHeight] = useState(1000);
 
-    const { loading, setLoading, setScrollPage, scrollPage, handleConversationSelected } = useHomeContext();
+    const listRef = useRef<ListRef>(null);
+    const MESSAGES_PER_PAGE = 10;
 
     const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
-        if (e.currentTarget.scrollTop === 0 && !loading) {
+        if (e.currentTarget.scrollTop === 0 && !loading && messages.length < totalMessages) {
             setLoading(true);
             setScrollPage(scrollPage + 1);
             getMessages();
@@ -58,10 +57,11 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
 
     function getMessages() {
         const data = {
-            userId: selectedConversation?.receiverId,
+            userId: user?.id,
             conversationId: selectedConversation?.id,
-            pageNumber: scrollPage
-        }
+            pageNumber: scrollPage,
+            pageSize: MESSAGES_PER_PAGE
+        };
 
         request({
             method: HttpMethods.POST,
@@ -69,7 +69,15 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
             data: data,
             successCallback: (data) => {
                 const conv = mapConversations(data, user);
-                conv.messages = [...selectedConversation.messages, ...conv.messages];
+
+                conv.messages = [
+                    ...selectedConversation.messages,
+                    ...conv.messages.filter(newMessage =>
+                        !selectedConversation.messages.some(oldMessage => oldMessage.id === newMessage.id)
+                    )
+                ];
+
+                conv.messages.sort((a, b) => new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime());
 
                 handleConversationSelected(conv);
                 setLoading(false);
@@ -77,7 +85,7 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
             errorCallback: (error) => {
                 setLoading(false);
             }
-        })
+        });
     }
 
     useEffect(() => {

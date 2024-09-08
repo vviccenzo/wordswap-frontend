@@ -1,6 +1,5 @@
 .chat-container {
     height: 80vh;
-    overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;
     margin-bottom: 10px

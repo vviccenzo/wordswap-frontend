@@ -1,47 +1,25 @@
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, List, Tooltip } from 'antd';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useUser } from '../../../../context/UserContext.tsx';
-import { useRequest } from '../../../../hook/useRequest.ts';
-import { HttpMethods } from '../../../../utils/IRequest.ts';
-import { Notification } from '../../../../utils/Notification.tsx';
+import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
 import { useHomeContext } from '../../context/HomeContext.tsx';
 
 export const FriendRequestsTab: React.FC = () => {
 
     const { user } = useUser();
-    const { request } = useRequest();
-
-    const { friendRequests, setFriendRequests } = useHomeContext();
-
-    useEffect(() => {
-        fetchFriendRequests();
-    }, [user?.id]);
-
-    function fetchFriendRequests() {
-        request({
-            method: HttpMethods.GET,
-            url: '/friendship/find-pending-invites?userId=' + user?.id,
-            successCallback: (data) => {
-                setFriendRequests(data);
-            },
-            errorCallback: (error) => {
-                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
-            }
-        });
-    }
+    const { friendRequests, stompClient } = useHomeContext();
 
     function handleChangeStatusRequest(status: string, id: number) {
-        request({
-            method: HttpMethods.PUT,
-            url: '/friendship/change-invite?status=' + status + '&inviteId=' + id,
-            successCallback: () => {
-                fetchFriendRequests();
-            },
-            errorCallback: (error) => {
-                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+        const data = {
+            action: WebSocketEventType.UPDATE_FRIEND_REQUEST,
+            friendshipChangeInviteRequestDTO: {
+                status: status,
+                inviteId: id
             }
-        });
+        }
+
+        stompClient.send('/app/chat/' + user?.id, {}, JSON.stringify(data));
     }
 
     return (

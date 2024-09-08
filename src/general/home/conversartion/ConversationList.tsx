@@ -18,7 +18,7 @@ export function ConversationList() {
     const { user } = useUser();
     const { request } = useRequest();
 
-    const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, selectedConversation } = useHomeContext();
+    const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, setScrollPage, setTotalMessages } = useHomeContext();
 
     useEffect(() => {
         if (user.id) {
@@ -125,7 +125,11 @@ export function ConversationList() {
                                 src={byteArrayToDataUrl(conv.profilePic) || ''}
                             />
                         }
-                        onClick={() => handleConversationSelected(conv)}
+                        onClick={() => {
+                            setScrollPage(1);
+                            setTotalMessages(conv.totalMessages || 0);
+                            handleConversationSelected(conv);
+                        }}
                         style={{ height: 55, paddingLeft: 20, marginBottom: 10 }}
                         onContextMenu={(e) => e.preventDefault()}
                     >

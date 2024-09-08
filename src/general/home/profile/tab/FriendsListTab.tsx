@@ -6,14 +6,12 @@ import { HttpMethods } from '../../../../utils/IRequest.ts';
 import { Notification } from '../../../../utils/Notification.tsx';
 import { useRequest } from '../../../../hook/useRequest.ts';
 import { useHomeContext } from '../../context/HomeContext.tsx';
+import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
 
 export function FriendsListTab() {
     const { user } = useUser();
     const { request } = useRequest();
-
-    const { handleModalStatus, doStartConversartion } = useHomeContext();
-
-    const [friendsList, setFriendsList] = useState([]);
+    const { handleModalStatus, doStartConversartion, stompClient, friendsList, setFriendsList } = useHomeContext();
 
     useEffect(() => {
         fetchFriends();
@@ -33,16 +31,15 @@ export function FriendsListTab() {
     }
 
     function handleDeleteFriend(id: number) {
-        request({
-            method: HttpMethods.PUT,
-            url: '/friendship/delete-friendship?friendId=' + id + '&userId=' + user?.id,
-            successCallback: () => {
-                fetchFriends();
-            },
-            errorCallback: (error) => {
-                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+        const data = {
+            action: WebSocketEventType.DELETE_FRIEND,
+            friendshipDeleteRequestDTO: {
+                friendId: id,
+                userId: user?.id
             }
-        });
+        };
+
+        stompClient.send('/app/chat/' + user?.id, {}, JSON.stringify(data));
     }
 
     function handleStartConversartion(data) {
@@ -52,9 +49,9 @@ export function FriendsListTab() {
         handleModalStatus(false);
     }
 
-    const menu = (item: any) => (
+    const menu = (friend: any) => (
         <Menu>
-            <Menu.Item key="1" onClick={() => handleDeleteFriend(item.id)}>
+            <Menu.Item key="1" onClick={() => handleDeleteFriend(friend.id)}>
                 Apagar Amizade
             </Menu.Item>
         </Menu>
@@ -63,7 +60,7 @@ export function FriendsListTab() {
     return (
         <List
             dataSource={friendsList}
-            renderItem={(item: any) => (
+            renderItem={(friend: any) => (
                 <List.Item>
                     <Avatar
                         size={48}
@@ -71,11 +68,11 @@ export function FriendsListTab() {
                         style={{ cursor: 'pointer', border: '1px solid #777777', marginRight: 10 }}
                     />
                     <List.Item.Meta
-                        title={item.label}
+                        title={friend.label}
                     />
                     <div style={{ gap: 20, display: 'flex' }}>
-                        <MessageOutlined style={{ fontSize: '18px', cursor: 'pointer' }} onClick={() => handleStartConversartion(item)} />
-                        <Dropdown overlay={menu(item)} trigger={['click']}>
+                        <MessageOutlined style={{ fontSize: '18px', cursor: 'pointer' }} onClick={() => handleStartConversartion(friend)} />
+                        <Dropdown overlay={menu(friend)} trigger={['click']}>
                             <Space>
                                 <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
                             </Space>

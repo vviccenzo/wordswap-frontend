@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
 import { useRequest } from "../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../utils/IRequest.ts";
 import { Notification } from "../../../utils/Notification.tsx";
+import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
 
 const defaultHomeState = {
     isModalOpen: false,
@@ -23,7 +23,11 @@ const defaultHomeState = {
     loading: false,
     setLoading: () => { },
     friendRequests: [],
-    setFriendRequests: () => { }
+    setFriendRequests: () => { },
+    friendsList: [],
+    setFriendsList: () => { },
+    totalMessages: 0,
+    setTotalMessages: () => { }
 };
 
 const HomeContext = createContext<HomeContextType>(defaultHomeState);
@@ -39,8 +43,10 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [translationOptions, setTranslationOptions] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [scrollPage, setScrollPage] = useState<number>(0);
+    const [scrollPage, setScrollPage] = useState<number>(1);
     const [friendRequests, setFriendRequests] = useState<any[]>([]);
+    const [friendsList, setFriendsList] = useState<any[]>([]);
+    const [totalMessages, setTotalMessages] = useState<any>(0);
 
     const doStartConversartion = (data) => {
         const conversationStarted = {
@@ -79,6 +85,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
 
     function handleConversationSelected(data: any) {
         setSelectedConversation(data);
+        setTotalMessages(data.totalMessages || 0);
     }
 
     function handleStompClient(data: any) {
@@ -108,7 +115,11 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             loading,
             setLoading,
             friendRequests,
-            setFriendRequests
+            setFriendRequests,
+            friendsList,
+            setFriendsList,
+            totalMessages,
+            setTotalMessages
         }}>
             {children}
         </HomeContext.Provider>

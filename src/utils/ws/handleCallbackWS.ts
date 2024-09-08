@@ -1,12 +1,12 @@
-import { useUser } from '../context/UserContext.tsx';
-import { useHomeContext } from '../general/home/context/HomeContext.tsx';
-import { WebSocketEventType } from '../utils/enum/WebSocketEventType.ts';
+import { useUser } from '../../context/UserContext.tsx';
+import { useHomeContext } from '../../general/home/context/HomeContext.tsx';
+import { WebSocketEventType } from '../enum/WebSocketEventType.ts';
 
-import mapConversation from './mapper/conversationMapper.ts';
+import mapConversation from '../mapper/conversationMapper.ts';
 
-export function useHandleCallbackWS() {
+export function useHandleCallbackWS( ) {
     const { user } = useUser();
-    const { handleConversations, handleConversationSelected, selectedConversation, setFriendRequests } = useHomeContext();
+    const { handleConversations, handleConversationSelected, setFriendRequests, setFriendsList, selectedConversation, friendRequests, friendsList } = useHomeContext();
 
     const handleCallbackWS = (response) => {
         const eventType = response.eventType;
@@ -34,6 +34,7 @@ export function useHandleCallbackWS() {
                         Number(conv.senderId) === Number(selectedConversation.senderId) &&
                         Number(conv.receiverId) === Number(selectedConversation.receiverId)
                     );
+
                     const conversationToUpdate = selectedConversation;
 
                     if (conversation) {
@@ -47,7 +48,13 @@ export function useHandleCallbackWS() {
                 break;
 
             case WebSocketEventType.SEND_FRIEND_REQUEST:
+            case WebSocketEventType.UPDATE_FRIEND_REQUEST:
                 setFriendRequests(response.data);
+                break;
+
+            case WebSocketEventType.DELETE_FRIEND:
+            case WebSocketEventType.ACCEPT_FRIEND_REQUEST:
+                setFriendsList(response.data);
                 break;
 
             default:

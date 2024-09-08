@@ -1,31 +1,41 @@
 import React, { useState } from 'react';
-import { List, Typography, Menu, Dropdown, Input, Button, Divider } from 'antd';
-import { useHomeContext } from '../context/HomeContext.tsx';
+import { Button, Divider, Dropdown, Input, List, Menu, Typography } from 'antd';
 import { useUser } from '../../../context/UserContext.tsx';
+import { WebSocketEventType } from '../../../utils/enum/WebSocketEventType.ts';
+import { useHomeContext } from '../context/HomeContext.tsx';
 import getContent from '../../../utils/functions/getContent.ts';
-import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
 export function Message({ message, isMe, conv, showDateSeparator, separatorDate }) {
 
     const { user } = useUser();
-    const { stompClient, selectedConversation } = useHomeContext();
+    const { stompClient } = useHomeContext();
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedMessage, setEditedMessage] = useState(message.content);
 
     function handlEditMessage() {
         const data = {
-            id: message.id,
-            content: editedMessage
+            action: WebSocketEventType.EDIT_MESSAGE,
+            messageEditDTO: {
+                id: message.id,
+                content: editedMessage
+            }
         }
 
-        stompClient.send('/app/chat/edit/' + selectedConversation?.id, {}, JSON.stringify(data));
+        stompClient.send('/app/chat/' + user?.id, {}, JSON.stringify(data));
     }
 
     function handleDeleteMessage() {
-        stompClient.send('/app/chat/delete/' + selectedConversation?.id, {}, JSON.stringify({ id: message.id }));
+        const data = {
+            action: WebSocketEventType.EDIT_MESSAGE,
+            MessageDeleteDTO: {
+                id: message.id,
+            }
+        }
+
+        stompClient.send('/app/chat/delete/' + user?.id, {}, JSON.stringify(data));
     }
 
     const handleMenuClick = (key) => {
