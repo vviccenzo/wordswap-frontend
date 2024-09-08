@@ -22,6 +22,8 @@ const defaultHomeState = {
     setScrollPage: () => { },
     loading: false,
     setLoading: () => { },
+    friendRequests: [],
+    setFriendRequests: () => { }
 };
 
 const HomeContext = createContext<HomeContextType>(defaultHomeState);
@@ -38,7 +40,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     const [translationOptions, setTranslationOptions] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [scrollPage, setScrollPage] = useState<number>(0);
-    const [loadConversartions, setLoadConversartions] = useState<boolean>(false);
+    const [friendRequests, setFriendRequests] = useState<any[]>([]);
 
     const doStartConversartion = (data) => {
         const conversationStarted = {
@@ -105,6 +107,8 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             setScrollPage,
             loading,
             setLoading,
+            friendRequests,
+            setFriendRequests
         }}>
             {children}
         </HomeContext.Provider>

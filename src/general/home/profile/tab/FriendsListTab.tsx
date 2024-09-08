@@ -77,7 +77,7 @@ export function FriendsListTab() {
                         <MessageOutlined style={{ fontSize: '18px', cursor: 'pointer' }} onClick={() => handleStartConversartion(item)} />
                         <Dropdown overlay={menu(item)} trigger={['click']}>
                             <Space>
-                                <EllipsisOutlined style={{ fontSize: '20px' }} />
+                                <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
                             </Space>
                         </Dropdown>
                     </div>

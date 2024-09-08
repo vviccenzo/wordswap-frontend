@@ -1,64 +1,26 @@
+import { Button, Layout, Typography } from 'antd';
 import React, { useState } from 'react';
-import { Layout, Divider, Typography, Button } from 'antd';
-import { ConversationList } from './conversartion/ConversationList.tsx';
-import { Chat } from './conversartion/Chat.tsx';
-import { Profile } from './profile/Profile.tsx';
 import { useHomeContext } from './context/HomeContext.tsx';
+import { Chat } from './conversartion/Chat.tsx';
+import { ConversationList } from './conversartion/ConversationList.tsx';
+import { Profile } from './profile/Profile.tsx';
 
-import useWebSocket from '../../hook/useWebSocket.ts';
-import { useUser } from '../../context/UserContext.tsx';
-import mapConversation from '../../utils/mapper/conversationMapper.ts';
 import { FolderOutlined } from '@ant-design/icons';
-import Icon from '@ant-design/icons/lib/components/Icon';
+import useWebSocket from '../../hook/useWebSocket.ts';
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
 
 export function Home() {
 
-    const { user } = useUser();
-    const { handleConversationSelected, handleConversations, handleStompClient, selectedConversation } = useHomeContext();
-
+    const { handleStompClient, selectedConversation } = useHomeContext();
     const [showArchived, setShowArchived] = useState<boolean>(false);
 
     const toggleView = () => {
         setShowArchived((prev) => !prev);
     };
 
-    function handleCallbackConversation(data: any) {
-        const conversationsMapped = data.map((conversation: any) => {
-            return mapConversation(conversation, user.id);
-        });
-
-        handleConversations(conversationsMapped);
-
-        if (selectedConversation.id) {
-            const conversation = conversationsMapped.filter((conversation: any) => conversation.id === Number(selectedConversation.id))[0];
-            const conversartionToUpdated = selectedConversation;
-
-            if (conversation) {
-                conversartionToUpdated.messages = conversation.messages;
-                conversartionToUpdated.lastMessage = conversation.lastMessage;
-            }
-
-            handleConversationSelected(conversartionToUpdated);
-        } else if (selectedConversation.isNewConversartion) {
-            const conversation = conversationsMapped.filter((conversation: any) => {
-                return Number(conversation.senderId) === Number(selectedConversation.senderId) && Number(conversation.receiverId) === Number(selectedConversation.receiverId)
-            })[0];
-
-            const conversartionToUpdated = selectedConversation;
-
-            if (conversation) {
-                conversartionToUpdated.messages = conversation.messages;
-                conversartionToUpdated.lastMessage = conversation.lastMessage;
-            }
-
-            handleConversationSelected(conversartionToUpdated);
-        }
-    };
-
-    useWebSocket(handleCallbackConversation, handleStompClient, selectedConversation ? selectedConversation : null);
+    useWebSocket(handleStompClient);
 
     return (
         <Layout>

@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { List, Button, Tooltip } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Button, List, Tooltip } from 'antd';
+import React, { useEffect } from 'react';
+import { useUser } from '../../../../context/UserContext.tsx';
 import { useRequest } from '../../../../hook/useRequest.ts';
 import { HttpMethods } from '../../../../utils/IRequest.ts';
-import { useUser } from '../../../../context/UserContext.tsx';
 import { Notification } from '../../../../utils/Notification.tsx';
+import { useHomeContext } from '../../context/HomeContext.tsx';
 
 export const FriendRequestsTab: React.FC = () => {
+
     const { user } = useUser();
     const { request } = useRequest();
-    const [friendRequests, setFriendRequests] = useState<any>([]);
+
+    const { friendRequests, setFriendRequests } = useHomeContext();
 
     useEffect(() => {
         fetchFriendRequests();

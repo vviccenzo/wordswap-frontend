@@ -21,4 +21,6 @@ export interface HomeContextType {
     setScrollPage: (page: number) => void;
     loading: boolean;
     setLoading: (loading: boolean) => void;
+    friendRequests: any[];
+    setFriendRequests: (friendRequests: any[]) => void;
 }

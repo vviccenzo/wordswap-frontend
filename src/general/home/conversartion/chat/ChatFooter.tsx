@@ -51,7 +51,7 @@ export function ChatFooter({
                 style={{ marginRight: '8px' }}
             />
             <Button type="primary" icon={<SendOutlined />} onClick={handleSend}>
-                Send
+                Enviar
             </Button>
         </div>
     );

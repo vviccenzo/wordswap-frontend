@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "antd/es/modal/Modal";
 
 import { useHomeContext } from "../../context/HomeContext.tsx";
@@ -96,6 +96,10 @@ export function EditUserModal() {
         onChange: handleUploadChange,
         fileList,
     };
+
+    useEffect(() => {
+        setProfileName(user.name);
+    }, [user.name]);
 
     return (
         <Modal

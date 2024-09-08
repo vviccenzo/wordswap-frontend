@@ -7,26 +7,6 @@ import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
-// Função para formatar a data do separador
-function formatDateForSeparator(date) {
-    const today = dayjs();
-    const messageDate = dayjs(date);
-
-    if (messageDate.isSame(today, 'day')) {
-        return 'Hoje';
-    } else if (messageDate.isSame(today.subtract(1, 'day'), 'day')) {
-        return 'Ontem';
-    } else {
-        return messageDate.format('DD/MM/YYYY');
-    }
-}
-
-// Função para determinar se um separador de data é necessário
-function shouldShowDateSeparator(currentDate, previousDate) {
-    if (!previousDate) return true;
-    return !dayjs(currentDate).isSame(previousDate, 'day');
-}
-
 export function Message({ message, isMe, conv, showDateSeparator, separatorDate }) {
 
     const { user } = useUser();
@@ -174,31 +154,5 @@ export function Message({ message, isMe, conv, showDateSeparator, separatorDate 
                 </Dropdown>
             </List.Item>
         </div>
-    );
-}
-
-// Componente que renderiza a lista de mensagens com separadores de data
-export function MessageList({ messages, conv }) {
-    let previousDate = null;
-
-    return (
-        <List itemLayout="horizontal">
-            {messages.map((message, index) => {
-                const currentDate = message.timeStamp;
-                const showDateSeparator = shouldShowDateSeparator(currentDate, previousDate);
-                previousDate = currentDate;
-
-                return (
-                    <Message
-                        key={message.id}
-                        message={message}
-                        isMe={message.sender === 'me'}
-                        conv={conv}
-                        showDateSeparator={showDateSeparator}
-                        separatorDate={currentDate}
-                    />
-                );
-            })}
-        </List>
     );
 }

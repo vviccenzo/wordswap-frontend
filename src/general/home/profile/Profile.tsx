@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Dropdown, Menu, Space } from 'antd';
+import { Avatar, Badge, Dropdown, Menu, Space } from 'antd';
 import { SettingOutlined, TeamOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
 import { useUser } from '../../../context/UserContext.tsx';
 import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.ts';
@@ -9,7 +9,7 @@ import { EditUserModal } from './editUser/EditUserModal.tsx';
 
 export function Profile() {
     const { user, doLogout } = useUser();
-    const { handleModalStatus, handleEditModalStatus } = useHomeContext();
+    const { handleModalStatus, handleEditModalStatus, friendRequests } = useHomeContext();
     const [isHovering, setIsHovering] = useState<boolean>(false);
 
     const hasProfilePicture = user?.profilePic && user?.profilePic?.length > 0;
@@ -51,7 +51,12 @@ export function Profile() {
                 <EditUserModal />
             </div>
             <div style={{ display: 'flex', gap: 35, marginRight: 10 }}>
-                <TeamOutlined style={{ fontSize: 18, cursor: 'pointer' }} onClick={() => handleModalStatus(true)} />
+                <div style={{ marginTop: 22 }}>
+                    <Badge count={friendRequests.length} overflowCount={99} offset={[10, 0]}>
+                        <TeamOutlined style={{ fontSize: 18, cursor: 'pointer' }} onClick={() => handleModalStatus(true)} />
+                    </Badge>
+                </div>
+
                 <FriendshipRequestModal />
                 <Dropdown overlay={menu} trigger={['click']}>
                     <Space>

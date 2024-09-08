@@ -1,31 +1,29 @@
+import { Button, Input } from 'antd';
 import React, { useState } from 'react';
-import { Input, Button } from 'antd';
 import { useUser } from '../../../../context/UserContext.tsx';
-import { useRequest } from '../../../../hook/useRequest.ts';
-import { HttpMethods } from '../../../../utils/IRequest.ts';
+import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
 import { Notification } from '../../../../utils/Notification.tsx';
+import { useHomeContext } from '../../context/HomeContext.tsx';
 
 export const AddFriendTab: React.FC = () => {
+
     const { user } = useUser();
-    const { request } = useRequest();
+    const { stompClient } = useHomeContext();
+
     const [friendCode, setFriendCode] = useState('');
 
     const handleAddFriend = () => {
-        request({
-            method: HttpMethods.POST,
-            url: '/friendship/send-invite',
-            data: {
+        const data = {
+            action: WebSocketEventType.SEND_FRIEND_REQUEST,
+            friendRequestDTO: {
                 senderId: user?.id,
-                targetUserCode: friendCode
-            },
-            successCallback: () => {
-                Notification({ message: 'Convite enviado', description: "Convite enviado com sucesso", placement: 'top', type: 'success' });
-            },
-            errorCallback: (error) => {
-                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+                targetUserCode: friendCode,
             }
-        });
+        };
 
+        stompClient.send('/app/chat/' + user?.id, {}, JSON.stringify(data));
+
+        Notification({ message: 'Convite enviado', description: "Convite enviado com sucesso", placement: 'top', type: 'success' });
         setFriendCode('');
     };
 
