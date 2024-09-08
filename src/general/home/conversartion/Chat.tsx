@@ -39,6 +39,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
         }
     };
 
+
     function configurateTranslation() {
         const data = {
             userId: user?.id,
@@ -68,6 +69,8 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     useEffect(() => {
         if (selectedConversation) {
             setCombinedMessages(selectedConversation.messages);
+            if(selectedConversation.isNewConversartion) return;
+
             const userConfig = selectedConversation.configsUser[user.id];
             if (userConfig) {
                 setLanguageTo(userConfig.sendingTranslation);

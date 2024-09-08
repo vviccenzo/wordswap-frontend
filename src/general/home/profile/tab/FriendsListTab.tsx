@@ -45,8 +45,10 @@ export function FriendsListTab() {
         });
     }
 
-    function handleStartConversartion(friend) {
-        doStartConversartion(friend);
+    function handleStartConversartion(data) {
+        data.senderId = user.id;
+
+        doStartConversartion(data);
         handleModalStatus(false);
     }
 

@@ -42,6 +42,19 @@ export function Home() {
             }
 
             handleConversationSelected(conversartionToUpdated);
+        } else if (selectedConversation.isNewConversartion) {
+            const conversation = conversationsMapped.filter((conversation: any) => {
+                return Number(conversation.senderId) === Number(selectedConversation.senderId) && Number(conversation.receiverId) === Number(selectedConversation.receiverId)
+            })[0];
+
+            const conversartionToUpdated = selectedConversation;
+
+            if (conversation) {
+                conversartionToUpdated.messages = conversation.messages;
+                conversartionToUpdated.lastMessage = conversation.lastMessage;
+            }
+
+            handleConversationSelected(conversartionToUpdated);
         }
     };
 

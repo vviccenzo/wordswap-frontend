@@ -40,13 +40,15 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     const [scrollPage, setScrollPage] = useState<number>(0);
     const [loadConversartions, setLoadConversartions] = useState<boolean>(false);
 
-    const doStartConversartion = (friend) => {
+    const doStartConversartion = (data) => {
         const conversationStarted = {
-            id: friend.conversationId,
-            friendId: friend.id,
-            name: friend.label,
-            profilePicture: friend.profilePicture,
+            id: data.conversationId,
+            receiverId: data.id,
+            conversationName: data.label,
+            profilePic: data.profilePicture,
             messages: [],
+            isNewConversartion: true,
+            senderId: data.senderId
         };
 
         setConversartions([conversationStarted, ...conversations]);
@@ -55,12 +57,14 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     }
 
     useEffect(() => {
-        request({
-            method: HttpMethods.GET,
-            url: '/translation/find-options-translation',
-            successCallback: (data) => setTranslationOptions(data),
-            errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
-        });
+        if (selectedConversation) {
+            request({
+                method: HttpMethods.GET,
+                url: '/translation/find-options-translation',
+                successCallback: (data) => setTranslationOptions(data),
+                errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
+            });
+        }
     }, []);
 
     function handleModalStatus(status: boolean) {

@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { Avatar, Dropdown, Menu, Typography } from 'antd';
 import { DeleteOutlined, FolderOutlined } from '@ant-design/icons';
-import { useHomeContext } from '../context/HomeContext.tsx';
+import { Avatar, Dropdown, Menu, Typography } from 'antd';
+import React, { useEffect } from 'react';
 import { useUser } from '../../../context/UserContext.tsx';
-import { HttpMethods } from '../../../utils/IRequest.ts';
-import { Notification } from '../../../utils/Notification.tsx';
 import { useRequest } from '../../../hook/useRequest.ts';
 import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.ts';
+import { HttpMethods } from '../../../utils/IRequest.ts';
+import { Notification } from '../../../utils/Notification.tsx';
+import { useHomeContext } from '../context/HomeContext.tsx';
 
 import * as moment from 'moment';
 import mapConversations from '../../../utils/mapper/conversationMapper.ts';
@@ -18,7 +18,7 @@ export function ConversationList() {
     const { user } = useUser();
     const { request } = useRequest();
 
-    const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage } = useHomeContext();
+    const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, selectedConversation } = useHomeContext();
 
     useEffect(() => {
         if (user.id) {
@@ -27,7 +27,7 @@ export function ConversationList() {
     }, [user.id]);
 
     const getLastMessage = (conv) => {
-        if (conv && Object.keys(conv.lastMessage).length > 0) {
+        if (conv && conv.lastMessage && Object.keys(conv.lastMessage).length > 0) {
             const firstKey = Object.keys(conv.lastMessage)[0];
             return conv.lastMessage[firstKey];
         }
@@ -36,7 +36,7 @@ export function ConversationList() {
     };
 
     const getLastTimeMessage = (conv) => {
-        if (conv && Object.keys(conv.lastMessage).length > 0) {
+        if (conv && conv.lastMessage && Object.keys(conv.lastMessage).length > 0) {
             const timeMessage = Object.keys(conv.lastMessage)[0];
 
             return moment(timeMessage).format('HH:mm');
@@ -106,31 +106,32 @@ export function ConversationList() {
     );
 
     return (
-        <div style={{ padding: '16px', height: '84.4%', display: 'flex', flexDirection: 'column', backgroundColor: '#DCDCDC' }}>
+        <div style={{ padding: '16px', height: '84.4%', display: 'flex', flexDirection: 'column' }}>
             <Menu mode="inline" theme="light" style={{ borderRadius: 10 }}>
                 {conversations.map((conv) => (
-                    <Dropdown
+                    <Menu.Item
                         key={conv.id}
-                        overlay={menu(conv)}
-                        trigger={['contextMenu']}
-                        disabled={!conv}
+                        icon={
+                            <Avatar
+                                size={48}
+                                style={{
+                                    border: '1px solid #777777',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    overflow: 'hidden'
+                                }}
+                                src={byteArrayToDataUrl(conv.profilePic) || ''}
+                            />
+                        }
+                        onClick={() => handleConversationSelected(conv)}
+                        style={{ height: 55, paddingLeft: 20, marginBottom: 10 }}
+                        onContextMenu={(e) => e.preventDefault()}
                     >
-                        <Menu.Item
-                            icon={
-                                <Avatar
-                                    size={48}
-                                    style={{
-                                        border: '1px solid #777777',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        overflow: 'hidden'
-                                    }}
-                                    src={byteArrayToDataUrl(conv.profilePic) || ''}
-                                />}
-                            onClick={() => handleConversationSelected(conv)}
-                            style={{ height: 55, paddingLeft: 20 }}
+                        <Dropdown
+                            overlay={menu(conv)}
+                            trigger={['contextMenu']}
                         >
                             <div className="ant-menu-title-content" style={{ display: 'flex', flexDirection: 'column', gap: 5, marginLeft: 5 }}>
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -139,8 +140,8 @@ export function ConversationList() {
                                 </div>
                                 <Text type="secondary">{getLastMessage(conv)}</Text>
                             </div>
-                        </Menu.Item>
-                    </Dropdown>
+                        </Dropdown>
+                    </Menu.Item>
                 ))}
             </Menu>
         </div>
