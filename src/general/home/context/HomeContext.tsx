@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
 import { useRequest } from "../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../utils/IRequest.ts";
 import { Notification } from "../../../utils/Notification.tsx";
+import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
 
 const defaultHomeState = {
     isModalOpen: false,
@@ -18,6 +18,16 @@ const defaultHomeState = {
     isEditModalOpen: false,
     handleEditModalStatus: () => { },
     translationOptions: [],
+    scrollPage: 0,
+    setScrollPage: () => { },
+    loading: false,
+    setLoading: () => { },
+    friendRequests: [],
+    setFriendRequests: () => { },
+    friendsList: [],
+    setFriendsList: () => { },
+    totalMessages: 0,
+    setTotalMessages: () => { }
 };
 
 const HomeContext = createContext<HomeContextType>(defaultHomeState);
@@ -32,14 +42,21 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     const [stompClient, setStompClient] = useState<any>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [translationOptions, setTranslationOptions] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [scrollPage, setScrollPage] = useState<number>(1);
+    const [friendRequests, setFriendRequests] = useState<any[]>([]);
+    const [friendsList, setFriendsList] = useState<any[]>([]);
+    const [totalMessages, setTotalMessages] = useState<any>(0);
 
-    const doStartConversartion = (friend) => {
+    const doStartConversartion = (data) => {
         const conversationStarted = {
-            id: friend.conversationId,
-            friendId: friend.id,
-            name: friend.label,
-            profilePicture: friend.profilePicture,
+            id: data.conversationId,
+            receiverId: data.id,
+            conversationName: data.label,
+            profilePic: data.profilePicture,
             messages: [],
+            isNewConversartion: true,
+            senderId: data.senderId
         };
 
         setConversartions([conversationStarted, ...conversations]);
@@ -48,12 +65,14 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     }
 
     useEffect(() => {
-        request({
-            method: HttpMethods.GET,
-            url: '/translation/find-options-translation',
-            successCallback: (data) => setTranslationOptions(data),
-            errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
-        });
+        if (selectedConversation) {
+            request({
+                method: HttpMethods.GET,
+                url: '/translation/find-options-translation',
+                successCallback: (data) => setTranslationOptions(data),
+                errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
+            });
+        }
     }, []);
 
     function handleModalStatus(status: boolean) {
@@ -66,6 +85,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
 
     function handleConversationSelected(data: any) {
         setSelectedConversation(data);
+        setTotalMessages(data.totalMessages || 0);
     }
 
     function handleStompClient(data: any) {
@@ -89,7 +109,17 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             handleStompClient,
             isEditModalOpen,
             handleEditModalStatus,
-            translationOptions
+            translationOptions,
+            scrollPage,
+            setScrollPage,
+            loading,
+            setLoading,
+            friendRequests,
+            setFriendRequests,
+            friendsList,
+            setFriendsList,
+            totalMessages,
+            setTotalMessages
         }}>
             {children}
         </HomeContext.Provider>

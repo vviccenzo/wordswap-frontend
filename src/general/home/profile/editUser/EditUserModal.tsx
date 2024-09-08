@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "antd/es/modal/Modal";
 
 import { useHomeContext } from "../../context/HomeContext.tsx";
 import { Button, Input, Upload, message, Typography, Avatar } from "antd";
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
 import { useUser } from "../../../../context/UserContext.tsx";
-import { byteArrayToDataUrl } from "../../../../utils/byteArrayToDataUrl.ts";
+import { byteArrayToDataUrl } from "../../../../utils/functions/byteArrayToDataUrl.ts";
 
 import { useRequest } from "../../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../../utils/IRequest.ts";
@@ -96,6 +96,10 @@ export function EditUserModal() {
         onChange: handleUploadChange,
         fileList,
     };
+
+    useEffect(() => {
+        setProfileName(user.name);
+    }, [user.name]);
 
     return (
         <Modal

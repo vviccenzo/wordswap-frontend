@@ -32,7 +32,7 @@ export function TranslationPopover({
 
     const content = (
         <div>
-            <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            {/* <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Tooltip title="Selecione o idioma para traduzir ao Enviar">
                     <span>Traduzir ao enviar:</span>
                     <Select
@@ -55,7 +55,7 @@ export function TranslationPopover({
                     <Switch checked={translationSending} onChange={() => setTranslationSending(!translationSending)} />
                 </div>
             </div>
-            <Divider />
+            <Divider /> */}
             <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Tooltip title="Selecione o idioma para traduzir ao Receber">
                     <span style={{ marginRight: '20px' }}>Traduzir ao receber:</span>

@@ -1,6 +1,10 @@
 export default function getContent(user, conv, message) {
+    if (!conv.configUser) {
+        return message.content;
+    }
+
     const userId = user.id;
-    const config = conv.configsUser[userId];
+    const config = conv.configsUser[Number(userId)];
 
     if (config.isSendingTranslation && message.messageContent.contentSending) {
         return message.messageContent.contentSending;

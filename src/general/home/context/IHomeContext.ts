@@ -17,4 +17,14 @@ export interface HomeContextType {
     isEditModalOpen: boolean;
     handleEditModalStatus: (isEditModalOpen: boolean) => void;
     translationOptions: any[];
+    scrollPage: number;
+    setScrollPage: (page: number) => void;
+    loading: boolean;
+    setLoading: (loading: boolean) => void;
+    friendRequests: any[];
+    setFriendRequests: (friendRequests: any[]) => void;
+    friendsList: any[];
+    setFriendsList: (friendsList: any[]) => void;
+    totalMessages: number;
+    setTotalMessages: (totalMessages: number) => void;
 }

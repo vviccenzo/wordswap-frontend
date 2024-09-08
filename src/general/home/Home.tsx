@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { Layout, Divider, Typography, Button } from 'antd';
-import { ConversationList } from './conversartion/ConversationList.tsx';
-import { Chat } from './conversartion/Chat.tsx';
-import { Profile } from './profile/Profile.tsx';
+import { Button, Layout, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useHomeContext } from './context/HomeContext.tsx';
+import { Chat } from './conversartion/Chat.tsx';
+import { ConversationList } from './conversartion/ConversationList.tsx';
+import { Profile } from './profile/Profile.tsx';
 
+import { FolderOutlined } from '@ant-design/icons';
 import useWebSocket from '../../hook/useWebSocket.ts';
 import { useUser } from '../../context/UserContext.tsx';
-import mapConversation from '../../utils/mapper/conversationMapper.ts';
-import { FolderOutlined } from '@ant-design/icons';
-import Icon from '@ant-design/icons/lib/components/Icon';
+import { useRequest } from '../../hook/useRequest.ts';
+import { HttpMethods } from '../../utils/IRequest.ts';
+import { Notification } from '../../utils/Notification.tsx';
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
@@ -17,35 +18,34 @@ const { Title } = Typography;
 export function Home() {
 
     const { user } = useUser();
-    const { handleConversationSelected, handleConversations, handleStompClient, selectedConversation } = useHomeContext();
-
+    const { request } = useRequest();
+    const { handleStompClient, selectedConversation, setFriendRequests } = useHomeContext();
     const [showArchived, setShowArchived] = useState<boolean>(false);
 
     const toggleView = () => {
         setShowArchived((prev) => !prev);
     };
 
-    function handleCallbackConversation(data: any) {
-        const conversationsMapped = data.map((conversation: any) => {
-            return mapConversation(conversation, user.id);
-        });
-
-        handleConversations(conversationsMapped);
-
-        if (selectedConversation.id) {
-            const conversation = conversationsMapped.filter((conversation: any) => conversation.id === Number(selectedConversation.id))[0];
-            const conversartionToUpdated = selectedConversation;
-
-            if (conversation) {
-                conversartionToUpdated.messages = conversation.messages;
-                conversartionToUpdated.lastMessage = conversation.lastMessage;
+    function fetchFriendRequests(userId: number) {
+        request({
+            method: HttpMethods.GET,
+            url: '/friendship/find-pending-invites?userId=' + userId,
+            successCallback: (data) => {
+                setFriendRequests(data);
+            },
+            errorCallback: (error) => {
+                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
             }
+        });
+    }
 
-            handleConversationSelected(conversartionToUpdated);
+    useEffect(() => {
+        if (user.id) {
+            fetchFriendRequests(user.id);
         }
-    };
+    }, [user?.id]);
 
-    useWebSocket(handleCallbackConversation, handleStompClient, selectedConversation ? selectedConversation : null);
+    useWebSocket(handleStompClient);
 
     return (
         <Layout>
@@ -85,7 +85,7 @@ export function Home() {
                     {selectedConversation ? (
                         <Chat />
                     ) : (
-                        <Title level={2}>Select a conversation</Title>
+                        <Title level={2}>Inicie uma conversa</Title>
                     )}
                 </Content>
             </Layout>

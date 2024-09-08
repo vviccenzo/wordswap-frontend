@@ -26,7 +26,14 @@ export function Register() {
             formData.append('username', form.getFieldValue("username"));
             formData.append('password', form.getFieldValue("password"));
             formData.append('email', form.getFieldValue("email"));
-            formData.append('file', fileList[0].originFileObj);
+            formData.append('name', form.getFieldValue("name"));
+
+            if (fileList[0]) {
+                formData.append('file', fileList[0].originFileObj);
+            } else {
+                formData.append('file', 'undefined');
+            }
+
             formData.append('name', form.getFieldValue("name"));
 
             doRequest({

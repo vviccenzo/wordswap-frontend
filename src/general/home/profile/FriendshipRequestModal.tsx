@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Modal, Tabs } from 'antd';
 import { AddFriendTab } from './tab/AddFriendTab.tsx';
 import { FriendsListTab } from './tab/FriendsListTab.tsx';

@@ -8,8 +8,9 @@ import "./Chat.css";
 import { ChatHeader } from './chat/ChatHeader.tsx';
 import { ChatBody } from './chat/ChatBody.tsx';
 import { ChatFooter } from './chat/ChatFooter.tsx';
+import { WebSocketEventType } from '../../../utils/enum/WebSocketEventType.ts';
 
-export function Chat() {
+export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const { user } = useUser();
     const { request } = useRequest();
     const { selectedConversation, stompClient, conversations } = useHomeContext();
@@ -26,14 +27,18 @@ export function Chat() {
 
     const handleSend = () => {
         if (message.trim()) {
-            const messageData = {
-                senderId: user?.id,
-                receiverId: user.id === selectedConversation?.receiverId ? selectedConversation?.senderId : selectedConversation?.receiverId,
-                conversationId: selectedConversation?.id,
-                content: message,
+            const messageRequest = {
+                action: WebSocketEventType.SEND_MESSAGE,
+                messageCreateDTO: {
+                    senderId: user?.id,
+                    receiverId: user.id === selectedConversation?.receiverId ? selectedConversation?.senderId : selectedConversation?.receiverId,
+                    conversationId: selectedConversation?.id,
+                    content: message,
+                    scrollPage,
+                }
             };
 
-            stompClient.send('/app/chat/' + selectedConversation?.id, {}, JSON.stringify(messageData));
+            stompClient.send('/app/chat/' + user.id, {}, JSON.stringify(messageRequest));
             setMessage('');
         }
     };
@@ -67,6 +72,8 @@ export function Chat() {
     useEffect(() => {
         if (selectedConversation) {
             setCombinedMessages(selectedConversation.messages);
+            if(selectedConversation.isNewConversartion) return;
+
             const userConfig = selectedConversation.configsUser[user.id];
             if (userConfig) {
                 setLanguageTo(userConfig.sendingTranslation);
@@ -90,6 +97,10 @@ export function Chat() {
             <ChatBody
                 messages={combinedMessages}
                 selectedConversation={selectedConversation}
+                setScrollPage={setScrollPage}
+                scrollPage={scrollPage}
+                loading={loading}
+                setLoading={setLoading}
             />
             <ChatFooter
                 message={message}
