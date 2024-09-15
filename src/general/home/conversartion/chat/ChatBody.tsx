@@ -6,9 +6,11 @@ import { HttpMethods } from '../../../../utils/IRequest.ts';
 import { useRequest } from '../../../../hook/useRequest.ts';
 import { useUser } from '../../../../context/UserContext.tsx';
 
-import dayjs from 'dayjs';
 import formatTimestamp from '../../../../utils/functions/formatTimestamp.ts';
 import mapConversations from '../../../../utils/mapper/conversationMapper.ts';
+
+import './ChatBody.css';
+import { formatDateForSeparator, shouldShowDateSeparator } from '../../../../utils/functions/dateUtils.ts';
 
 interface ChatBodyProps {
     messages: any[];
@@ -19,33 +21,17 @@ interface ChatBodyProps {
     setLoading: (loading: boolean) => void;
 }
 
-function shouldShowDateSeparator(currentDate, previousDate) {
-    if (!previousDate) return true;
-    return !dayjs(currentDate).isSame(previousDate, 'day');
-}
-
-function formatDateForSeparator(date) {
-    const today = dayjs();
-    const messageDate = dayjs(date);
-
-    if (messageDate.isSame(today, 'day')) {
-        return 'Hoje';
-    } else if (messageDate.isSame(today.subtract(1, 'day'), 'day')) {
-        return 'Ontem';
-    } else {
-        return messageDate.format('DD/MM/YYYY');
-    }
-}
-
 let previousDate = null;
 export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
     const { user } = useUser();
     const { request } = useRequest();
     const { loading, setLoading, setScrollPage, scrollPage, handleConversationSelected, totalMessages } = useHomeContext();
-    const [containerHeight, setContainerHeight] = useState(1000);
+    const [containerHeight, setContainerHeight] = useState<number>(1000);
 
     const listRef = useRef<ListRef>(null);
     const MESSAGES_PER_PAGE = 10;
+
+    const [shouldAutoScroll, setShouldAutoScroll] = useState<boolean>(true);
 
     const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
         if (e.currentTarget.scrollTop === 0 && !loading && messages.length < totalMessages) {
@@ -82,17 +68,12 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                 handleConversationSelected(conv);
                 setLoading(false);
             },
-            errorCallback: (error) => {
-                setLoading(false);
-            }
+            errorCallback: (error) => setLoading(false)
         });
     }
 
     useEffect(() => {
-        const updateHeight = () => {
-            setContainerHeight(window.innerHeight * 0.8);
-        };
-
+        const updateHeight = () => setContainerHeight(window.innerHeight * 0.8);
         window.addEventListener('resize', updateHeight);
         updateHeight();
 
@@ -100,9 +81,11 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
     }, []);
 
     useEffect(() => {
-        if (listRef.current) {
+        if (listRef.current && shouldAutoScroll) {
             listRef.current.scrollTo({ index: messages.length - 1, align: 'bottom' });
         }
+
+        setShouldAutoScroll(true);
     }, [messages, selectedConversation]);
 
     return (
@@ -111,7 +94,6 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                 ref={listRef}
                 data={messages}
                 height={containerHeight}
-                itemHeight={47}
                 itemKey="id"
                 onScroll={onScroll}
             >

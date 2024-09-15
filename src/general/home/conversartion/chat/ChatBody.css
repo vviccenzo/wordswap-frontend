@@ -1,0 +1,11 @@
+/* .chat-container {
+    height: 80vh;
+    display: flex;
+    flex-direction: column-reverse;
+    margin-bottom: 10px
+} */
+/* @media (max-width: 768px) {
+    .chat-container {
+        flex-direction: column;
+    }
+} */

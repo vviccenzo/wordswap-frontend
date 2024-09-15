@@ -4,7 +4,6 @@ import { useHomeContext } from '../context/HomeContext.tsx';
 import { useRequest } from "../../../hook/useRequest.ts";
 import { HttpMethods } from '../../../utils/IRequest.ts';
 import { Notification } from '../../../utils/Notification.tsx';
-import "./Chat.css";
 import { ChatHeader } from './chat/ChatHeader.tsx';
 import { ChatBody } from './chat/ChatBody.tsx';
 import { ChatFooter } from './chat/ChatFooter.tsx';
@@ -60,7 +59,6 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
             successCallback: (data) => {
                 setLanguageTo(translationTo.split('-')[0]);
                 setLanguageFrom(translationFrom.split('-')[0]);
-
                 setPopoverVisible(false);
             },
             errorCallback: (error) => {

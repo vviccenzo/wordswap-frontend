@@ -3,8 +3,7 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useUser } from '../context/UserContext.tsx';
 import { BASE_URL_WS } from '../utils/constants.ts';
-import { useHandleCallbackWS } from '../utils/ws/handleCallbackWS.ts';
-
+import { useHandleCallbackWS } from '../utils/ws/handleCallbackWS.tsx';
 
 const useWebSocket = (handleStompClient: (client: any) => void) => {
     const { token, user } = useUser();

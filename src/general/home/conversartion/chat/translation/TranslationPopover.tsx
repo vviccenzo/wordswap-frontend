@@ -31,31 +31,7 @@ export function TranslationPopover({
     const { translationOptions } = useHomeContext();
 
     const content = (
-        <div>
-            {/* <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Tooltip title="Selecione o idioma para traduzir ao Enviar">
-                    <span>Traduzir ao enviar:</span>
-                    <Select
-                        value={languageTo}
-                        onChange={(value, option: any) => {
-                            setTranslationTo(option.children + ' - ' + value);
-                            setLanguageTo(value)
-                        }}
-                        style={{ width: '150px', marginLeft: '18px' }}
-                        defaultValue="pt-br"
-                        showSearch
-                    >
-                        {translationOptions.map(option => (
-                            <Option key={option.code} value={option.code}>{option.name}</Option>
-                        ))}
-                    </Select>
-                </Tooltip>
-                <div style={{ display: 'flex', gap: 5 }}>
-                    <span>Ativar o modo tradução:</span>
-                    <Switch checked={translationSending} onChange={() => setTranslationSending(!translationSending)} />
-                </div>
-            </div>
-            <Divider /> */}
+        <>
             <div style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Tooltip title="Selecione o idioma para traduzir ao Receber">
                     <span style={{ marginRight: '20px' }}>Traduzir ao receber:</span>
@@ -82,7 +58,7 @@ export function TranslationPopover({
                 <Button type="dashed" onClick={() => setPopoverVisible(false)}>Cancelar</Button>
                 <Button type="primary" onClick={configurateTranslation}>Salvar</Button>
             </div>
-        </div>
+        </>
     );
 
     return (

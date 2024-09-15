@@ -21,6 +21,8 @@ export default function mapConversation(conversation: any, userId: any): any {
         messages: combinedMessages,
         lastMessage: conversation.lastMessage,
         configsUser: conversation.configsUser,
-        totalMessages: conversation.totalMessages
+        totalMessages: conversation.totalMessages,
+        receiverCode: conversation.receiverCode,
+        senderCode: conversation.senderCode
     };
 }

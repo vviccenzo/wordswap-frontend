@@ -11,7 +11,6 @@ const api = axios.create({
     },
 });
 
-
 const doRequest = async ({ method, url, params = {}, data = {}, headers = {}, successCallback, errorCallback, token }: IRequest): Promise<void> => {
 
     try {
