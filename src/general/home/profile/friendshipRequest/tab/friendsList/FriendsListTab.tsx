@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { List, Dropdown, Space, Avatar, Menu } from 'antd';
 import { EllipsisOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
-import { useUser } from '../../../../context/UserContext.tsx';
-import { HttpMethods } from '../../../../utils/IRequest.ts';
-import { Notification } from '../../../../utils/Notification.tsx';
-import { useRequest } from '../../../../hook/useRequest.ts';
-import { useHomeContext } from '../../context/HomeContext.tsx';
-import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
+import { Avatar, Dropdown, List, Menu, Space } from 'antd';
+import React, { useEffect } from 'react';
+import { useUser } from '../../../../../../context/UserContext.tsx';
+import { useRequest } from '../../../../../../hook/useRequest.ts';
+import { HttpMethods } from '../../../../../../utils/IRequest.ts';
+import { Notification } from '../../../../../../utils/Notification.tsx';
+import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType.ts';
+import { useHomeContext } from '../../../../context/HomeContext.tsx';
+
+import './FriendList.css';
 
 export function FriendsListTab() {
     const { user } = useUser();
@@ -61,20 +63,20 @@ export function FriendsListTab() {
         <List
             dataSource={friendsList}
             renderItem={(friend: any) => (
-                <List.Item>
+                <List.Item className="list-item-container">
                     <Avatar
                         size={48}
                         icon={<UserOutlined />}
-                        style={{ cursor: 'pointer', border: '1px solid #777777', marginRight: 10 }}
+                        className="avatar"
                     />
                     <List.Item.Meta
                         title={friend.label}
                     />
-                    <div style={{ gap: 20, display: 'flex' }}>
-                        <MessageOutlined style={{ fontSize: '18px', cursor: 'pointer' }} onClick={() => handleStartConversartion(friend)} />
+                    <div className="actions-container">
+                        <MessageOutlined className="message-icon" onClick={() => handleStartConversartion(friend)} />
                         <Dropdown overlay={menu(friend)} trigger={['click']}>
                             <Space>
-                                <EllipsisOutlined style={{ fontSize: '20px', cursor: 'pointer' }} />
+                                <EllipsisOutlined className="dropdown-icon" />
                             </Space>
                         </Dropdown>
                     </div>

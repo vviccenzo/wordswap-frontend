@@ -1,0 +1,45 @@
+.loading-notification {
+    position: absolute;
+    left: 50%;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 10px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px
+}
+
+.chat-body {
+    border: #938ca9 1px solid;
+    padding-left: 10px;
+    background-color: #938ca9;
+}
+
+.message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.message-sent {
+    background-color: #e1ffc7;
+    align-self: flex-end;
+}
+
+.message-received {
+    background-color: #fff;
+    align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+    .chat-body {
+        padding: 12px;
+    }
+
+    .message {
+        padding: 8px;
+        font-size: 14px;
+    }
+}

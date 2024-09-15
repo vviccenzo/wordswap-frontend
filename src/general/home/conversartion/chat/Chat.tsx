@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../../../context/UserContext.tsx';
-import { useHomeContext } from '../context/HomeContext.tsx';
-import { useRequest } from "../../../hook/useRequest.ts";
-import { HttpMethods } from '../../../utils/IRequest.ts';
-import { Notification } from '../../../utils/Notification.tsx';
-import { ChatHeader } from './chat/ChatHeader.tsx';
-import { ChatBody } from './chat/ChatBody.tsx';
-import { ChatFooter } from './chat/ChatFooter.tsx';
-import { WebSocketEventType } from '../../../utils/enum/WebSocketEventType.ts';
+import { useUser } from '../../../../context/UserContext.tsx';
+import { useHomeContext } from '../../context/HomeContext.tsx';
+import { useRequest } from "../../../../hook/useRequest.ts";
+import { HttpMethods } from '../../../../utils/IRequest.ts';
+import { Notification } from '../../../../utils/Notification.tsx';
+import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
+import { ChatHeader } from './header/ChatHeader.tsx';
+import { ChatBody } from './body/ChatBody.tsx';
+import { ChatFooter } from './footer/ChatFooter.tsx';
+import './Chat.css'; // Import the main CSS file
 
 export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const { user } = useUser();
@@ -70,7 +71,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     useEffect(() => {
         if (selectedConversation) {
             setCombinedMessages(selectedConversation.messages);
-            if(selectedConversation.isNewConversartion) return;
+            if (selectedConversation.isNewConversartion) return;
 
             const userConfig = selectedConversation.configsUser[user.id];
             if (userConfig) {
@@ -87,37 +88,43 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     }, [selectedConversation, conversations]);
 
     return (
-        <div style={{ padding: '16px', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#DCDCDC', borderRadius: 20 }}>
-            <ChatHeader
-                profilePicture={selectedConversation?.profilePic}
-                conversationName={selectedConversation?.conversationName}
-            />
-            <ChatBody
-                messages={combinedMessages}
-                selectedConversation={selectedConversation}
-                setScrollPage={setScrollPage}
-                scrollPage={scrollPage}
-                loading={loading}
-                setLoading={setLoading}
-            />
-            <ChatFooter
-                message={message}
-                setMessage={setMessage}
-                handleSend={handleSend}
-                popoverVisible={popoverVisible}
-                setPopoverVisible={setPopoverVisible}
-                languageTo={languageTo}
-                setLanguageTo={setLanguageTo}
-                translationSending={translationSending}
-                setTranslationSending={setTranslationSending}
-                languageFrom={languageFrom}
-                setLanguageFrom={setLanguageFrom}
-                translationReceiving={translationReceiving}
-                setTranslationReceiving={setTranslationReceiving}
-                configurateTranslation={configurateTranslation}
-                setTranslationTo={setTranslationTo}
-                setTranslationFrom={setTranslationFrom}
-            />
+        <div className="chat-container">
+            <div className="chat-header-container">
+                <ChatHeader
+                    profilePicture={selectedConversation?.profilePic}
+                    conversationName={selectedConversation?.conversationName}
+                />
+            </div>
+            <div className="chat-body-container">
+                <ChatBody
+                    messages={combinedMessages}
+                    selectedConversation={selectedConversation}
+                    setScrollPage={setScrollPage}
+                    scrollPage={scrollPage}
+                    loading={loading}
+                    setLoading={setLoading}
+                />
+            </div>
+            <div className="chat-footer-container">
+                <ChatFooter
+                    message={message}
+                    setMessage={setMessage}
+                    handleSend={handleSend}
+                    popoverVisible={popoverVisible}
+                    setPopoverVisible={setPopoverVisible}
+                    languageTo={languageTo}
+                    setLanguageTo={setLanguageTo}
+                    translationSending={translationSending}
+                    setTranslationSending={setTranslationSending}
+                    languageFrom={languageFrom}
+                    setLanguageFrom={setLanguageFrom}
+                    translationReceiving={translationReceiving}
+                    setTranslationReceiving={setTranslationReceiving}
+                    configurateTranslation={configurateTranslation}
+                    setTranslationTo={setTranslationTo}
+                    setTranslationFrom={setTranslationFrom}
+                />
+            </div>
         </div>
     );
 }

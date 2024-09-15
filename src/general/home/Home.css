@@ -1,0 +1,45 @@
+.sider {
+    background: #42397b !important;
+}
+
+.button-folder {
+    margin: 4px 0;
+}
+
+.folder-button {
+    width: 100%;
+    text-align: center;
+    background-color: #3e375c;
+    border-color: #d9d9d9;
+    color: white;
+    font-weight: bold;
+    height: 45px;
+}
+
+.title-folder {
+    margin: 0 !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+    color: white !important;
+}
+
+.content {
+    padding: 24px;
+    margin: 0;
+    min-height: 280px;
+}
+
+.profile {
+    border-bottom: #8278a3 4px solid;
+}
+
+.folder-icon {
+    color: white;
+    font-size: 21px;
+}
+
+.layout-home {
+    min-height: 100vh;
+    background-color: #8278a3;
+    border-left: #322b6b 8px solid;
+}

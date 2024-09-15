@@ -1,14 +1,18 @@
+.modal-root {
+    background-color: #42397b !important;
+}
+
+.modal-container {
+    background-color: #110e4a;
+    border-radius: 20px;
+    box-shadow: none;
+}
+
 .modal-body {
     display: flex;
     flex-direction: column;
     padding: 20px;
     border-radius: 20px;
-}
-
-.modal-container {
-    background-color: transparent;
-    border-radius: 20px;
-    box-shadow: none;
 }
 
 .upload-avatar {
@@ -22,14 +26,24 @@
 }
 
 .upload-icon {
-    font-size: 40px;
+    font-size: 90px;
     color: #FFF;
 }
 
-.avatar-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+.avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-icon {
+    cursor: pointer;
+    border: 1px solid #777777;
+    transition: opacity 0.3s;
+}
+
+.avatar-icon.hover {
+    opacity: 0.8;
 }
 
 .profile-header {
@@ -40,26 +54,30 @@
 
 .profile-name {
     margin: 0;
-    color: #000;
+    color: white !important;
+}
+
+.profile-name-input {
+    width: 100%;
 }
 
 .edit-icon {
     margin-left: 10px;
     color: #777;
-    margin-bottom: 8px
+    margin-bottom: 8px;
 }
 
 .bio-textarea {
     width: 100%;
     margin-top: 10px;
     border-radius: 10px;
-    background-color: #C4C4C4;
     color: #555;
 }
 
 .button-group {
     display: flex;
-    justify-content: space-between;
+    gap: 20px;
+    justify-content: flex-end;
     margin-top: 20px;
     width: 100%;
 }
@@ -71,5 +89,8 @@
 }
 
 .save-button {
+    background-color: #110e4a;
+    color: #FFF;
+    border: 1px solid #110e4a;
     border-radius: 20px;
 }

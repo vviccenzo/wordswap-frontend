@@ -1,0 +1,20 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #DCDCDC;
+    border-radius: 20px;
+}
+
+.chat-header-container,
+.chat-body-container,
+.chat-footer-container {
+    background-color: #DCDCDC;
+    border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        border-radius: 10px;
+    }
+}

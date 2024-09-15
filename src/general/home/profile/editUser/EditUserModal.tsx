@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Modal from "antd/es/modal/Modal";
-
-import { useHomeContext } from "../../context/HomeContext.tsx";
 import { Button, Input, Upload, message, Typography, Avatar } from "antd";
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
 import { useUser } from "../../../../context/UserContext.tsx";
 import { byteArrayToDataUrl } from "../../../../utils/functions/byteArrayToDataUrl.ts";
-
 import { useRequest } from "../../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../../utils/IRequest.ts";
 import { Notification } from "../../../../utils/Notification.tsx";
-
+import { useHomeContext } from "../../context/HomeContext.tsx";
 import "./EditUserModal.css";
 
 const { TextArea } = Input;
 
 export function EditUserModal() {
-
     const { user, setUser } = useUser();
     const { request } = useRequest();
-
     const { isEditModalOpen, handleEditModalStatus } = useHomeContext();
 
     const [bio, setBio] = useState<string>(user.bio || '');
@@ -49,8 +44,7 @@ export function EditUserModal() {
             url: '/user',
             data: formData,
             successCallback: (data) => {
-                setUser({
-                    id: data.id,
+                setUser({ id: data.id,
                     name: data.label,
                     profilePic: data.profilePic,
                     bio: data.bio
@@ -104,6 +98,7 @@ export function EditUserModal() {
     return (
         <Modal
             open={isEditModalOpen}
+            rootClassName="modal-root"
             onCancel={() => handleEditModalStatus(false)}
             footer={null}
             className="modal-container"
@@ -114,7 +109,7 @@ export function EditUserModal() {
                     <Upload {...uploadProps} listType="picture-card" showUploadList={false}>
                         <div className="upload-avatar">
                             <div
-                                style={{ position: 'relative', display: 'inline-block' }}
+                                className="avatar-icon-container"
                                 onMouseEnter={() => setIsHovering(true)}
                                 onMouseLeave={() => setIsHovering(false)}
                             >
@@ -122,12 +117,7 @@ export function EditUserModal() {
                                     size={82}
                                     src={hasProfilePicture ? hasSelectedImage ? imageNew : imageUrl : undefined}
                                     icon={isHovering ? <EditOutlined /> : <UserOutlined />}
-                                    style={{
-                                        cursor: 'pointer',
-                                        border: '1px solid #777777',
-                                        opacity: isHovering ? 0.8 : 1,
-                                        transition: 'opacity 0.3s'
-                                    }}
+                                    className={`avatar-icon ${isHovering ? 'hover' : ''}`}
                                     onClick={isHovering ? () => handleEditModalStatus(true) : undefined}
                                 />
                             </div>
@@ -180,6 +170,6 @@ export function EditUserModal() {
                     </Button>
                 </div>
             </div>
-        </Modal >
+        </Modal>
     );
 }

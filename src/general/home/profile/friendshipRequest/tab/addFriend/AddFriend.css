@@ -1,0 +1,17 @@
+.add-friend-tab {
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-field {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.send-button {
+    width: 100%;
+    background-color: #110e4a;
+
+}

@@ -1,12 +1,13 @@
 import { Button, Input } from 'antd';
 import React, { useState } from 'react';
-import { useUser } from '../../../../context/UserContext.tsx';
-import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
-import { Notification } from '../../../../utils/Notification.tsx';
-import { useHomeContext } from '../../context/HomeContext.tsx';
+import { useUser } from '../../../../../../context/UserContext.tsx';
+import { useHomeContext } from '../../../../context/HomeContext.tsx';
+import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType.ts';
+import { Notification } from '../../../../../../utils/Notification.tsx';
+
+import './AddFriend.css';
 
 export const AddFriendTab: React.FC = () => {
-
     const { user } = useUser();
     const { stompClient } = useHomeContext();
 
@@ -28,14 +29,14 @@ export const AddFriendTab: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="add-friend-tab">
             <Input
                 value={friendCode}
                 onChange={(e) => setFriendCode(e.target.value)}
                 placeholder="Digite o código do usuário"
-                style={{ marginBottom: 16 }}
+                className="input-field"
             />
-            <Button type="primary" onClick={handleAddFriend}>
+            <Button type="primary" onClick={handleAddFriend} className="send-button">
                 Enviar Convite
             </Button>
         </div>

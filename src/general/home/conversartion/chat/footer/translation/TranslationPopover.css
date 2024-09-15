@@ -1,0 +1,57 @@
+.translation-popover-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.translation-options-container {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.translation-select-container {
+    display: flex;
+    align-items: center;
+}
+
+.translation-select-label {
+    margin-right: 20px;
+}
+
+.translation-select {
+    width: 150px;
+}
+
+.translation-switch-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.translation-switch-label {
+    margin-left: 18px;
+}
+
+.translation-action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    padding-top: 8px;
+}
+
+.translation-button-cancel {
+    border: 1px dashed #d9d9d9;
+}
+
+.translation-button-save {
+    background-color: #1890ff;
+    border: none;
+    color: #fff;
+}
+
+.translation-popover-trigger {
+    margin-right: 8px;
+    font-size: 18px;
+    color: #1890ff;
+}
