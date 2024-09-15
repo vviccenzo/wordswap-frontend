@@ -1,4 +1,4 @@
-.modal-root {
+.modal-container .ant-modal-content {
     background-color: #42397b !important;
 }
 
@@ -93,4 +93,16 @@
     color: #FFF;
     border: 1px solid #110e4a;
     border-radius: 20px;
+}
+
+.user-code {
+    font-size: 12px;
+    color: #6c757d;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    padding: 4px 8px;
+    text-align: center;
+    margin-top: 8px;
+    display: inline-block;
+    border: 1px solid #ced4da;
 }

@@ -1,15 +1,15 @@
-import { Button, Layout, Typography } from 'antd';
+import { FolderOutlined } from '@ant-design/icons';
+import { Layout, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useUser } from '../../context/UserContext.tsx';
+import { useRequest } from '../../hook/useRequest.ts';
+import useWebSocket from '../../hook/useWebSocket.ts';
+import { HttpMethods } from '../../utils/IRequest.ts';
+import { Notification } from '../../utils/Notification.tsx';
 import { useHomeContext } from './context/HomeContext.tsx';
 import { Chat } from './conversartion/chat/Chat.tsx';
 import { ConversationList } from './conversartion/ConversationList.tsx';
 import { Profile } from './profile/Profile.tsx';
-import { FolderOutlined } from '@ant-design/icons';
-import useWebSocket from '../../hook/useWebSocket.ts';
-import { useUser } from '../../context/UserContext.tsx';
-import { useRequest } from '../../hook/useRequest.ts';
-import { HttpMethods } from '../../utils/IRequest.ts';
-import { Notification } from '../../utils/Notification.tsx';
 
 import './Home.css';
 
@@ -65,10 +65,8 @@ export function Home() {
             </Sider>
             <Layout className='layout-home'>
                 <Content className="content">
-                    {selectedConversation ? (
+                    {selectedConversation && (
                         <Chat />
-                    ) : (
-                        <Title level={2}>Inicie uma conversa</Title>
                     )}
                 </Content>
             </Layout>

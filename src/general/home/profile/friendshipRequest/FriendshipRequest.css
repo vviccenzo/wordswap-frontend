@@ -1,3 +1,25 @@
-.friendship-request-modal {
+.friendship-request-modal .ant-modal-content {
     background-color: #42397b !important;
+}
+
+.friendship-request-modal .ant-modal-title {
+    color: #e7dfff !important;
+    background-color: #42397b;
+}
+
+.add-friend-tab {
+    color: #e7dfff !important;
+    background-color: #322b6b;
+}
+
+.friends-list-tab {
+    color: #e7dfff !important;
+    background-color: #322b6b;
+    border-radius: 20px;
+}
+
+.friendship-request-tab {
+    color: #e7dfff !important;
+    background-color: #322b6b;
+    border-radius: 20px;
 }

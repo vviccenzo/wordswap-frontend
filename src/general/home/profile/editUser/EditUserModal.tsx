@@ -47,7 +47,8 @@ export function EditUserModal() {
                 setUser({ id: data.id,
                     name: data.label,
                     profilePic: data.profilePic,
-                    bio: data.bio
+                    bio: data.bio,
+                    userCode: data.userCode
                 });
             },
             errorCallback: (error) => {
@@ -98,7 +99,6 @@ export function EditUserModal() {
     return (
         <Modal
             open={isEditModalOpen}
-            rootClassName="modal-root"
             onCancel={() => handleEditModalStatus(false)}
             footer={null}
             className="modal-container"
@@ -153,6 +153,7 @@ export function EditUserModal() {
                             onClick={() => setIsEditingName(true)}
                         />
                     </div>
+                    <Typography.Text className="user-code">{user.userCode}</Typography.Text>
                 </div>
                 <TextArea
                     value={bio}

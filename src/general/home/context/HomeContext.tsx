@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRequest } from "../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../utils/IRequest.ts";
 import { Notification } from "../../../utils/Notification.tsx";
-import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
+import { HomeProviderProps } from "./IHomeContext.ts";
 
 const HomeContext = createContext<any>({});
 

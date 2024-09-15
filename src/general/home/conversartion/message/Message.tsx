@@ -96,10 +96,7 @@ export function Message({ message, isMe, conv, showDateSeparator, separatorDate 
         <div>
             {showDateSeparator && separatorDate && (
                 <>
-                    <Divider />
-                    <div className="date-separator">
-                        {separatorDate}
-                    </div>
+                    <Divider className="date-separator">{separatorDate}</Divider>
                 </>
             )}
             <List.Item className={`message-container ${isMe ? 'me' : 'not-me'}`}>

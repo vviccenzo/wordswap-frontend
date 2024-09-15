@@ -8,7 +8,7 @@ import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts
 import { ChatHeader } from './header/ChatHeader.tsx';
 import { ChatBody } from './body/ChatBody.tsx';
 import { ChatFooter } from './footer/ChatFooter.tsx';
-import './Chat.css'; // Import the main CSS file
+import './Chat.css';
 
 export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const { user } = useUser();

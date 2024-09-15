@@ -72,6 +72,7 @@
 }
 
 .message-info .timestamp {
+    margin-left: 10px;
     font-size: 10px;
     color: #888;
     margin-bottom: 1px;
@@ -88,13 +89,6 @@
 
 .message-edit .button {
     margin-right: 8px;
-}
-
-.date-separator {
-    text-align: center;
-    margin: 20px 0;
-    color: #888;
-    font-weight: bold;
 }
 
 .menu-item-message {
