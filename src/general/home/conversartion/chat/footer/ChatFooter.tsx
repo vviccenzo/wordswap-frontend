@@ -1,25 +1,24 @@
 import React from 'react';
-import { Input, Button } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
-import { TranslationPopover } from './translation/TranslationPopover.tsx';
+import { Button, Input } from 'antd';
+import { TranslationModal } from './translation/TranslationModal.tsx';
 import { ChatFooterProps } from '../IChat.ts';
 
 import './ChatFooter.css';
 
 export function ChatFooter({
-    message, setMessage, handleSend, popoverVisible, setPopoverVisible,
+    message, setMessage, handleSend,
     languageFrom, setLanguageFrom, translationReceiving, setTranslationReceiving, configurateTranslation, setTranslationFrom
 }: ChatFooterProps) {
+
     return (
         <div className="chat-footer">
-            <TranslationPopover
+            <TranslationModal
                 languageFrom={languageFrom}
                 setLanguageFrom={setLanguageFrom}
-                translationReceiving={translationReceiving}
-                setTranslationReceiving={setTranslationReceiving}
+                translationSending={translationReceiving}
+                setTranslationSending={setTranslationReceiving}
                 configurateTranslation={configurateTranslation}
-                popoverVisible={popoverVisible}
-                setPopoverVisible={setPopoverVisible}
                 setTranslationFrom={setTranslationFrom}
             />
             <Input

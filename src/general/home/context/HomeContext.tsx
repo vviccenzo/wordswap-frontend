@@ -55,7 +55,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
                 errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
             });
         }
-    }, []);
+    }, [selectedConversation]);
 
     function handleModalStatus(status: boolean) {
         setIsModalOpen(status);

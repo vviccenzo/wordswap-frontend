@@ -1,0 +1,77 @@
+.translation-modal-trigger {
+  background-color: #282c34;
+  color: white;
+  border: none;
+}
+
+.translation-button-save {
+  background-color: #282c34;
+  border-color: #282c34;
+}
+
+.translation-button-cancel {
+  background-color: white;
+  border-color: white;
+}
+
+.translation-modal-content {
+  padding: 20px;
+}
+
+.translation-modal-content .ant-list-item-meta-title {
+  font-weight: bold;
+}
+
+.translation-modal-content .ant-list-item-meta-description {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.translation-modal-content .ant-select,
+.translation-modal-content .ant-switch {
+  margin-left: 10px;
+}
+
+.translation-options-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.translation-switch-label {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: bold;
+  color: black;
+}
+
+.translation-modal .ant-modal-content {
+  background-color: #42397b !important;
+}
+
+.translation-modal .ant-modal-title {
+  color: white;
+  background-color: #42397b !important;
+}
+
+.translation-receiving {
+  margin-bottom: 10px;
+  background-color: #938ca9;
+  border-radius: 10px;
+}
+
+.translation-receiving-item {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.text-improvement {
+  background-color: #938ca9;
+  border-radius: 10px;
+}
+
+.text-improvement-item {
+  margin-right: 10px;
+  margin-left: 10px;
+}
