@@ -23,7 +23,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const [languageFrom, setLanguageFrom] = useState<string>('pt');
     const [translationFrom, setTranslationFrom] = useState<string>('pt');
     const [translationReceiving, setTranslationReceiving] = useState<boolean>(false);
-    const [translationSending, setTranslationSending] = useState(false);
+    const [isImprovingText, setIsImprovingText] = useState<boolean>(false);
 
     const handleSend = () => {
         if (message.trim()) {
@@ -47,10 +47,9 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
         const data = {
             userId: user?.id,
             conversationId: selectedConversation?.id,
-            sendingTranslation: translationTo,
-            receivingTranslation: translationFrom,
-            isSendingTranslation: translationSending,
-            isReceivingTranslation: translationReceiving
+            receivingTranslation: languageFrom,
+            isReceivingTranslation: translationReceiving,
+            isImprovingText: isImprovingText
         };
 
         request({
@@ -58,8 +57,11 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
             url: '/conversation/configuration',
             data: data,
             successCallback: (data) => {
-                setLanguageTo(translationTo.split('-')[0]);
-                setLanguageFrom(translationFrom.split('-')[0]);
+                if(data.isReceivingTranslation && translationReceiving) {
+                    setLanguageFrom(translationFrom.split('-')[0]);
+                }
+
+                setIsImprovingText(data.isImprovingText);
                 setPopoverVisible(false);
             },
             errorCallback: (error) => {
@@ -82,7 +84,6 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
                 setTranslationFrom(userConfig.receivingTranslation);
 
                 setTranslationReceiving(userConfig.isReceivingTranslation);
-                setTranslationSending(userConfig.isSendingTranslation);
             }
         }
     }, [selectedConversation, conversations]);
@@ -110,19 +111,23 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
                     message={message}
                     setMessage={setMessage}
                     handleSend={handleSend}
+
                     popoverVisible={popoverVisible}
                     setPopoverVisible={setPopoverVisible}
-                    languageTo={languageTo}
-                    setLanguageTo={setLanguageTo}
-                    translationSending={translationSending}
-                    setTranslationSending={setTranslationSending}
+
+                    translationFrom={translationFrom}
+
                     languageFrom={languageFrom}
                     setLanguageFrom={setLanguageFrom}
+
                     translationReceiving={translationReceiving}
                     setTranslationReceiving={setTranslationReceiving}
+
                     configurateTranslation={configurateTranslation}
-                    setTranslationTo={setTranslationTo}
                     setTranslationFrom={setTranslationFrom}
+
+                    isImprovingText={isImprovingText}
+                    setIsImprovingText={setIsImprovingText}
                 />
             </div>
         </div>

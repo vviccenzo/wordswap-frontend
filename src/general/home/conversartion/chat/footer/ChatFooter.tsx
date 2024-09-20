@@ -8,7 +8,9 @@ import './ChatFooter.css';
 
 export function ChatFooter({
     message, setMessage, handleSend,
-    languageFrom, setLanguageFrom, translationReceiving, setTranslationReceiving, configurateTranslation, setTranslationFrom
+    languageFrom, setLanguageFrom, translationReceiving, 
+    setTranslationReceiving, configurateTranslation, setTranslationFrom,
+    setIsImprovingText, isImprovingText, translationFrom
 }: ChatFooterProps) {
 
     return (
@@ -16,10 +18,13 @@ export function ChatFooter({
             <TranslationModal
                 languageFrom={languageFrom}
                 setLanguageFrom={setLanguageFrom}
-                translationSending={translationReceiving}
-                setTranslationSending={setTranslationReceiving}
+                translationReceiving={translationReceiving}
+                setTranslationReceiving={setTranslationReceiving}
                 configurateTranslation={configurateTranslation}
                 setTranslationFrom={setTranslationFrom}
+                setIsImprovingText={setIsImprovingText}
+                isImprovingText={isImprovingText}
+                translationFrom={translationFrom}
             />
             <Input
                 value={message}

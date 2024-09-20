@@ -47,18 +47,22 @@ export interface ChatFooterProps {
     message: string;
     setMessage: (value: string) => void;
     handleSend: () => void;
+
+    translationFrom: string;
+
     popoverVisible: boolean;
     setPopoverVisible: (visible: boolean) => void;
-    languageTo: string;
-    setLanguageTo: (value: string) => void;
-    translationSending: boolean;
-    setTranslationSending: (value: boolean) => void;
+
     languageFrom: string;
     setLanguageFrom: (value: string) => void;
+
     translationReceiving: boolean;
-    setTranslationReceiving: (value: boolean) => void;
     configurateTranslation: () => void;
-    setTranslationTo: (value: string) => void;
+
+    isImprovingText: boolean;
+    setIsImprovingText: (value: boolean) => void;
+    
+    setTranslationReceiving: (value: boolean) => void;
     setTranslationFrom: (value: string) => void;
 }
 

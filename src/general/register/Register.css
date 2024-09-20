@@ -1,0 +1,134 @@
+.sider-register {
+    background-color: #322b6b !important;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sider-register img {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    max-width: 100%;
+    height: auto;
+}
+
+.sider-register .register-form {
+    width: 100%;
+    max-width: 1000px !important;
+}
+
+.sider-register .register-input,
+.sider-register .register-password-input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sider-register .register-btn-primary {
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 8px 15px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.sider-register .register-btn-primary:hover {
+    background-color: #322b6b;
+}
+
+/* Botão padrão */
+.sider-register .register-btn-default {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.sider-register .register-btn-default:hover {
+    color: white;
+}
+
+.sider-register .register-upload-list-item {
+    border: none;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.sider-register .register-form-item-label>label {
+    color: #444;
+}
+
+.sider-register .register-upload:hover {
+    border-color: #322b6b;
+}
+
+.sider-register a {
+    color: #322b6b;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.sider-register a:hover {
+    color: #322b6b;
+}
+
+@media (max-width: 768px) {
+    .sider-register {
+        padding: 20px 10px;
+    }
+
+    .sider-register img {
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+
+    .sider-register .register-form {
+        max-width: 100%;
+    }
+
+    .sider-register .register-btn-primary {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .sider-register .register-upload {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sider-register {
+        padding: 15px 5px;
+    }
+
+    .sider-register img {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .sider-register .register-form {
+        max-width: 100%;
+    }
+
+    .sider-register .register-input,
+    .sider-register .register-password-input {
+        padding: 8px;
+    }
+
+    .sider-register .register-btn-primary {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .sider-register .register-upload {
+        padding: 10px;
+    }
+}

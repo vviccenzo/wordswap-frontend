@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { Layout, Form, Input, Button, Upload, message } from 'antd';
 import { DoubleLeftOutlined, DoubleRightOutlined, UploadOutlined } from '@ant-design/icons';
-import { HttpMethods } from '../../utils/IRequest.ts';
-import { Notification } from '../../utils/Notification.tsx';
 import { useNavigate } from 'react-router-dom';
 
 import img1 from '../../imgs/logo.png';
 import doRequest from '../../utils/Request.ts';
+import "./Register.css";
 
 const { Content, Sider } = Layout;
 
 export function Register() {
-
     const navigate = useNavigate();
-
     const [step, setStep] = useState<number>(1);
     const [fileList, setFileList] = useState<any[]>([]);
     const form = Form.useForm()[0];
@@ -34,18 +31,16 @@ export function Register() {
                 formData.append('file', 'undefined');
             }
 
-            formData.append('name', form.getFieldValue("name"));
-
             doRequest({
-                method: HttpMethods.POST,
+                method: 'POST',
                 url: '/user',
                 data: formData,
                 successCallback: () => {
-                    navigate('/login')
-                    Notification({ message: 'Sucesso', description: "Conta criada com sucesso", placement: 'top', type: "success" });
+                    navigate('/login');
+                    message.success("Conta criada com sucesso!");
                 },
                 errorCallback: (error) => {
-                    Notification({ message: 'Erro', description: error, placement: 'top', type: "error" });
+                    message.error(error);
                 },
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -62,12 +57,12 @@ export function Register() {
         beforeUpload: (file) => {
             const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
             if (!isJpgOrPng) {
-                message.error('Você só pode enviar arquivos JPG/PNG!');
+                message.error('Apenas arquivos JPG/PNG!');
             }
 
             const isLt2M = file.size / 1024 / 1024 < 2;
             if (!isLt2M) {
-                message.error('A imagem deve ser menor que 2MB!');
+                message.error('Imagem deve ter menos que 2MB!');
             }
 
             return isJpgOrPng && isLt2M;
@@ -77,13 +72,13 @@ export function Register() {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh', backgroundColor: '#f0f0f0' }}>
-            <Sider width="30%" style={{ backgroundColor: '#f0f0f0', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '8%' }}>
-                <img width={200} src={img1} alt="Logo do site" style={{ marginLeft: 50 }} />
+        <Layout style={{ minHeight: '100vh', backgroundColor: '#322b6b' }}>
+            <Sider width="30%" className="sider-register">
+                <img width={200} src={img1} alt="Logo" />
                 <Form
                     name="register"
                     onFinish={onFinish}
-                    style={{ width: '300px' }}
+                    className="register-form"
                     scrollToFirstError
                     form={form}
                 >
@@ -92,142 +87,120 @@ export function Register() {
                             <Form.Item
                                 name="username"
                                 rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}
+                                className="register-form-item"
                             >
-                                <Input placeholder="Usuário" />
+                                <Input placeholder="Usuário" className="register-input" />
                             </Form.Item>
                             <Form.Item
                                 name="password"
                                 rules={[
-                                    {
-                                        required: true,
-                                        message: '- Por favor, insira sua senha!',
-                                    },
-                                    {
-                                        min: 8,
-                                        message: '- A senha deve ter pelo menos 8 caracteres!',
-                                    },
+                                    { required: true, message: 'Por favor, insira sua senha!' },
+                                    { min: 8, message: 'A senha deve ter pelo menos 8 caracteres!' },
                                     {
                                         pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/,
-                                        message: '- A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial!',
+                                        message: 'A senha deve ter uma letra maiúscula, um número e um caractere especial!'
                                     },
                                 ]}
                                 hasFeedback
+                                className="register-form-item"
                             >
-                                <Input.Password placeholder="Senha" />
+                                <Input.Password placeholder="Senha" className="register-password-input" />
                             </Form.Item>
                             <Form.Item
                                 name="confirm"
                                 dependencies={['password']}
                                 hasFeedback
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Por favor, confirme sua senha!',
+                                className="register-form-item"
+                                rules={[{
+                                    required: true,
+                                    message: 'Confirme sua senha!',
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('password') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('As senhas não conferem!'));
                                     },
-                                    ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                            if (!value || getFieldValue('password') === value) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject(new Error('As senhas não conferem!'));
-                                        },
-                                    }),
+                                }),
                                 ]}
                             >
-                                <Input.Password placeholder="Confirmar Senha" />
+                                <Input.Password placeholder="Confirmar Senha" className="register-password-input" />
                             </Form.Item>
                         </>
                     )}
+
                     {step === 2 && (
                         <>
-                            <Form.Item>
-                                <Upload {...uploadProps} listType="picture">
-                                    <Button icon={<UploadOutlined />}>Carregar Avatar</Button>
+                            <Form.Item className="register-form-item">
+                                <Upload {...uploadProps} listType="picture" className="register-upload">
+                                    <Button icon={<UploadOutlined />} className="register-btn-default">Carregar Avatar</Button>
                                 </Upload>
                             </Form.Item>
                             <Form.Item
                                 name="email"
                                 rules={[
-                                    {
-                                        type: 'email',
-                                        message: 'O email não é válido!',
-                                    },
-                                    {
-                                        required: true,
-                                        message: 'Por favor, insira seu email!',
-                                    },
+                                    { type: 'email', message: 'Email inválido!' },
+                                    { required: true, message: 'Insira seu email!' },
                                 ]}
+                                className="register-form-item"
                             >
-                                <Input placeholder="Email" />
+                                <Input placeholder="Email" className="register-input" />
                             </Form.Item>
                             <Form.Item
                                 name="confirmEmail"
                                 dependencies={['email']}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Por favor, confirme seu email!',
+                                rules={[{
+                                    required: true,
+                                    message: 'Confirme seu email!',
+                                },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('email') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Os emails não conferem!'));
                                     },
-                                    ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                            if (!value || getFieldValue('email') === value) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject(new Error('Os emails não conferem!'));
-                                        },
-                                    }),
+                                }),
                                 ]}
+                                className="register-form-item"
                             >
-                                <Input placeholder="Confirmar Email" />
+                                <Input placeholder="Confirmar Email" className="register-input" />
                             </Form.Item>
-                            <Form.Item>
-                                <Input
-                                    placeholder="Nome"
-                                    name="name"
-                                    rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}
-                                />
+                            <Form.Item className="register-form-item">
+                                <Input placeholder="Nome" name="name" className="register-input" />
                             </Form.Item>
                         </>
                     )}
+
                     <Form.Item>
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             {step === 1 && (
-                                <Button
-                                    type="default"
-                                    onClick={() => setStep(2)}
-                                    style={{ width: 100, backgroundColor: "#1A1818", color: 'white' }}
-                                >
-                                    Cancelar
-                                </Button>
+                                <a href="/login">
+                                    <Button type="default" className="register-btn-default" onClick={() => setStep(2)} style={{ width: 100 }}>
+                                        Cancelar
+                                    </Button>
+                                </a>
                             )}
                             {step === 2 && (
                                 <Button
                                     type="default"
+                                    className="register-btn-default"
                                     onClick={() => setStep(1)}
                                     style={{ width: 100 }}
                                 >
                                     <DoubleLeftOutlined />
                                 </Button>
                             )}
-                            <Button type="primary" htmlType="submit" style={{ width: 150, backgroundColor: '#cccccc', color: 'black', border: 'none', boxShadow: 'none' }}>
-                                {step === 1 ? <DoubleRightOutlined /> : 'Salvar'}
+                            <Button type="primary" htmlType="submit" className="register-btn-primary">
+                                {step === 1 ? <DoubleRightOutlined /> : 'Registrar'}
                             </Button>
                         </div>
                     </Form.Item>
                 </Form>
-                <div style={{ marginLeft: 55 }}>
-                    <span>
-                        Já é cadastrado? Efetue o &nbsp;
-                    </span>
-                    <a href="/login" style={{ color: "#ccc" }}>
-                        login
-                    </a>
-                </div>
+
             </Sider>
-            <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#ccc' }} />
+            <Content style={{ padding: '50px', backgroundColor: '#8278a3' }} />
         </Layout>
     );
 }

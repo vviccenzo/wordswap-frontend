@@ -1,5 +1,5 @@
 export default function getContent(user, conv, message) {
-    if (!conv.configUser) {
+    if (!conv.configsUser) {
         return message.content;
     }
 
@@ -11,15 +11,6 @@ export default function getContent(user, conv, message) {
     }
 
     if (config.isReceivingTranslation && message.messageContent.contentReceiving) {
-        return message.messageContent.contentReceiving;
-    }
-
-    const configOtherUser = conv.configsUser[conv.receiverId];
-    if (configOtherUser.isSendingTranslation && message.messageContent.contentSending) {
-        return message.messageContent.contentSending;
-    }
-
-    if (configOtherUser.isReceivingTranslation && message.messageContent.contentReceiving) {
         return message.messageContent.contentReceiving;
     }
 

@@ -1,18 +1,31 @@
 import { TranslationOutlined } from '@ant-design/icons';
-import { Button, List, Modal, Select, Switch, Tooltip } from 'antd';
+import { Button, List, Modal, Select, Switch, Tooltip, message } from 'antd';
 import React from 'react';
 import { useHomeContext } from '../../../../context/HomeContext.tsx';
 import './TranslationModal.css';
 
 const { Option } = Select;
 
-export function TranslationModal({ languageFrom, setLanguageFrom,
-    translationSending, setTranslationSending, configurateTranslation, setTranslationFrom
+export function TranslationModal({ 
+    languageFrom, setLanguageFrom,
+    translationReceiving, setTranslationReceiving, configurateTranslation, setTranslationFrom,
+    setIsImprovingText, isImprovingText, translationFrom
 }) {
     const { translationOptions } = useHomeContext();
 
     const [modalVisible, setModalVisible] = React.useState(false);
-    const [textImprovement, setTextImprovement] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState('');
+
+    const validateAndSave = () => {
+        if (translationReceiving && (!languageFrom || !translationFrom)) {
+            setErrorMessage('Selecione um idioma para traduzir antes de ativar a tradução.');
+            message.error('Selecione um idioma para traduzir antes de ativar a tradução.');
+        } else {
+            setErrorMessage('');
+            configurateTranslation();
+            setModalVisible(false);
+        }
+    };
 
     const modalOptions = [
         {
@@ -23,9 +36,9 @@ export function TranslationModal({ languageFrom, setLanguageFrom,
                 <div className="translation-options-container">
                     <Select
                         value={languageFrom}
-                        onChange={(value, option) => {
+                        onChange={(value, option: any) => {
                             setTranslationFrom(option + ' - ' + value);
-                            setLanguageFrom(value);
+                            setLanguageFrom(option.children);
                         }}
                         style={{ width: '100%' }}
                         showSearch
@@ -38,8 +51,8 @@ export function TranslationModal({ languageFrom, setLanguageFrom,
                     </Select>
                     <span className="translation-switch-label">Ativar:</span>
                     <Switch
-                        checked={translationSending}
-                        onChange={() => setTranslationSending(!translationSending)}
+                        checked={translationReceiving}
+                        onChange={() => setTranslationReceiving(!translationReceiving)}
                     />
                 </div>
             ),
@@ -50,7 +63,7 @@ export function TranslationModal({ languageFrom, setLanguageFrom,
             itemClassName: 'text-improvement-item',
             description: (
                 <>
-                    <Switch checked={textImprovement} onChange={setTextImprovement} />
+                    <Switch checked={isImprovingText} onChange={setIsImprovingText} />
                 </>
             )
         }
@@ -80,13 +93,15 @@ export function TranslationModal({ languageFrom, setLanguageFrom,
                     <Button
                         key="save"
                         type="primary"
-                        onClick={configurateTranslation}
+                        onClick={validateAndSave}
                         className="translation-button-save"
+                        disabled={translationReceiving && (!languageFrom || !translationFrom)}
                     >
                         Salvar
-                    </Button>,
+                    </Button>
                 ]}
             >
+                {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Exibe a mensagem de erro, se houver */}
                 <List
                     itemLayout="horizontal"
                     dataSource={modalOptions}
