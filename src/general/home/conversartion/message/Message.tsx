@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
 import { Button, Divider, Dropdown, Input, List, Menu, Typography } from 'antd';
+import React, { useState } from 'react';
 import { useUser } from '../../../../context/UserContext.tsx';
 import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
 import { useHomeContext } from '../../context/HomeContext.tsx';
-import getContent from '../../../../utils/functions/getContent.ts';
-import './Message.css';  // Import the CSS file
+import './Message.css'; // Import the CSS file
 
 const { Text } = Typography;
 
@@ -77,7 +76,7 @@ export function Message({ message, isMe, conv, showDateSeparator, separatorDate 
         ) : (
             <div className="message-info">
                 <Text>
-                    {getContent(user, conv, message)}
+                    {message.content}
                     {message.isEdited && <em className="message-edited">(editada)</em>}
                 </Text>
                 <span className="timestamp">{message.timestamp}</span>

@@ -74,17 +74,6 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
         if (selectedConversation) {
             setCombinedMessages(selectedConversation.messages);
             if (selectedConversation.isNewConversartion) return;
-
-            const userConfig = selectedConversation.configsUser[user.id];
-            if (userConfig) {
-                setLanguageTo(userConfig.sendingTranslation);
-                setLanguageFrom(userConfig.receivingTranslation);
-
-                setTranslationTo(userConfig.sendingTranslation);
-                setTranslationFrom(userConfig.receivingTranslation);
-
-                setTranslationReceiving(userConfig.isReceivingTranslation);
-            }
         }
     }, [selectedConversation, conversations]);
 
