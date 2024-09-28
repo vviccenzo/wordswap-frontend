@@ -8,6 +8,7 @@ import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts
 import { ChatHeader } from './header/ChatHeader.tsx';
 import { ChatBody } from './body/ChatBody.tsx';
 import { ChatFooter } from './footer/ChatFooter.tsx';
+
 import './Chat.css';
 
 export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
@@ -18,8 +19,6 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const [combinedMessages, setCombinedMessages] = useState<any[]>([]);
     const [message, setMessage] = useState('');
     const [popoverVisible, setPopoverVisible] = useState(false);
-    const [languageTo, setLanguageTo] = useState<string>('pt');
-    const [translationTo, setTranslationTo] = useState<string>('pt');
     const [languageFrom, setLanguageFrom] = useState<string>('pt');
     const [translationFrom, setTranslationFrom] = useState<string>('pt');
     const [translationReceiving, setTranslationReceiving] = useState<boolean>(false);
@@ -57,7 +56,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
             url: '/conversation/configuration',
             data: data,
             successCallback: (data) => {
-                if(data.isReceivingTranslation && translationReceiving) {
+                if (data.isReceivingTranslation && translationReceiving) {
                     setLanguageFrom(translationFrom.split('-')[0]);
                 }
 
@@ -74,6 +73,17 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
         if (selectedConversation) {
             setCombinedMessages(selectedConversation.messages);
             if (selectedConversation.isNewConversartion) return;
+
+            const userConfig = selectedConversation.configsUser[user.id];
+            if (userConfig) {
+                setIsImprovingText(userConfig.isImprovingText);
+                setTranslationReceiving(userConfig.isReceivingTranslation);
+
+                if (userConfig.receivingTranslation && userConfig.receivingTranslation != "") {
+                    setTranslationFrom(userConfig.receivingTranslation);
+                    setLanguageFrom(userConfig.receivingTranslation);
+                }
+            }
         }
     }, [selectedConversation, conversations]);
 
@@ -83,6 +93,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
                 <ChatHeader
                     profilePicture={selectedConversation?.profilePic}
                     conversationName={selectedConversation?.conversationName}
+                    selectedConversation={selectedConversation}
                 />
             </div>
             <div className="chat-body-container">

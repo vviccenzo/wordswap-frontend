@@ -48,6 +48,7 @@ export function useHandleCallbackWS() {
                 if (selectedConversation) {
                     updateSelectedConversation(conversationsMapped, selectedConversation);
                 }
+
                 break;
             }
 

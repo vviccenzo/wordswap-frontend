@@ -5,14 +5,16 @@
     padding: 8px 16px;
     border-bottom: 1px solid #e8e8e8;
     background-color: #ffffff;
+    border-radius: 50px !important;
 }
 
 .list-item-meta {
     flex: 1;
-    margin-right: 16px;
+    margin-left: 16px;
 }
 
 .action-buttons {
+    margin-right: 16px;
     display: flex;
     gap: 8px;
 }

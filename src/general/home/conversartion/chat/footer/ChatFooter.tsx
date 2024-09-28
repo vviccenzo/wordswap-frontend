@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SendOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 import { TranslationModal } from './translation/TranslationModal.tsx';
 import { ChatFooterProps } from '../IChat.ts';
 
 import './ChatFooter.css';
+import { useHomeContext } from '../../../context/HomeContext.tsx';
+import { useUser } from '../../../../../context/UserContext.tsx';
 
 export function ChatFooter({
     message, setMessage, handleSend,

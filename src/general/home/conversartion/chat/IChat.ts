@@ -80,4 +80,5 @@ export interface TranslationPopoverProps {
 export interface ChatHeaderProps {
     profilePicture: string;
     conversationName: string;
+    selectedConversation: any;
 }

@@ -43,7 +43,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
                 }
             });
         } else {
-            setIsTokenValid(false);
+            if(isTokenValid) {
+                setIsTokenValid(false);
+            }
         }
 
         localStorage.removeItem('conversation');

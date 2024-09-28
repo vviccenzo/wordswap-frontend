@@ -34,18 +34,15 @@
     bottom: 0;
     width: 4px;
     background: #ccc;
-    /* Line color */
     z-index: -1;
 }
 
 .message-container.not-me .message-content::before {
     left: -6px;
-    /* Adjust based on the width of the line */
 }
 
 .message-container.me .message-content::before {
     right: -6px;
-    /* Adjust based on the width of the line */
 }
 
 .message-deleted {

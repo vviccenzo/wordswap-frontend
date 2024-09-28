@@ -23,6 +23,7 @@ export default function mapConversation(conversation: any, userId: any): any {
         configsUser: conversation.configsUser,
         totalMessages: conversation.totalMessages,
         receiverCode: conversation.receiverCode,
-        senderCode: conversation.senderCode
+        senderCode: conversation.senderCode,
+        userInfo: conversation.userInfo
     };
 }

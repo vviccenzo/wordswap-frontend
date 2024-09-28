@@ -104,7 +104,7 @@ export function EditUserModal() {
 
     const validateFile = (file: File) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt2M = file.size / 2048 / 2048 < 4;
 
         if (!isJpgOrPng) message.error('Você só pode enviar arquivos JPG/PNG!');
         if (!isLt2M) message.error('A imagem deve ser menor que 2MB!');
