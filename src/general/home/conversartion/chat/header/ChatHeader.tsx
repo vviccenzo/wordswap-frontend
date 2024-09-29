@@ -23,7 +23,11 @@ export function ChatHeader({ profilePicture, conversationName, selectedConversat
                 }}
                 isModalVisible={isModalUserVisible}
                 handleCancel={() => setIsModalUserVisible(false)}
-                selectedConversation={selectedConversation}
+                userInfo={{
+                    conversationName: conversationName,
+                    createdDate: selectedConversation?.userInfo?.createdDate,
+                    profilePic: selectedConversation?.userInfo?.profilePic
+                }}
             />
         </div>
     );

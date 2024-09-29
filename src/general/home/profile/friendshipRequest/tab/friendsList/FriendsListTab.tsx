@@ -1,6 +1,6 @@
 import { EllipsisOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, List, Menu, Space } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUser } from '../../../../../../context/UserContext.tsx';
 import { useRequest } from '../../../../../../hook/useRequest.ts';
 import { HttpMethods } from '../../../../../../utils/IRequest.ts';
@@ -9,11 +9,15 @@ import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventT
 import { useHomeContext } from '../../../../context/HomeContext.tsx';
 
 import './FriendList.css';
+import { byteArrayToDataUrl } from '../../../../../../utils/functions/byteArrayToDataUrl.ts';
+import { ProfileModal } from '../../../../conversartion/chat/header/ProfileModal/ProfileModal.tsx';
 
 export function FriendsListTab() {
     const { user } = useUser();
     const { request } = useRequest();
-    const { handleModalStatus, doStartConversartion, stompClient, friendsList, setFriendsList } = useHomeContext();
+    const { handleModalStatus, doStartConversartion, stompClient, friendsList, setFriendsList, selectedConversation } = useHomeContext();
+
+    const [selectedFriend, setSelectedFriend] = useState<any>(null);  // Guarda o amigo selecionado
 
     useEffect(() => {
         fetchFriends();
@@ -68,9 +72,26 @@ export function FriendsListTab() {
                         size={48}
                         icon={<UserOutlined />}
                         className="avatar"
+                        onClick={() => setSelectedFriend(friend)}
+                        src={friend?.profilePic?.length > 0 ? byteArrayToDataUrl(friend.profilePic) : ''}
                     />
+                    {selectedFriend && (
+                        <ProfileModal
+                            user={{
+                                profilePic: selectedFriend?.profilePic?.length > 0 ? byteArrayToDataUrl(selectedFriend.profilePic) : '',
+                            }}
+                            isModalVisible={selectedFriend?.id === friend.id}
+                            handleCancel={() => setSelectedFriend(null)}
+                            userInfo={{
+                                conversationName: selectedFriend?.label,
+                                createdDate: selectedFriend?.createdDate,
+                                bio: selectedFriend?.bio
+                            }}
+                        />
+                    )}
                     <List.Item.Meta
                         title={friend.label}
+                        className='list-item-meta-friends'
                     />
                     <div className="actions-container">
                         <MessageOutlined className="message-icon" onClick={() => handleStartConversartion(friend)} />

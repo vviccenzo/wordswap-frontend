@@ -1,61 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useUser } from './context/UserContext.tsx';
-import { useRequest } from './hook/useRequest.ts';
-import { HttpMethods } from './utils/IRequest.ts';
 
 interface PrivateRouteProps {
     element: JSX.Element;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
-    const { request } = useRequest();
     const { setUser, setToken, token } = useUser();
-
     const location = useLocation();
 
-    const [isTokenValid, setIsTokenValid] = useState<boolean | null>(null);
-
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const user = localStorage.getItem('user');
+        const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
 
-        if (token) {
-            request({
-                method: HttpMethods.GET,
-                url: '/auth/token/validate-token?token=' + token,
-                successCallback: (data) => {
-                    if (data.isValid) {
-                        setIsTokenValid(true);
-                        if (user) {
-                            setUser(JSON.parse(user));
-                        }
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
 
-                        setToken(token);
-                    } else {
-                        setIsTokenValid(false);
-                        localStorage.clear();
-                    }
-                },
-                errorCallback: () => {
-                    setIsTokenValid(false);
-                    localStorage.clear();
-                }
-            });
-        } else {
-            if(isTokenValid) {
-                setIsTokenValid(false);
-            }
+        if (storedToken) {
+            setToken(storedToken);
         }
 
         localStorage.removeItem('conversation');
-    }, [setUser, setToken, token]);
+    }, []);
 
-    if (isTokenValid === null) {
-        return null;
-    }
-
-    return isTokenValid ? (
+    return token ? (
         element
     ) : (
         <Navigate to="/login" state={{ from: location }} />

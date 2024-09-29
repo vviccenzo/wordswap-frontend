@@ -14,8 +14,8 @@ export const FriendRequestsTab: React.FC = () => {
     function handleChangeStatusRequest(status: string, id: number) {
         const data = {
             action: WebSocketEventType.UPDATE_FRIEND_REQUEST,
-            friendshipChangeInviteRequestDTO: {
-                status: status,
+            friendshipRequestUpdateDTO: {
+                statusType: status,
                 inviteId: id
             }
         };

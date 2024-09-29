@@ -32,6 +32,10 @@
     border: 1px solid #e8e8e8;
 }
 
+.list-item-meta-friends h4 {
+    color: white !important;
+}
+
 @media (max-width: 768px) {
 
     .list-item-container {
