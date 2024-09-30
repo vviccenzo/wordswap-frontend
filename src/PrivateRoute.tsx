@@ -7,26 +7,25 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
-    const { setUser, setToken } = useUser();
+    const { setUser, setToken, token } = useUser();
     const location = useLocation();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const user = localStorage.getItem('user');
+        const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
 
-        if (user) {
-            setUser(JSON.parse(user));
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
         }
 
-        if (token) {
-            setToken(token);
+        if (storedToken) {
+            setToken(storedToken);
         }
-    }, [setUser, setToken]);
 
-    const token = localStorage.getItem('token');
-    const isLogged = !!token;
+        localStorage.removeItem('conversation');
+    }, []);
 
-    return isLogged ? (
+    return token ? (
         element
     ) : (
         <Navigate to="/login" state={{ from: location }} />

@@ -2,35 +2,9 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRequest } from "../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../utils/IRequest.ts";
 import { Notification } from "../../../utils/Notification.tsx";
-import { HomeContextType, HomeProviderProps } from "./IHomeContext.ts";
+import { HomeProviderProps } from "./IHomeContext.ts";
 
-const defaultHomeState = {
-    isModalOpen: false,
-    handleModalStatus: () => { },
-    conversations: [],
-    handleConversations: () => { },
-    selectedConversation: null,
-    handleConversationSelected: () => { },
-    doStartConversartion: () => { },
-    fetchConversations: () => { },
-    stompClient: null,
-    handleStompClient: () => { },
-    isEditModalOpen: false,
-    handleEditModalStatus: () => { },
-    translationOptions: [],
-    scrollPage: 0,
-    setScrollPage: () => { },
-    loading: false,
-    setLoading: () => { },
-    friendRequests: [],
-    setFriendRequests: () => { },
-    friendsList: [],
-    setFriendsList: () => { },
-    totalMessages: 0,
-    setTotalMessages: () => { }
-};
-
-const HomeContext = createContext<HomeContextType>(defaultHomeState);
+const HomeContext = createContext<any>({});
 
 export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
 
@@ -56,11 +30,19 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             profilePic: data.profilePicture,
             messages: [],
             isNewConversartion: true,
-            senderId: data.senderId
+            senderId: data.senderId,
+            receiverCode: data.receiverCode,
         };
 
-        setConversartions([conversationStarted, ...conversations]);
-        setSelectedConversation(conversationStarted);
+        const conversation = conversations.find((c) => c.receiverCode === data.userCode || c.senderCode === data.userCode);
+        if(conversation) {
+            setSelectedConversation(conversation);
+            setTotalMessages(conversation.totalMessages);
+        } else {
+            setConversartions([conversationStarted, ...conversations]);
+            setSelectedConversation(conversationStarted);
+        }
+
         setIsModalOpen(false);
     }
 
@@ -73,7 +55,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
                 errorCallback: (error) => Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' })
             });
         }
-    }, []);
+    }, [selectedConversation]);
 
     function handleModalStatus(status: boolean) {
         setIsModalOpen(status);
@@ -84,6 +66,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     }
 
     function handleConversationSelected(data: any) {
+        localStorage.setItem('conversation', JSON.stringify(data));
         setSelectedConversation(data);
         setTotalMessages(data.totalMessages || 0);
     }

@@ -1,51 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react';
 import VirtualList, { ListRef } from 'rc-virtual-list';
-import { Message } from '../Message.tsx';
-import { useHomeContext } from '../../context/HomeContext.tsx';
-import { HttpMethods } from '../../../../utils/IRequest.ts';
-import { useRequest } from '../../../../hook/useRequest.ts';
-import { useUser } from '../../../../context/UserContext.tsx';
+import React, { useEffect, useRef, useState } from 'react';
 
-import dayjs from 'dayjs';
-import formatTimestamp from '../../../../utils/functions/formatTimestamp.ts';
-import mapConversations from '../../../../utils/mapper/conversationMapper.ts';
+import { Spin } from 'antd';
+import { useUser } from '../../../../../context/UserContext.tsx';
+import { useRequest } from '../../../../../hook/useRequest.ts';
+import { HttpMethods } from '../../../../../utils/IRequest.ts';
+import { useHomeContext } from '../../../context/HomeContext.tsx';
+import { Message } from './../../message/Message.tsx';
+import { ChatBodyProps, GetMessagePayload, Message as MessageType } from './../IChat.ts';
 
-interface ChatBodyProps {
-    messages: any[];
-    selectedConversation: any;
-    setScrollPage: (page: number) => void;
-    scrollPage: number;
-    loading: boolean;
-    setLoading: (loading: boolean) => void;
-}
+import { formatDateForSeparator, shouldShowDateSeparator } from '../../../../../utils/functions/dateUtils.ts';
+import formatTimestamp from '../../../../../utils/functions/formatTimestamp.ts';
+import mapConversations from '../../../../../utils/mapper/conversationMapper.ts';
 
-function shouldShowDateSeparator(currentDate, previousDate) {
-    if (!previousDate) return true;
-    return !dayjs(currentDate).isSame(previousDate, 'day');
-}
+import './ChatBody.css';
 
-function formatDateForSeparator(date) {
-    const today = dayjs();
-    const messageDate = dayjs(date);
+let previousDate: any = null;
+const MESSAGES_PER_PAGE = 10;
 
-    if (messageDate.isSame(today, 'day')) {
-        return 'Hoje';
-    } else if (messageDate.isSame(today.subtract(1, 'day'), 'day')) {
-        return 'Ontem';
-    } else {
-        return messageDate.format('DD/MM/YYYY');
-    }
-}
-
-let previousDate = null;
 export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
     const { user } = useUser();
     const { request } = useRequest();
     const { loading, setLoading, setScrollPage, scrollPage, handleConversationSelected, totalMessages } = useHomeContext();
-    const [containerHeight, setContainerHeight] = useState(1000);
+
+    const [containerHeight, setContainerHeight] = useState<number>(1000);
 
     const listRef = useRef<ListRef>(null);
-    const MESSAGES_PER_PAGE = 10;
 
     const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
         if (e.currentTarget.scrollTop === 0 && !loading && messages.length < totalMessages) {
@@ -56,7 +36,7 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
     };
 
     function getMessages() {
-        const data = {
+        const data: GetMessagePayload = {
             userId: user?.id,
             conversationId: selectedConversation?.id,
             pageNumber: scrollPage,
@@ -83,39 +63,37 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                 setLoading(false);
             },
             errorCallback: (error) => {
+                console.error('Error loading messages', error);
                 setLoading(false);
             }
         });
     }
 
     useEffect(() => {
-        const updateHeight = () => {
-            setContainerHeight(window.innerHeight * 0.8);
-        };
-
+        const updateHeight = () => setContainerHeight(window.innerHeight * 0.8);
         window.addEventListener('resize', updateHeight);
         updateHeight();
 
         return () => window.removeEventListener('resize', updateHeight);
     }, []);
 
-    useEffect(() => {
-        if (listRef.current) {
-            listRef.current.scrollTo({ index: messages.length - 1, align: 'bottom' });
-        }
-    }, [messages, selectedConversation]);
-
     return (
-        <div className="chat-container">
+        <div className="chat-body">
+            {loading && (
+                <div className="loading-notification">
+                    <Spin size="large" />
+                    <span>Carregando mais mensagens...</span>
+                </div>
+            )}
+
             <VirtualList
                 ref={listRef}
                 data={messages}
                 height={containerHeight}
-                itemHeight={47}
                 itemKey="id"
                 onScroll={onScroll}
             >
-                {(msg, index) => {
+                {(msg: MessageType) => {
                     const currentDate = msg.timeStamp;
                     const showDateSeparator = shouldShowDateSeparator(currentDate, previousDate);
                     const separatorDate = showDateSeparator ? formatDateForSeparator(currentDate) : null;
@@ -130,24 +108,18 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                                 avatar: msg.sender === 'me' ? null : selectedConversation?.profilePicture,
                                 senderName: msg.sender === 'me' ? 'You' : selectedConversation?.conversationName,
                                 timestamp: formatTimestamp(msg.timeStamp),
-                                isEdited: msg.isEdited,
-                                isDeleted: msg.isDeleted,
+                                isEdited: msg.edited,
+                                isDeleted: msg.deleted,
                                 messageContent: msg.messageContent,
                                 date: msg.timeStamp
                             }}
                             isMe={msg.sender === 'me'}
-                            conv={selectedConversation}
                             showDateSeparator={showDateSeparator}
                             separatorDate={separatorDate}
                         />
                     );
                 }}
             </VirtualList>
-            {loading && (
-                <div className="loading-indicator">
-                    <span>Carregando mais mensagens...</span>
-                </div>
-            )}
         </div>
     );
 }

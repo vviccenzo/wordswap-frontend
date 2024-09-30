@@ -3,9 +3,11 @@ import { Avatar, Badge, Dropdown, Menu, Space } from 'antd';
 import { SettingOutlined, TeamOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
 import { useUser } from '../../../context/UserContext.tsx';
 import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.ts';
-import { FriendshipRequestModal } from './FriendshipRequestModal.tsx';
+import { FriendshipRequestModal } from './friendshipRequest/FriendshipRequestModal.tsx';
 import { useHomeContext } from '../context/HomeContext.tsx';
 import { EditUserModal } from './editUser/EditUserModal.tsx';
+
+import './Profile.css';
 
 export function Profile() {
     const { user, doLogout } = useUser();
@@ -29,9 +31,9 @@ export function Profile() {
     );
 
     return (
-        <div style={{ padding: '16px', gap: 20, display: 'flex', justifyContent: 'space-between', backgroundColor: '#DCDCDC', position: 'relative' }}>
+        <div className="profile-container">
             <div
-                style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                className="avatar-container"
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
             >
@@ -39,28 +41,22 @@ export function Profile() {
                     size={64}
                     src={hasProfilePicture ? imageUrl : undefined}
                     icon={isHovering ? <EditOutlined /> : <UserOutlined />}
-                    style={{
-                        cursor: 'pointer',
-                        border: '3px solid #777777',
-                        opacity: isHovering ? 0.8 : 1,
-                        transition: 'opacity 0.3s',
-                        marginRight: '8px',
-                    }}
+                    className={`avatar ${isHovering ? 'avatar-hover' : ''}`}
                     onClick={isHovering ? () => handleEditModalStatus(true) : undefined}
                 />
                 <EditUserModal />
             </div>
-            <div style={{ display: 'flex', gap: 35, marginRight: 10 }}>
-                <div style={{ marginTop: 22 }}>
+            <div className="space">
+                <div className="badge-container">
                     <Badge count={friendRequests.length} overflowCount={99} offset={[10, 0]}>
-                        <TeamOutlined style={{ fontSize: 18, cursor: 'pointer' }} onClick={() => handleModalStatus(true)} />
+                        <TeamOutlined className="icon" onClick={() => handleModalStatus(true)} />
                     </Badge>
                 </div>
 
                 <FriendshipRequestModal />
                 <Dropdown overlay={menu} trigger={['click']}>
                     <Space>
-                        <SettingOutlined style={{ fontSize: 18, cursor: 'pointer' }} />
+                        <SettingOutlined className="dropdown-icon" />
                     </Space>
                 </Dropdown>
             </div>

@@ -9,6 +9,7 @@ export interface User {
     name: string;
     profilePic?: any;
     bio?: string;
+    userCode: string;
 }
 
 export interface UserContextType {

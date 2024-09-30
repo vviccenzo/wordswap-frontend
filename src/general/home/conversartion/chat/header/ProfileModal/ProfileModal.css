@@ -1,0 +1,48 @@
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.avatar-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.text-user-profile {
+    margin-left: 10px;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+h5 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.profile-modal {
+    background-color: #000000;
+    border-radius: 10px;
+}
+
+.profile-modal .ant-modal-content {
+    background-color: #ffffff !important;
+}
+
+.profile-modal .ant-modal-header {
+    background-color: #ffffff !important;
+    border-radius: 10px 10px 0 0;
+}

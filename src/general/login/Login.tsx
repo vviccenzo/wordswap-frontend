@@ -1,7 +1,6 @@
 import React from 'react';
 import { Layout, Form, Input, Button } from 'antd';
 import { useUser } from '../../context/UserContext.tsx';
-
 import './style.css';
 import img1 from '../../imgs/logo.png';
 import doRequest from '../../utils/Request.ts';
@@ -21,11 +20,16 @@ export function Login() {
             method: HttpMethods.POST,
             url: '/auth/login?user=' + values.username + '&password=' + values.password,
             successCallback: (data) => {
-
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.userInfo));
 
-                setUser({ id: data.userInfo.id, profilePic: data.userInfo.profilePic, name: data.userInfo.name });
+                setUser({
+                    id: data.userInfo.id,
+                    profilePic: data.userInfo.profilePic,
+                    name: data.userInfo.name,
+                    bio: data.userInfo.bio,
+                    userCode: data.userInfo.userCode
+                });
                 setToken(data.token);
                 setIsLogged(true);
                 navigate("/home");
@@ -37,9 +41,9 @@ export function Login() {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh', backgroundColor: '#f0f0f0' }}>
-            <Sider width="30%" style={{ backgroundColor: '#f0f0f0', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10%' }}>
-                <img width={200} src={img1} alt="Logo do site" style={{ margin: 50 }} />
+        <Layout className="layout-login">
+            <Sider width="30%" className="sider-login">
+                <img width={200} src={img1} alt="Logo do site" />
                 <Form
                     name="login"
                     initialValues={{ remember: true }}
@@ -47,27 +51,29 @@ export function Login() {
                 >
                     <Form.Item
                         name="username"
-                        rules={[{ required: true, message: 'Por favor, insira seu username' }]}
+                        rules={[{ required: true, message: 'Por favor, insira seu Usuário' }]}
+                        className="login-form-item"
                     >
-                        <Input placeholder="Username" />
+                        <Input placeholder="Usuário" className="login-input" />
                     </Form.Item>
                     <Form.Item
                         name="password"
-                        rules={[{ required: true, message: 'Por favor, insira sua senha' }]}
+                        rules={[{ required: true, message: 'Por favor, insira sua Senha' }]}
+                        className="login-form-item"
                     >
-                        <Input.Password placeholder="Password" />
+                        <Input.Password placeholder="Senha" className="login-password-input" />
                     </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" style={{ width: '100%', backgroundColor: "#1A1818" }}>
+                    <Form.Item className="login-form-item">
+                        <Button type="primary" htmlType="submit" className="login-btn">
                             Logar
                         </Button>
                     </Form.Item>
-                    <Form.Item>
-                        Ou <a href="/register" style={{ color: "#ccc" }}> registrar-se!</a>
+                    <Form.Item className="login-form-item">
+                        Ou <a href="/register"> registrar-se!</a>
                     </Form.Item>
                 </Form>
             </Sider>
-            <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#ccc' }} />
+            <Content className="content-login" />
         </Layout>
     );
 }

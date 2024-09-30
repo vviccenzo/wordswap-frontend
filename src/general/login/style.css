@@ -1,3 +1,158 @@
-.layout {
-    background-color: #f5f5dc;
+/* Estilos principais */
+.layout-login {
+    min-height: 100vh;
+    background-color: #3E3363 !important;
+}
+
+/* Estilos do container lateral de login */
+.sider-login {
+    background-color: #3E3363 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
+}
+
+/* Conteúdo central de login */
+.content-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #8278a3;
+    border-left: 1px black solid;
+}
+
+/* Estilos da imagem */
+.sider-login img {
+    margin-bottom: 40px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Itens do formulário de login */
+.sider-login .login-form-item {
+    margin-bottom: 20px;
+}
+
+/* Inputs de login e senha */
+.sider-login .login-input,
+.sider-login .login-password-input {
+    background-color: #8278a3;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Placeholder dos inputs */
+.sider-login .login-input::placeholder,
+.sider-login .login-password-input::placeholder {
+    color: #a4a4a4;
+}
+
+/* Foco nos inputs */
+.sider-login .login-input:focus,
+.sider-login .login-password-input:focus {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    outline: none;
+}
+
+/* Botão de login */
+.sider-login .login-btn {
+    background-color: #8278a3;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover no botão de login */
+.sider-login .login-btn:hover {
+    background-color: #8B77D7;
+}
+
+/* Foco no botão de login */
+.sider-login .login-btn:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Estilo dos links */
+.sider-login a {
+    color: #cfcfcf;
+}
+
+/* Hover nos links */
+.sider-login a:hover {
+    color: #e2e2e2;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .sider-login {
+        margin-top: 5%;
+    }
+
+    .content-login {
+        flex-direction: column;
+        border-left: none;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sider-login {
+        margin-top: 0;
+        padding: 20px;
+    }
+
+    .content-login {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .sider-login img {
+        margin-bottom: 30px;
+    }
+
+    .sider-login .login-input,
+    .sider-login .login-password-input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .sider-login .login-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sider-login {
+        margin-top: 0;
+        padding: 10px;
+    }
+
+    .content-login {
+        padding: 10px;
+    }
+
+    .sider-login img {
+        margin-bottom: 20px;
+    }
+
+    .sider-login .login-input,
+    .sider-login .login-password-input {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .sider-login .login-btn {
+        font-size: 12px;
+        padding: 8px;
+    }
 }

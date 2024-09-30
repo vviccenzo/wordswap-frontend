@@ -1,0 +1,51 @@
+.container {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu {
+    border-radius: 10px;
+    background-color: #ffffff !important;
+    color: white !important;
+    padding: 0 !important;
+    border: none !important;
+    width: 100% !important;
+}
+
+.menu-item {
+    height: 60px !important;
+    padding-left: 5px !important;
+    background-color: #000000 !important;
+}
+
+.menu-title-content {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.title-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.title-conversation {
+    margin: 1px;
+    font-weight: bold;
+    font-size: 16px;
+    color: white !important;
+}
+
+.last-message-time {
+    color: white !important;
+    font-size: 11px;
+    margin-top: 4px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.last-message {
+    color: white !important;
+    font-size: 14px;
+}

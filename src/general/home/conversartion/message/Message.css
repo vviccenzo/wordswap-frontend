@@ -1,0 +1,114 @@
+.message-container {
+    display: flex;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.message-container.me {
+    justify-content: flex-end;
+    margin-right: 10px;
+}
+
+.message-container.not-me {
+    justify-content: flex-start;
+}
+
+.message-content {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 8px 16px;
+    max-width: 60%;
+    word-break: break-word;
+    position: relative;
+    z-index: 1;
+}
+
+.message-content.me {
+    background: #dcf8c6;
+}
+
+.message-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #ccc;
+    z-index: -1;
+}
+
+.message-container.not-me .message-content::before {
+    left: -6px;
+}
+
+.message-container.me .message-content::before {
+    right: -6px;
+}
+
+.message-deleted {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.message-deleted em {
+    font-style: italic;
+    color: #888;
+}
+
+.message-deleted span {
+    font-size: 10px;
+    color: #888;
+    margin-top: 6px;
+}
+
+.message-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.message-info .timestamp {
+    margin-left: 10px;
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 1px;
+}
+
+.message-edit {
+    display: flex;
+    align-items: center;
+}
+
+.message-edit .input {
+    margin-right: 8px;
+}
+
+.message-edit .button {
+    margin-right: 8px;
+}
+
+.menu-item-message {
+    font-size: 14px;
+}
+
+.message-edited {
+    font-size: 10px;
+    color: #888;
+}
+
+.dropdown-content {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+}
+
+.dropdown-content .ant-dropdown-menu-item {
+    font-size: 14px;
+    color: #333;
+}
+
+.dropdown-content .ant-dropdown-menu-item:hover {
+    background: #f0f0f0;
+}

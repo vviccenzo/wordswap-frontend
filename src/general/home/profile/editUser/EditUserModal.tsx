@@ -1,40 +1,37 @@
 import React, { useEffect, useState } from "react";
 import Modal from "antd/es/modal/Modal";
-
-import { useHomeContext } from "../../context/HomeContext.tsx";
 import { Button, Input, Upload, message, Typography, Avatar } from "antd";
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
 import { useUser } from "../../../../context/UserContext.tsx";
 import { byteArrayToDataUrl } from "../../../../utils/functions/byteArrayToDataUrl.ts";
-
 import { useRequest } from "../../../../hook/useRequest.ts";
 import { HttpMethods } from "../../../../utils/IRequest.ts";
 import { Notification } from "../../../../utils/Notification.tsx";
-
+import { useHomeContext } from "../../context/HomeContext.tsx";
 import "./EditUserModal.css";
 
 const { TextArea } = Input;
 
 export function EditUserModal() {
-
     const { user, setUser } = useUser();
     const { request } = useRequest();
-
     const { isEditModalOpen, handleEditModalStatus } = useHomeContext();
 
     const [bio, setBio] = useState<string>(user.bio || '');
     const [fileList, setFileList] = useState<any>([]);
-    const [isHovering, setIsHovering] = useState<boolean>(false);
     const [profileName, setProfileName] = useState<string>(user.name);
     const [isEditingName, setIsEditingName] = useState<boolean>(false);
     const [nameInput, setNameInput] = useState<string>(profileName);
-    const [hasSelectedImage, setHasSelectedImage] = useState<boolean>(false);
     const [imageNew, setImageNew] = useState<any>();
 
-    const hasProfilePicture = user?.profilePic && user?.profilePic?.length > 0;
+    const hasProfilePicture = user?.profilePic?.length > 0;
     const imageUrl = hasProfilePicture ? byteArrayToDataUrl(user.profilePic) : '';
 
-    function handleSave() {
+    useEffect(() => {
+        setProfileName(user.name);
+    }, [user.name]);
+
+    const handleSave = () => {
         const formData = new FormData();
         formData.append('id', user.id.toString());
         formData.append('name', profileName);
@@ -48,63 +45,85 @@ export function EditUserModal() {
             method: HttpMethods.PUT,
             url: '/user',
             data: formData,
-            successCallback: (data) => {
-                setUser({
-                    id: data.id,
-                    name: data.label,
-                    profilePic: data.profilePic,
-                    bio: data.bio
-                });
-            },
-            errorCallback: (error) => {
-                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
-            },
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
+            successCallback: updateUser,
+            errorCallback: handleError,
+            headers: { 'Content-Type': 'multipart/form-data' },
         });
 
         handleEditModalStatus(false);
-    }
+    };
 
-    function handleUploadChange({ file }: any) {
-        setFileList([file]);
-        setHasSelectedImage(true);
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImageNew(reader.result as string);
-            setIsHovering(false);
+    const updateUser = (data: any) => {
+        const updatedUser = {
+            id: data.id,
+            name: data.label,
+            profilePic: data.profilePic,
+            bio: data.bio,
+            userCode: data.userCode,
         };
-        reader.readAsDataURL(file.originFileObj);
-    }
+
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+    };
+
+    const handleError = (error: string) => {
+        Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+    };
+
+    const handleUploadChange = ({ file }: any) => {
+        if (file && file.originFileObj) {
+            const isValidFile = validateFile(file.originFileObj);
+            if (!isValidFile) {
+                setFileList([]);
+                return;
+            }
+    
+            setFileList([file]);
+    
+            const reader = new FileReader();
+            reader.onloadend = () => setImageNew(reader.result as string);
+            try {
+                reader.readAsDataURL(file.originFileObj);
+            } catch (error) {
+                message.error('Erro ao processar a imagem. Tente novamente.');
+            }
+        } else {
+            message.error('Arquivo inválido. Por favor, selecione uma imagem válida.');
+        }
+    };
 
     const uploadProps = {
-        beforeUpload: (file) => {
-            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-            if (!isJpgOrPng) {
-                message.error('Você só pode enviar arquivos JPG/PNG!');
-            }
-
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            if (!isLt2M) {
-                message.error('A imagem deve ser menor que 2MB!');
-            }
-
-            return isJpgOrPng && isLt2M;
+        beforeUpload: (file: File) => {
+            const isValid = validateFile(file);
+            if (!isValid) return false;
+            return true;
         },
         onChange: handleUploadChange,
         fileList,
     };
 
-    useEffect(() => {
-        setProfileName(user.name);
-    }, [user.name]);
+    const validateFile = (file: File) => {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isLt2M = file.size / 2048 / 2048 < 4;
+
+        if (!isJpgOrPng) message.error('Você só pode enviar arquivos JPG/PNG!');
+        if (!isLt2M) message.error('A imagem deve ser menor que 2MB!');
+
+        return isJpgOrPng && isLt2M;
+    };
+
+    const getProfilePicture = () => {
+        if (imageNew) return imageNew;
+        return hasProfilePicture ? imageUrl : undefined;
+    };
 
     return (
         <Modal
             open={isEditModalOpen}
-            onCancel={() => handleEditModalStatus(false)}
+            onCancel={() => {
+                handleEditModalStatus(false);
+                setImageNew(undefined);
+            }}
             footer={null}
             className="modal-container"
             width={500}
@@ -112,26 +131,12 @@ export function EditUserModal() {
             <div className="modal-body">
                 <div className="avatar-container">
                     <Upload {...uploadProps} listType="picture-card" showUploadList={false}>
-                        <div className="upload-avatar">
-                            <div
-                                style={{ position: 'relative', display: 'inline-block' }}
-                                onMouseEnter={() => setIsHovering(true)}
-                                onMouseLeave={() => setIsHovering(false)}
-                            >
-                                <Avatar
-                                    size={82}
-                                    src={hasProfilePicture ? hasSelectedImage ? imageNew : imageUrl : undefined}
-                                    icon={isHovering ? <EditOutlined /> : <UserOutlined />}
-                                    style={{
-                                        cursor: 'pointer',
-                                        border: '1px solid #777777',
-                                        opacity: isHovering ? 0.8 : 1,
-                                        transition: 'opacity 0.3s'
-                                    }}
-                                    onClick={isHovering ? () => handleEditModalStatus(true) : undefined}
-                                />
-                            </div>
-                        </div>
+                        <Avatar
+                            size={82}
+                            src={getProfilePicture()}
+                            icon={<UserOutlined />}
+                            className="avatar-icon"
+                        />
                     </Upload>
                     <div className="profile-header">
                         {isEditingName ? (
@@ -163,6 +168,7 @@ export function EditUserModal() {
                             onClick={() => setIsEditingName(true)}
                         />
                     </div>
+                    <Typography.Text className="user-code">{user.userCode}</Typography.Text>
                 </div>
                 <TextArea
                     value={bio}
@@ -180,6 +186,6 @@ export function EditUserModal() {
                     </Button>
                 </div>
             </div>
-        </Modal >
+        </Modal>
     );
 }

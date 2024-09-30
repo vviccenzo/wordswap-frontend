@@ -1,22 +1,22 @@
-import { Button, Layout, Typography } from 'antd';
+import { FolderOutlined } from '@ant-design/icons';
+import { Layout, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useUser } from '../../context/UserContext.tsx';
+import { useRequest } from '../../hook/useRequest.ts';
+import useWebSocket from '../../hook/useWebSocket.ts';
+import { HttpMethods } from '../../utils/IRequest.ts';
+import { Notification } from '../../utils/Notification.tsx';
 import { useHomeContext } from './context/HomeContext.tsx';
-import { Chat } from './conversartion/Chat.tsx';
+import { Chat } from './conversartion/chat/Chat.tsx';
 import { ConversationList } from './conversartion/ConversationList.tsx';
 import { Profile } from './profile/Profile.tsx';
 
-import { FolderOutlined } from '@ant-design/icons';
-import useWebSocket from '../../hook/useWebSocket.ts';
-import { useUser } from '../../context/UserContext.tsx';
-import { useRequest } from '../../hook/useRequest.ts';
-import { HttpMethods } from '../../utils/IRequest.ts';
-import { Notification } from '../../utils/Notification.tsx';
+import './Home.css';
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
 
 export function Home() {
-
     const { user } = useUser();
     const { request } = useRequest();
     const { handleStompClient, selectedConversation, setFriendRequests } = useHomeContext();
@@ -49,43 +49,24 @@ export function Home() {
 
     return (
         <Layout>
-            <Sider width={300} style={{ background: '#fff' }}>
-                <Profile />
-                <div className="button-folder">
+            <Sider width={300} className="sider">
+                <div className="profile"><Profile /></div>
+                {/* <div className="button-folder">
                     <Button
-                        icon={<FolderOutlined />}
+                        icon={<FolderOutlined className='folder-icon'/>}
                         type="default"
-                        style={{
-                            width: '100%',
-                            textAlign: 'center',
-                            padding: '10px 0',
-                            margin: '4px 0',
-                            borderRadius: '8px',
-                            backgroundColor: '#f0f0f0',
-                            borderColor: '#d9d9d9',
-                            color: '#1890ff',
-                            fontWeight: 'bold',
-                        }}
+                        className="folder-button"
                         onClick={toggleView}
                     >
-                        <Title level={5} style={{ margin: 0 }}>{showArchived ? 'Mostrar Conversas Ativas' : 'Mostrar Arquivadas'}</Title>
+                        <Title className="title-folder" level={5}>{showArchived ? 'Mostrar Conversas Ativas' : 'Mostrar Arquivadas'}</Title>
                     </Button>
-                </div>
+                </div> */}
                 {showArchived ? <FolderOutlined /> : <ConversationList />}
             </Sider>
-            <Layout style={{ padding: '0 24px', minHeight: '100vh' }}>
-                <Content
-                    style={{
-                        padding: 24,
-                        margin: 0,
-                        minHeight: 280,
-                        background: '#fff',
-                    }}
-                >
-                    {selectedConversation ? (
+            <Layout className='layout-home'>
+                <Content className="content">
+                    {selectedConversation && (
                         <Chat />
-                    ) : (
-                        <Title level={2}>Inicie uma conversa</Title>
                     )}
                 </Content>
             </Layout>

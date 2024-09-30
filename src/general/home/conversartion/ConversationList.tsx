@@ -7,17 +7,17 @@ import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.
 import { HttpMethods } from '../../../utils/IRequest.ts';
 import { Notification } from '../../../utils/Notification.tsx';
 import { useHomeContext } from '../context/HomeContext.tsx';
+import mapConversations from '../../../utils/mapper/conversationMapper.ts';
 
 import * as moment from 'moment';
-import mapConversations from '../../../utils/mapper/conversationMapper.ts';
+
+import './ConversationList.css';
 
 const { Title, Text } = Typography;
 
 export function ConversationList() {
-
     const { user } = useUser();
     const { request } = useRequest();
-
     const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, setScrollPage, setTotalMessages } = useHomeContext();
 
     useEffect(() => {
@@ -69,12 +69,8 @@ export function ConversationList() {
             method: HttpMethods.GET,
             url: '/conversation/load-conversations?userId=' + user.id + '&pageNumber=' + scrollPage,
             successCallback: (data) => {
-                const conversationsMapped: any[] = data.map((conversation: any) => {
-                    return mapConversations(conversation, user.id);
-                })
-
                 setLoading(false);
-                handleConversations(conversationsMapped);
+                handleConversations(data.map((conversation: any) => mapConversations(conversation, user.id)));
             },
             errorCallback: (error) => {
                 Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
@@ -106,23 +102,16 @@ export function ConversationList() {
     );
 
     return (
-        <div style={{ padding: '16px', height: '84.4%', display: 'flex', flexDirection: 'column' }}>
-            <Menu mode="inline" theme="light" style={{ borderRadius: 10 }}>
+        <div className="container">
+            <Menu mode="inline" theme="dark" className="menu">
                 {conversations.map((conv) => (
                     <Menu.Item
                         key={conv.id}
                         icon={
                             <Avatar
                                 size={48}
-                                style={{
-                                    border: '1px solid #777777',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    overflow: 'hidden'
-                                }}
-                                src={byteArrayToDataUrl(conv.profilePic) || ''}
+                                className="avatar-conversation"
+                                src={conv.profilePic ? byteArrayToDataUrl(conv.profilePic) : null}
                             />
                         }
                         onClick={() => {
@@ -130,19 +119,19 @@ export function ConversationList() {
                             setTotalMessages(conv.totalMessages || 0);
                             handleConversationSelected(conv);
                         }}
-                        style={{ height: 55, paddingLeft: 20, marginBottom: 10 }}
+                        className="menu-item"
                         onContextMenu={(e) => e.preventDefault()}
                     >
                         <Dropdown
                             overlay={menu(conv)}
                             trigger={['contextMenu']}
                         >
-                            <div className="ant-menu-title-content" style={{ display: 'flex', flexDirection: 'column', gap: 5, marginLeft: 5 }}>
-                                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Title level={5} style={{ margin: 0 }}>{conv.conversationName}</Title>
-                                    <Text type="secondary" style={{ fontSize: 11, marginTop: 4, marginLeft: 5, fontWeight: 'bold' }}>{getLastTimeMessage(conv)}</Text>
+                            <div className="menu-title-content">
+                                <div className="title-row">
+                                    <Title level={5} className="title-conversation">{conv.conversationName}</Title>
+                                    <Text type="secondary" className="last-message-time">{getLastTimeMessage(conv)}</Text>
                                 </div>
-                                <Text type="secondary">{getLastMessage(conv)}</Text>
+                                <Text type="secondary" className="last-message">{getLastMessage(conv)}</Text>
                             </div>
                         </Dropdown>
                     </Menu.Item>

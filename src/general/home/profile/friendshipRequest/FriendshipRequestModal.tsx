@@ -1,12 +1,14 @@
 import React from 'react';
 
 import { Modal, Tabs } from 'antd';
-import { AddFriendTab } from './tab/AddFriendTab.tsx';
-import { FriendsListTab } from './tab/FriendsListTab.tsx';
-import { FriendRequestsTab } from './tab/FriendRequestsTab.tsx';
-import { useHomeContext } from '../context/HomeContext.tsx';
+import { useHomeContext } from '../../context/HomeContext.tsx';
+import { AddFriendTab } from './tab/addFriend/AddFriendTab.tsx';
+import { FriendsListTab } from './tab/friendsList/FriendsListTab.tsx';
+import { FriendRequestsTab } from './tab/friendRequests/FriendRequestsTab.tsx';
+import './FriendshipRequest.css'
 
 const { TabPane } = Tabs;
+
 
 export function FriendshipRequestModal() {
 
@@ -19,18 +21,18 @@ export function FriendshipRequestModal() {
             open={isModalOpen}
             onOk={() => handleModalStatus(false)}
             onCancel={() => handleModalStatus(false)}
-            cancelButtonProps={{ style: { display: 'none' } }}
-            okButtonProps={{ style: { display: 'none' } }}
             width={600}
+            className="friendship-request-modal"
+            footer={null}
         >
             <Tabs defaultActiveKey="1">
-                <TabPane tab="Adicionar Amigos" key="1">
+                <TabPane className='add-friend-tab' tab="Adicionar Amigos" key="1">
                     <AddFriendTab />
                 </TabPane>
-                <TabPane tab="Lista de Amigos" key="2">
+                <TabPane className='friends-list-tab' tab="Lista de Amigos" key="2">
                     <FriendsListTab />
                 </TabPane>
-                <TabPane tab="Solicitações" key="3">
+                <TabPane className='friendship-request-tab' tab="Solicitações" key="3">
                     <FriendRequestsTab />
                 </TabPane>
             </Tabs>
