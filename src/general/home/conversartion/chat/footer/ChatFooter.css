@@ -1,6 +1,6 @@
 .chat-footer {
     padding: 10px;
-    background-color: #554c74;
+    background-color: #000000;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -14,8 +14,8 @@
 }
 
 .chat-footer button {
-    background-color: #322b6b;
-    color: #fff;
+    background-color: #ffffff;
+    color: #000000;
     border: none;
     border-radius: 20px;
     padding: 10px 20px;
@@ -23,7 +23,7 @@
 }
 
 .chat-footer button:hover {
-    background-color: #0056b3;
+    background-color: #516479;
 }
 
 @media (max-width: 768px) {

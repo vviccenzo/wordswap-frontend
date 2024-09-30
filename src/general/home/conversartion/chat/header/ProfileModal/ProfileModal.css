@@ -32,3 +32,17 @@ h5 {
     margin: 0;
     font-size: 14px;
 }
+
+.profile-modal {
+    background-color: #000000;
+    border-radius: 10px;
+}
+
+.profile-modal .ant-modal-content {
+    background-color: #ffffff !important;
+}
+
+.profile-modal .ant-modal-header {
+    background-color: #ffffff !important;
+    border-radius: 10px 10px 0 0;
+}

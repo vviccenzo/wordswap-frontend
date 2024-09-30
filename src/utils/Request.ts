@@ -37,7 +37,12 @@ const doRequest = async ({ method, url, params = {}, data = {}, headers = {}, su
         }
     } catch (error) {
         if (errorCallback) {
-            errorCallback(error.response ? error.response.data : error.message);
+            if (error?.response && error?.response?.data && error?.response?.data?.message === "User not valid.") {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+            } else {
+                errorCallback(error.response ? error.response.data : error.message);
+            }
         } else {
             throw error.response ? error.response.data : error.message;
         }

@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { useUser } from '../../../../context/UserContext.tsx';
 import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
 import { useHomeContext } from '../../context/HomeContext.tsx';
-import './Message.css'; // Import the CSS file
+import './Message.css';
 
 const { Text } = Typography;
 
-export function Message({ message, isMe, conv, showDateSeparator, separatorDate }) {
+export function Message({ message, isMe, showDateSeparator, separatorDate }) {
     const { user } = useUser();
     const { stompClient } = useHomeContext();
 
@@ -25,7 +25,7 @@ export function Message({ message, isMe, conv, showDateSeparator, separatorDate 
     };
 
     const handleDeleteMessage = () => {
-        stompClient.send(`/app/chat/delete/${user?.id}`, {}, JSON.stringify({
+        stompClient.send(`/app/chat/${user?.id}`, {}, JSON.stringify({
             action: WebSocketEventType.DELETE_MESSAGE,
             messageDeleteDTO: {
                 id: message.id,

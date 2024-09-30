@@ -31,8 +31,8 @@ export interface Message {
     content: string;
     sender: string;
     timeStamp: string;
-    isEdited: boolean;
-    isDeleted: boolean;
+    edited: boolean;
+    deleted: boolean;
     messageContent: string;
 }
 

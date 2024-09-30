@@ -9,11 +9,12 @@ export function ProfileModal({ user, isModalVisible, handleCancel, userInfo }: a
 
     return (
         <Modal
-            title="Perfil do Usuário"
+            title="Usuário"
             visible={isModalVisible}
             onCancel={handleCancel}
             okButtonProps={{ style: { display: 'none' } }}
             cancelButtonProps={{ style: { display: 'none' } }}
+            className="profile-modal"
         >
             <div className="user-profile">
                 <div className="avatar-user-profile">

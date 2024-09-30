@@ -23,3 +23,7 @@
     background-color: #322b6b;
     border-radius: 20px;
 }
+
+.ant-tabs-tab-btn {
+    color: white !important;
+}

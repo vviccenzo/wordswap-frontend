@@ -1,5 +1,5 @@
 .modal-container .ant-modal-content {
-    background-color: #42397b !important;
+    background-color: #ffffff !important;
 }
 
 .modal-container {
@@ -38,7 +38,7 @@
 
 .avatar-icon {
     cursor: pointer;
-    border: 1px solid #777777;
+    border: 1px solid black;
     transition: opacity 0.3s;
 }
 
@@ -54,7 +54,6 @@
 
 .profile-name {
     margin: 0;
-    color: white !important;
 }
 
 .profile-name-input {

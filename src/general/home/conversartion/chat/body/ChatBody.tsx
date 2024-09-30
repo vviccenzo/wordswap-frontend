@@ -108,13 +108,12 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                                 avatar: msg.sender === 'me' ? null : selectedConversation?.profilePicture,
                                 senderName: msg.sender === 'me' ? 'You' : selectedConversation?.conversationName,
                                 timestamp: formatTimestamp(msg.timeStamp),
-                                isEdited: msg.isEdited,
-                                isDeleted: msg.isDeleted,
+                                isEdited: msg.edited,
+                                isDeleted: msg.deleted,
                                 messageContent: msg.messageContent,
                                 date: msg.timeStamp
                             }}
                             isMe={msg.sender === 'me'}
-                            conv={selectedConversation}
                             showDateSeparator={showDateSeparator}
                             separatorDate={separatorDate}
                         />

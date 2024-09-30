@@ -1,5 +1,5 @@
 .sider {
-    background: #42397b !important;
+    background: #ffffff !important;
 }
 
 .button-folder {
@@ -30,7 +30,7 @@
 }
 
 .profile {
-    border-bottom: #322b6b 10px solid;
+    border-bottom: #000000 10px solid;
 }
 
 .folder-icon {
@@ -40,6 +40,5 @@
 
 .layout-home {
     min-height: 100vh;
-    background-color: #8278a3;
-    border-left: #322b6b 8px solid;
+    background-color: #000000;
 }
