@@ -4,22 +4,41 @@
 
 .button-folder {
     margin: 4px 0;
+    display: flex;
+    justify-content: space-around;
 }
 
 .folder-button {
     width: 100%;
-    text-align: center;
-    background-color: #3e375c;
+    max-width: 270px;
+    background-color: black;
     border-color: #d9d9d9;
     color: white;
-    font-weight: bold;
-    height: 45px;
+    text-align: center;
+    display: flex;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .folder-button {
+        max-width: 100%;
+        font-size: 12px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .folder-button {
+        font-size: 12px;
+        height: 35px;
+        padding: 0 8px;
+    }
 }
 
 .title-folder {
     margin: 0 !important;
     font-weight: bold !important;
-    font-size: 16px !important;
+    font-size: 12px !important;
     color: white !important;
 }
 
