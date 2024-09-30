@@ -1,5 +1,5 @@
 import { FolderOutlined } from '@ant-design/icons';
-import { Layout, Typography } from 'antd';
+import { Button, Layout, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useUser } from '../../context/UserContext.tsx';
 import { useRequest } from '../../hook/useRequest.ts';
@@ -51,17 +51,17 @@ export function Home() {
         <Layout>
             <Sider width={300} className="sider">
                 <div className="profile"><Profile /></div>
-                {/* <div className="button-folder">
+                <div className="button-folder">
                     <Button
-                        icon={<FolderOutlined className='folder-icon'/>}
+                        icon={<FolderOutlined className='folder-icon' />}
                         type="default"
                         className="folder-button"
                         onClick={toggleView}
                     >
                         <Title className="title-folder" level={5}>{showArchived ? 'Mostrar Conversas Ativas' : 'Mostrar Arquivadas'}</Title>
                     </Button>
-                </div> */}
-                {showArchived ? <FolderOutlined /> : <ConversationList />}
+                </div>
+                <ConversationList showArchived={showArchived} />
             </Sider>
             <Layout className='layout-home'>
                 <Content className="content">

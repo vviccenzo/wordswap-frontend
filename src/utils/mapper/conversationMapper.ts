@@ -24,6 +24,8 @@ export default function mapConversation(conversation: any, userId: any): any {
         totalMessages: conversation.totalMessages,
         receiverCode: conversation.receiverCode,
         senderCode: conversation.senderCode,
-        userInfo: conversation.userInfo
+        userInfo: conversation.userInfo,
+        isArchivedRecipient: conversation.isArchivedRecipient,
+        isArchivedInitiator: conversation.isArchivedInitiator
     };
 }

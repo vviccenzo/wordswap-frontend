@@ -15,7 +15,7 @@ import './ConversationList.css';
 
 const { Title, Text } = Typography;
 
-export function ConversationList() {
+export function ConversationList({ showArchived }) {
     const { user } = useUser();
     const { request } = useRequest();
     const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, setScrollPage, setTotalMessages } = useHomeContext();
@@ -78,15 +78,27 @@ export function ConversationList() {
         });
     }
 
-    function handleArchive(conv) {
-        console.log(conv);
+    function handleArchive(conv, hasToArchive) {
+        request({
+            method: HttpMethods.PUT,
+            url: '/conversation/archive-conversation',
+            data: {
+                userId: user.id,
+                id: conv.id,
+                hasToArchive: hasToArchive
+            }
+        });
+
+        fetchConversations();
     }
 
     const handleMenuClick = (e, conv) => {
         if (e.key === 'delete') {
             handleDelete(conv);
         } else if (e.key === 'archive') {
-            handleArchive(conv);
+            handleArchive(conv, true);
+        } else if (e.key === 'unarchive') {
+            handleArchive(conv, false);
         }
     };
 
@@ -95,16 +107,53 @@ export function ConversationList() {
             <Menu.Item key="delete" icon={<DeleteOutlined />}>
                 Deletar Conversa
             </Menu.Item>
-            <Menu.Item key="archive" icon={<FolderOutlined />}>
-                Arquivar Conversa
-            </Menu.Item>
+            {verifyIfIsArchived(conv) ?
+                <Menu.Item key="unarchive" icon={<FolderOutlined />}>
+                    Desarquivar Conversa
+                </Menu.Item>
+                :
+                <Menu.Item key="archive" icon={<FolderOutlined />}>
+                    Arquivar Conversa
+                </Menu.Item>
+            }
         </Menu>
     );
+
+    function verifyIfIsArchived(conv) {
+        if (conv.isArchivedInitiator || conv.isArchivedRecipient) {
+            return true;
+        }
+
+        return false;
+    }
 
     return (
         <div className="container">
             <Menu mode="inline" theme="dark" className="menu">
-                {conversations.map((conv) => (
+                {conversations.filter((conv: any) => {
+                    const isUserInitiator = conv.senderId === user.id;
+                    const isUserReceiver = conv.receiverId === user.id;
+
+                    if (showArchived) {
+                        if (isUserInitiator) {
+                            return conv.isArchivedInitiator;
+                        }
+
+                        if (isUserReceiver) {
+                            return conv.isArchivedRecipient;
+                        }
+                    } else {
+                        if (isUserInitiator) {
+                            return !conv.isArchivedInitiator;
+                        }
+
+                        if (isUserReceiver) {
+                            return !conv.isArchivedRecipient;
+                        }
+                    }
+
+                    return true;
+                }).map((conv) => (
                     <Menu.Item
                         key={conv.id}
                         icon={
