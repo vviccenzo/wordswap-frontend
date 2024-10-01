@@ -112,3 +112,34 @@
 .dropdown-content .ant-dropdown-menu-item:hover {
     background: #f0f0f0;
 }
+
+.message-image {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.message-img {
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+.message-info {
+    text-align: center;
+}
+
+.message-edited {
+    font-size: 12px;
+    color: gray;
+    margin-left: 5px;
+}
+
+.timestamp {
+    display: block;
+    font-size: 10px;
+    color: gray;
+    margin-top: 5px;
+    text-align: right;
+}

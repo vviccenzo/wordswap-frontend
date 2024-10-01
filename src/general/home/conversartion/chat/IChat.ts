@@ -34,6 +34,7 @@ export interface Message {
     edited: boolean;
     deleted: boolean;
     messageContent: string;
+    image: string;
 }
 
 export interface GetMessagePayload {
@@ -47,6 +48,7 @@ export interface ChatFooterProps {
     message: string;
     setMessage: (value: string) => void;
     handleSend: () => void;
+    scrollPage: number;
 
     translationFrom: string;
 
