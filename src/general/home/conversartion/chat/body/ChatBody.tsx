@@ -111,7 +111,8 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                                 isEdited: msg.edited,
                                 isDeleted: msg.deleted,
                                 messageContent: msg.messageContent,
-                                date: msg.timeStamp
+                                date: msg.timeStamp,
+                                image: msg.image
                             }}
                             isMe={msg.sender === 'me'}
                             showDateSeparator={showDateSeparator}

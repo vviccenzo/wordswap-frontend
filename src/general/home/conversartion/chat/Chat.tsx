@@ -130,6 +130,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
 
                     isImprovingText={isImprovingText}
                     setIsImprovingText={setIsImprovingText}
+                    scrollPage={scrollPage}
                 />
             </div>
         </div>

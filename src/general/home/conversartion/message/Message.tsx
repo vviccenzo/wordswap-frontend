@@ -74,14 +74,21 @@ export function Message({ message, isMe, showDateSeparator, separatorDate }) {
                 <Button onClick={handleCancel}>Cancelar</Button>
             </div>
         ) : (
-            <div className="message-info">
-                <Text>
-                    {message.content}
-                    {message.isEdited && <em className="message-edited">(editada)</em>}
-                </Text>
-                <span className="timestamp">{message.timestamp}</span>
-            </div>
-        );
+            <>
+                {message.image && (
+                    <div className="message-image">
+                        <img src={`data:image/jpeg;base64,${message.image}`} alt="Mensagem de imagem" className="message-img" />
+                    </div>
+                )}
+                <div className="message-info">
+                    <Text>
+                        {message.content}
+                        {message.isEdited && <em className="message-edited">(editada)</em>}
+                    </Text>
+                    <span className="timestamp">{message.timestamp}</span>
+                </div>
+            </>
+        )
     };
 
     const menu = (
