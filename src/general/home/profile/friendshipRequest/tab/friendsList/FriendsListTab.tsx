@@ -1,16 +1,16 @@
 import { EllipsisOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, List, Menu, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../../../../../../context/UserContext.tsx';
-import { useRequest } from '../../../../../../hook/useRequest.ts';
-import { HttpMethods } from '../../../../../../utils/IRequest.ts';
-import { Notification } from '../../../../../../utils/Notification.tsx';
-import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType.ts';
-import { useHomeContext } from '../../../../context/HomeContext.tsx';
+import { useUser } from '../../../../../../context/UserContext';
+import { useRequest } from '../../../../../../hook/useRequest';
+import { HttpMethods } from '../../../../../../utils/IRequest';
+import { Notification } from '../../../../../../utils/Notification';
+import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType';
+import { useHomeContext } from '../../../../context/HomeContext';
 
 import './FriendList.css';
-import { byteArrayToDataUrl } from '../../../../../../utils/functions/byteArrayToDataUrl.ts';
-import { ProfileModal } from '../../../../conversartion/chat/header/ProfileModal/ProfileModal.tsx';
+import { byteArrayToDataUrl } from '../../../../../../utils/functions/byteArrayToDataUrl';
+import { ProfileModal } from '../../../../conversartion/chat/header/ProfileModal/ProfileModal';
 
 export function FriendsListTab() {
     const { user } = useUser();

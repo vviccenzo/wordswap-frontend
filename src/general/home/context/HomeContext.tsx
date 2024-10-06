@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRequest } from "../../../hook/useRequest.ts";
-import { HttpMethods } from "../../../utils/IRequest.ts";
-import { Notification } from "../../../utils/Notification.tsx";
-import { HomeProviderProps } from "./IHomeContext.ts";
+import { useRequest } from "../../../hook/useRequest";
+import { HttpMethods } from "../../../utils/IRequest";
+import { Notification } from "../../../utils/Notification";
+import { HomeProviderProps } from "./IHomeContext";
 
-const HomeContext = createContext<any>({});
+export const HomeContext = createContext<any>({});
 
 export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
 

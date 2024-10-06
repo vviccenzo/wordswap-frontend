@@ -1,11 +1,9 @@
-import React from 'react';
-
 import { Modal, Tabs } from 'antd';
-import { useHomeContext } from '../../context/HomeContext.tsx';
-import { AddFriendTab } from './tab/addFriend/AddFriendTab.tsx';
-import { FriendsListTab } from './tab/friendsList/FriendsListTab.tsx';
-import { FriendRequestsTab } from './tab/friendRequests/FriendRequestsTab.tsx';
-import './FriendshipRequest.css'
+import { useHomeContext } from '../../context/HomeContext';
+import './FriendshipRequest.css';
+import { AddFriendTab } from './tab/addFriend/AddFriendTab';
+import { FriendRequestsTab } from './tab/friendRequests/FriendRequestsTab';
+import { FriendsListTab } from './tab/friendsList/FriendsListTab';
 
 const { TabPane } = Tabs;
 

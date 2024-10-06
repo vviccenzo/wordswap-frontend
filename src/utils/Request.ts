@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { HttpMethods, IRequest } from './IRequest.ts';
+import { HttpMethods, IRequest } from './IRequest';
 
 const BASE_URL = 'http://localhost:8080';
 

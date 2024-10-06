@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { User, UserContextType, UserProviderProps } from './IUser.ts';
+import { User, UserContextType, UserProviderProps } from './IUser';
 
 const defaultUserState: UserContextType = {
     user: {} as User,
@@ -11,7 +11,7 @@ const defaultUserState: UserContextType = {
     doLogout: () => { }
 };
 
-const UserContext = createContext<UserContextType>(defaultUserState);
+export const UserContext = createContext<UserContextType>(defaultUserState);
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User>({} as User);
