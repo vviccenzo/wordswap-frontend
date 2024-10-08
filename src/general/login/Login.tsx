@@ -1,11 +1,10 @@
 import React from 'react';
 import { Layout, Form, Input, Button } from 'antd';
-import { useUser } from '../../context/UserContext.tsx';
+import { useUser } from '../../context/UserContext';
 import './style.css';
-import img1 from '../../imgs/logo.png';
-import doRequest from '../../utils/Request.ts';
-import { HttpMethods } from '../../utils/IRequest.ts';
-import { Notification } from '../../utils/Notification.tsx';
+import doRequest from '../../utils/Request';
+import { HttpMethods } from '../../utils/IRequest';
+import { Notification } from '../../utils/Notification';
 import { useNavigate } from 'react-router-dom';
 
 const { Content, Sider } = Layout;
@@ -43,7 +42,6 @@ export function Login() {
     return (
         <Layout className="layout-login">
             <Sider width="30%" className="sider-login">
-                <img width={200} src={img1} alt="Logo do site" />
                 <Form
                     name="login"
                     initialValues={{ remember: true }}
@@ -68,7 +66,7 @@ export function Login() {
                             Logar
                         </Button>
                     </Form.Item>
-                    <Form.Item className="login-form-item">
+                    <Form.Item className="login-form-item" style={{ color: 'white'}}>
                         Ou <a href="/register"> registrar-se!</a>
                     </Form.Item>
                 </Form>

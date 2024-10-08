@@ -1,9 +1,9 @@
 import { Avatar, Typography } from 'antd';
 import React, { useState } from 'react';
-import { byteArrayToDataUrl } from '../../../../../utils/functions/byteArrayToDataUrl.ts';
-import { ChatHeaderProps } from '../IChat.ts';
+import { byteArrayToDataUrl } from '../../../../../utils/functions/byteArrayToDataUrl';
+import { ChatHeaderProps } from '../IChat';
 import './ChatHeader.css';
-import { ProfileModal } from './ProfileModal/ProfileModal.tsx';
+import { ProfileModal } from './ProfileModal/ProfileModal';
 
 const { Title } = Typography;
 

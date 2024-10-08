@@ -1,8 +1,8 @@
 import { Button, Divider, Dropdown, Input, List, Menu, Typography } from 'antd';
 import React, { useState } from 'react';
-import { useUser } from '../../../../context/UserContext.tsx';
-import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
-import { useHomeContext } from '../../context/HomeContext.tsx';
+import { useUser } from '../../../../context/UserContext';
+import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType';
+import { useHomeContext } from '../../context/HomeContext';
 import './Message.css';
 
 const { Text } = Typography;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { Home } from './general/home/Home.tsx';
-import { Login } from './general/login/Login.tsx';
-import { Register } from './general/register/Register.tsx';
+import { Home } from './general/home/Home';
+import { Login } from './general/login/Login';
+import { Register } from './general/register/Register';
 
-import PrivateRoute from './PrivateRoute.tsx';
+import PrivateRoute from './PrivateRoute';
 
 export function Routers() {
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Avatar, Badge, Dropdown, Menu, Space } from 'antd';
 import { SettingOutlined, TeamOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
-import { useUser } from '../../../context/UserContext.tsx';
-import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.ts';
-import { FriendshipRequestModal } from './friendshipRequest/FriendshipRequestModal.tsx';
-import { useHomeContext } from '../context/HomeContext.tsx';
-import { EditUserModal } from './editUser/EditUserModal.tsx';
+import { useUser } from '../../../context/UserContext';
+import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl';
+import { FriendshipRequestModal } from './friendshipRequest/FriendshipRequestModal';
+import { useHomeContext } from '../context/HomeContext';
+import { EditUserModal } from './editUser/EditUserModal';
 
 import './Profile.css';
 

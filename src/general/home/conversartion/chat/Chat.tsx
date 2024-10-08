@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../../../../context/UserContext.tsx';
-import { useHomeContext } from '../../context/HomeContext.tsx';
-import { useRequest } from "../../../../hook/useRequest.ts";
-import { HttpMethods } from '../../../../utils/IRequest.ts';
-import { Notification } from '../../../../utils/Notification.tsx';
-import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
-import { ChatHeader } from './header/ChatHeader.tsx';
-import { ChatBody } from './body/ChatBody.tsx';
-import { ChatFooter } from './footer/ChatFooter.tsx';
+import { useUser } from '../../../../context/UserContext';
+import { useHomeContext } from '../../context/HomeContext';
+import { useRequest } from "../../../../hook/useRequest";
+import { HttpMethods } from '../../../../utils/IRequest';
+import { Notification } from '../../../../utils/Notification';
+import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType';
+import { ChatHeader } from './header/ChatHeader';
+import { ChatBody } from './body/ChatBody';
+import { ChatFooter } from './footer/ChatFooter';
 
 import './Chat.css';
 

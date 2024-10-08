@@ -1,7 +1,7 @@
-import { useUser } from '../../context/UserContext.tsx';
-import { useHomeContext } from '../../general/home/context/HomeContext.tsx';
-import { WebSocketEventType } from '../enum/WebSocketEventType.ts';
-import mapConversation from '../mapper/conversationMapper.ts';
+import { useUser } from '../../context/UserContext';
+import { useHomeContext } from '../../general/home/context/HomeContext';
+import { WebSocketEventType } from '../enum/WebSocketEventType';
+import mapConversation from '../mapper/conversationMapper';
 
 export function useHandleCallbackWS() {
     const { user } = useUser();

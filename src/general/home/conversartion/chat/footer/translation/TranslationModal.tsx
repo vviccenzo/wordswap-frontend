@@ -1,7 +1,7 @@
 import { TranslationOutlined } from '@ant-design/icons';
 import { Button, List, Modal, Select, Switch, Tooltip, message } from 'antd';
 import React from 'react';
-import { useHomeContext } from '../../../../context/HomeContext.tsx';
+import { useHomeContext } from '../../../../context/HomeContext';
 import './TranslationModal.css';
 
 const { Option } = Select;

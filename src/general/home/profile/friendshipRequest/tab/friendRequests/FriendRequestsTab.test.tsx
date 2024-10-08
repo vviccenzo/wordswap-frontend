@@ -3,8 +3,8 @@ import { FriendRequestsTab } from './FriendRequestsTab';
 import { useHomeContext } from '../../../../context/HomeContext';
 import { useUser } from '../../../../../../context/UserContext';
 
-jest.mock('../../../../context/HomeContext.tsx');
-jest.mock('../../../../../../context/UserContext.tsx');
+jest.mock('../../../../context/HomeContext');
+jest.mock('../../../../../../context/UserContext');
 
 beforeAll(() => {
     window.matchMedia = jest.fn().mockImplementation(query => ({

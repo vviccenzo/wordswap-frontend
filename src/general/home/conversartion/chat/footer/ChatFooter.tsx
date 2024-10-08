@@ -1,15 +1,15 @@
 import { SendOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Upload, message as antdMessage } from 'antd';
 import React, { useState } from 'react';
-import { ChatFooterProps } from '../IChat.ts';
-import { TranslationModal } from './translation/TranslationModal.tsx';
+import { ChatFooterProps } from '../IChat';
+import { TranslationModal } from './translation/TranslationModal';
 
 import './ChatFooter.css';
-import { WebSocketEventType } from '../../../../../utils/enum/WebSocketEventType.ts';
-import { useUser } from '../../../../../context/UserContext.tsx';
-import { useHomeContext } from '../../../context/HomeContext.tsx';
-import { useRequest } from '../../../../../hook/useRequest.ts';
-import { HttpMethods } from '../../../../../utils/IRequest.ts';
+import { WebSocketEventType } from '../../../../../utils/enum/WebSocketEventType';
+import { useUser } from '../../../../../context/UserContext';
+import { useHomeContext } from '../../../context/HomeContext';
+import { useRequest } from '../../../../../hook/useRequest';
+import { HttpMethods } from '../../../../../utils/IRequest';
 
 export function ChatFooter({
     message, setMessage, handleSend,
