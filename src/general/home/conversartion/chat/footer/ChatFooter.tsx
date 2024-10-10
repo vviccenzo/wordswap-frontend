@@ -1,26 +1,32 @@
 import { SendOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Upload, message as antdMessage } from 'antd';
-import React, { useState } from 'react';
-import { ChatFooterProps } from '../IChat';
+import { useState } from 'react';
 import { TranslationModal } from './translation/TranslationModal';
 
-import './ChatFooter.css';
-import { WebSocketEventType } from '../../../../../utils/enum/WebSocketEventType';
 import { useUser } from '../../../../../context/UserContext';
-import { useHomeContext } from '../../../context/HomeContext';
 import { useRequest } from '../../../../../hook/useRequest';
 import { HttpMethods } from '../../../../../utils/IRequest';
+import { useHomeContext } from '../../../context/HomeContext';
+import './ChatFooter.css';
 
 export function ChatFooter({
     message, setMessage, handleSend,
-    languageFrom, setLanguageFrom, translationReceiving,
-    setTranslationReceiving, configurateTranslation, setTranslationFrom,
-    setIsImprovingText, isImprovingText, translationFrom, scrollPage
-}: ChatFooterProps) {
+
+    receivedLanguage,
+    setReceivedLanguage,
+
+    isReceivedLanguage,
+    setIsReceivedLanguage,
+
+    isImprovingText,
+    setIsImprovingText,
+
+    saveConfiguration
+}) {
 
     const { request } = useRequest();
     const { user } = useUser();
-    const { selectedConversation, stompClient } = useHomeContext();
+    const { selectedConversation } = useHomeContext();
 
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,7 +35,8 @@ export function ChatFooter({
     const handleImageUpload = (file) => {
         setImageFile(file);
         setIsModalVisible(true);
-        return false; // Impede o upload automático
+
+        return false;
     };
 
     const handleSendImageAndMessage = () => {
@@ -40,7 +47,6 @@ export function ChatFooter({
 
         const reader = new FileReader();
         reader.onloadend = () => {
-            const byteArray = new Uint8Array(reader.result as ArrayBuffer);
             handleSendRequestForImage(reader);
             setIsModalVisible(false);
             setImageFile(null);
@@ -83,20 +89,21 @@ export function ChatFooter({
     return (
         <div className="chat-footer">
             <TranslationModal
-                languageFrom={languageFrom}
-                setLanguageFrom={setLanguageFrom}
-                translationReceiving={translationReceiving}
-                setTranslationReceiving={setTranslationReceiving}
-                configurateTranslation={configurateTranslation}
-                setTranslationFrom={setTranslationFrom}
-                setIsImprovingText={setIsImprovingText}
+                isReceivedLanguage={isReceivedLanguage}
+                setIsReceivedLanguage={setIsReceivedLanguage}
+
+                receivedLanguage={receivedLanguage}
+                setReceivedLanguage={setReceivedLanguage}
+
                 isImprovingText={isImprovingText}
-                translationFrom={translationFrom}
+                setIsImprovingText={setIsImprovingText}
+
+                saveConfiguration={saveConfiguration}
             />
             <Input
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onPressEnter={handleSend} // Chama o método handleSend
+                onPressEnter={handleSend}
                 placeholder='Mensagem'
             />
             <Button icon={<SendOutlined />} onClick={handleSend}>
