@@ -1,15 +1,16 @@
 import { FolderOutlined } from '@ant-design/icons';
 import { Button, Layout, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../../context/UserContext.tsx';
-import { useRequest } from '../../hook/useRequest.ts';
-import useWebSocket from '../../hook/useWebSocket.ts';
-import { HttpMethods } from '../../utils/IRequest.ts';
-import { Notification } from '../../utils/Notification.tsx';
-import { useHomeContext } from './context/HomeContext.tsx';
-import { Chat } from './conversartion/chat/Chat.tsx';
-import { ConversationList } from './conversartion/ConversationList.tsx';
-import { Profile } from './profile/Profile.tsx';
+
+import { useUser } from '../../context/UserContext';
+import { useRequest } from '../../hook/useRequest';
+import useWebSocket from '../../hook/useWebSocket';
+import { HttpMethods } from '../../utils/IRequest';
+import { Notification } from '../../utils/Notification';
+import { useHomeContext } from './context/HomeContext';
+import { Chat } from './conversartion/chat/Chat';
+import { ConversationList } from './conversartion/ConversationList';
+import { Profile } from './profile/Profile';
 
 import './Home.css';
 

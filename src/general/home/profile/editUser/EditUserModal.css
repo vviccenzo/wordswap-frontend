@@ -3,7 +3,7 @@
 }
 
 .modal-container {
-    background-color: #110e4a;
+    background-color: black;
     border-radius: 20px;
     box-shadow: none;
 }
@@ -88,9 +88,9 @@
 }
 
 .save-button {
-    background-color: #110e4a;
+    background-color: black;
     color: #FFF;
-    border: 1px solid #110e4a;
+    border: 1px solid black;
     border-radius: 20px;
 }
 

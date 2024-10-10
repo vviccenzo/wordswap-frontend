@@ -3,7 +3,7 @@ import { Avatar, Modal } from "antd";
 import { UserOutlined } from '@ant-design/icons';
 
 import './ProfileModal.css';
-import { formatDateForSeparator } from '../../../../../../utils/functions/dateUtils.ts';
+import { formatDateForSeparator } from '../../../../../../utils/functions/dateUtils';
 
 export function ProfileModal({ user, isModalVisible, handleCancel, userInfo }: any) {
 

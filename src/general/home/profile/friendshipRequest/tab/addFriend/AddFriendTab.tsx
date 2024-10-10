@@ -1,9 +1,9 @@
 import { Button, Input } from 'antd';
 import React, { useState } from 'react';
-import { useUser } from '../../../../../../context/UserContext.tsx';
-import { useHomeContext } from '../../../../context/HomeContext.tsx';
-import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType.ts';
-import { Notification } from '../../../../../../utils/Notification.tsx';
+import { useUser } from '../../../../../../context/UserContext';
+import { useHomeContext } from '../../../../context/HomeContext';
+import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType';
+import { Notification } from '../../../../../../utils/Notification';
 
 import './AddFriend.css';
 
@@ -13,7 +13,7 @@ export const AddFriendTab: React.FC = () => {
 
     const [friendCode, setFriendCode] = useState('');
 
-    const handleAddFriend = () => {
+    function handleAddFriend() {
         const data = {
             action: WebSocketEventType.SEND_FRIEND_REQUEST,
             friendRequestDTO: {
@@ -36,7 +36,7 @@ export const AddFriendTab: React.FC = () => {
                 placeholder="Digite o código do usuário"
                 className="input-field"
             />
-            <Button type="primary" onClick={handleAddFriend} className="send-button">
+            <Button data-testid="send-invite-button" type="primary" onClick={handleAddFriend} className="send-button">
                 Enviar Convite
             </Button>
         </div>

@@ -1,29 +1,39 @@
+import React from 'react';
+
 import { TranslationOutlined } from '@ant-design/icons';
 import { Button, List, Modal, Select, Switch, Tooltip, message } from 'antd';
-import React from 'react';
-import { useHomeContext } from '../../../../context/HomeContext.tsx';
+import { useHomeContext } from '../../../../context/HomeContext';
+
 import './TranslationModal.css';
+import { useUser } from '../../../../../../context/UserContext';
 
 const { Option } = Select;
 
-export function TranslationModal({ 
-    languageFrom, setLanguageFrom,
-    translationReceiving, setTranslationReceiving, configurateTranslation, setTranslationFrom,
-    setIsImprovingText, isImprovingText, translationFrom
-}) {
-    const { translationOptions } = useHomeContext();
+export function TranslationModal({
+    isReceivedLanguage,
+    setIsReceivedLanguage,
 
+    receivedLanguage,
+    setReceivedLanguage,
+
+    setIsImprovingText,
+    isImprovingText,
+
+    saveConfiguration
+}) {
+
+    const { translationOptions } = useHomeContext();
     const [modalVisible, setModalVisible] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState('');
 
     const validateAndSave = () => {
-        if (translationReceiving && (!languageFrom || !translationFrom)) {
+        if (isReceivedLanguage && (!receivedLanguage)) {
             setErrorMessage('Selecione um idioma para traduzir antes de ativar a tradução.');
             message.error('Selecione um idioma para traduzir antes de ativar a tradução.');
         } else {
             setErrorMessage('');
-            configurateTranslation();
             setModalVisible(false);
+            saveConfiguration();
         }
     };
 
@@ -35,10 +45,9 @@ export function TranslationModal({
             description: (
                 <div className="translation-options-container">
                     <Select
-                        value={languageFrom}
+                        value={receivedLanguage || 'pt'}
                         onChange={(value, option: any) => {
-                            setTranslationFrom(option + ' - ' + value);
-                            setLanguageFrom(option.children);
+                            setReceivedLanguage(option.children);
                         }}
                         style={{ width: '100%' }}
                         showSearch
@@ -51,8 +60,8 @@ export function TranslationModal({
                     </Select>
                     <span className="translation-switch-label">Ativar:</span>
                     <Switch
-                        checked={translationReceiving}
-                        onChange={() => setTranslationReceiving(!translationReceiving)}
+                        checked={isReceivedLanguage}
+                        onChange={() => setIsReceivedLanguage(!isReceivedLanguage)}
                     />
                 </div>
             ),
@@ -95,13 +104,13 @@ export function TranslationModal({
                         type="primary"
                         onClick={validateAndSave}
                         className="translation-button-save"
-                        disabled={translationReceiving && (!languageFrom || !translationFrom)}
+                        disabled={isReceivedLanguage && (!receivedLanguage)}
                     >
                         Salvar
                     </Button>
                 ]}
             >
-                {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Exibe a mensagem de erro, se houver */}
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <List
                     itemLayout="horizontal"
                     dataSource={modalOptions}
