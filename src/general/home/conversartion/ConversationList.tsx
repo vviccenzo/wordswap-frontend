@@ -89,8 +89,6 @@ export function ConversationList({ showArchived }) {
                 hasToArchive: hasToArchive
             }
         });
-
-        fetchConversations();
     }
 
     const handleMenuClick = (e, conv) => {
@@ -173,7 +171,7 @@ export function ConversationList({ showArchived }) {
                         onContextMenu={(e) => e.preventDefault()}
                     >
                         <Dropdown
-                            menu={conv}
+                            overlay={menu(conv)}
                             trigger={['contextMenu']}
                         >
                             <div className="menu-title-content">

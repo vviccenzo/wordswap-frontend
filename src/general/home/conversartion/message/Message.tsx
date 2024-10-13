@@ -1,4 +1,4 @@
-import { Button, Divider, Dropdown, Input, List, Menu, Typography } from 'antd';
+import { Button, Divider, Dropdown, Input, List, Menu, Modal, Typography } from 'antd';
 import React, { useState } from 'react';
 import { useUser } from '../../../../context/UserContext';
 import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType';
@@ -13,6 +13,18 @@ export function Message({ message, isMe, showDateSeparator, separatorDate }) {
 
     const [isEditing, setIsEditing] = useState(false);
     const [editedMessage, setEditedMessage] = useState(message.content);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [imageSrc, setImageSrc] = useState('');
+
+    const handleImageClick = () => {
+        setImageSrc(`data:image/jpeg;base64,${message.image}`);
+        setIsModalVisible(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalVisible(false);
+        setImageSrc('');
+    };
 
     const handleEditMessage = () => {
         stompClient.send(`/app/chat/${user?.id}`, {}, JSON.stringify({
@@ -76,9 +88,30 @@ export function Message({ message, isMe, showDateSeparator, separatorDate }) {
         ) : (
             <>
                 {message.image && (
-                    <div className="message-image">
-                        <img src={`data:image/jpeg;base64,${message.image}`} alt="Mensagem de imagem" className="message-img" />
-                    </div>
+                    <>
+                        <div className="message-image">
+                            <img
+                                src={`data:image/jpeg;base64,${message.image}`}
+                                alt="Mensagem de imagem"
+                                className="message-img"
+                                onClick={handleImageClick}
+                                style={{ cursor: 'pointer' }}
+                            />
+                        </div>
+
+                        <Modal
+                            visible={isModalVisible}
+                            footer={null}
+                            onCancel={handleModalClose}
+                            centered
+                        >
+                            <img
+                                src={imageSrc}
+                                alt="Imagem expandida"
+                                style={{ width: '100%' }}
+                            />
+                        </Modal>
+                    </>
                 )}
                 <div className="message-info">
                     <Text>
