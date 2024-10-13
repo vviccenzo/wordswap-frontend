@@ -166,7 +166,7 @@ export function Register() {
                             >
                                 <Input placeholder="Confirmar Email" className="register-input" />
                             </Form.Item>
-                            <Form.Item className="register-form-item">
+                            <Form.Item className="register-form-item" name="name">
                                 <Input placeholder="Nome" name="name" className="register-input" />
                             </Form.Item>
                         </>

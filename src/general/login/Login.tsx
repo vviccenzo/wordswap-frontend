@@ -66,9 +66,9 @@ export function Login() {
                             Logar
                         </Button>
                     </Form.Item>
-                    <Form.Item className="login-form-item" style={{ color: 'white'}}>
-                        Ou <a href="/register"> registrar-se!</a>
-                    </Form.Item>
+                    <div style={{ color: 'white' }}>
+                        Ou <a href="/register" style={{ color: 'white' }}> registrar-se!</a>
+                    </div>
                 </Form>
             </Sider>
             <Content className="content-login" />

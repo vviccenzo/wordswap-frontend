@@ -26,12 +26,12 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
         const conversationStarted = {
             id: data.conversationId,
             receiverId: data.id,
-            conversationName: data.label,
-            profilePic: data.profilePicture,
-            messages: [],
-            isNewConversartion: true,
             senderId: data.senderId,
-            receiverCode: data.receiverCode,
+            conversationName: data.label,
+            profilePic: data.profilePic,
+            messages: [],
+            isNewConversation: true,
+            receiverCode: data.userCode,
         };
 
         const conversation = conversations.find((c) => c.receiverCode === data.userCode || c.senderCode === data.userCode);
@@ -43,6 +43,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             setSelectedConversation(conversationStarted);
         }
 
+        localStorage.setItem('conversation', JSON.stringify(conversationStarted));
         setIsModalOpen(false);
     }
 

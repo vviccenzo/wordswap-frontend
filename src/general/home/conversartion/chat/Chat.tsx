@@ -22,9 +22,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const [message, setMessage] = useState('');
     const [isReceivedLanguage, setIsReceivedLanguage] = useState<boolean>(false);
     const [isImprovingText, setIsImprovingText] = useState<boolean>(false);
-    const [receivedLanguage, setReceivedLanguage] = React.useState(
-        translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt'
-    );
+    const [receivedLanguage, setReceivedLanguage] = React.useState<any>(buildDefaultValueReceivedLanguage());
 
     const handleSend = () => {
         if (message.trim()) {
@@ -43,6 +41,20 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
             setMessage('');
         }
     };
+
+
+    function buildDefaultValueReceivedLanguage() {
+        if (configUser) {
+            const userConfig = selectedConversation.configsUser[user.id];
+            if (userConfig) {
+                return translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt';
+            } else {
+                return 'pt';
+            }
+        } else {
+            return 'pt';
+        }
+    }
 
     function saveConfiguration() {
         const data = {
@@ -71,21 +83,27 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     useEffect(() => {
         if (selectedConversation) {
             setCombinedMessages(selectedConversation.messages);
-            if (selectedConversation.isNewConversartion) {
+            if (selectedConversation.isNewConversation) {
                 return;
             }
 
-            const userConfig = selectedConversation.configsUser[user.id];
-            if (userConfig) {
-                setIsImprovingText(userConfig.isImprovingText);
-                setIsReceivedLanguage(userConfig.isReceivingTranslation);
+            if (selectedConversation.configsUser) {
+                const userConfig = selectedConversation.configsUser[user.id];
+                if (userConfig) {
+                    setIsImprovingText(userConfig.isImprovingText);
+                    setIsReceivedLanguage(userConfig.isReceivingTranslation);
+                }
             }
         }
     }, [selectedConversation, conversations]);
-    
+
     useEffect(() => {
         if (translationOptions.length > 0) {
-            setReceivedLanguage(translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt');
+            if (configUser && configUser[user.id]) {
+                setReceivedLanguage(translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt');
+            }
+
+            setReceivedLanguage('pt');
         }
     }, [translationOptions]);
 

@@ -93,8 +93,8 @@ export function Message({ message, isMe, showDateSeparator, separatorDate }) {
 
     const menu = (
         <Menu className="dropdown-content">
-            {isMe && <Menu.Item key="edit" onClick={() => setIsEditing(true)} className="menu-item-message">Editar mensagem</Menu.Item>}
-            <Menu.Item key="delete" onClick={() => handleMenuClick('delete')} className="menu-item-message">Apagar mensagem</Menu.Item>
+            {isMe && !message.isDeleted && <Menu.Item key="edit" onClick={() => setIsEditing(true)} className="menu-item-message">Editar mensagem</Menu.Item>}
+            {!message.isDeleted && <Menu.Item key="delete" onClick={() => handleMenuClick('delete')} className="menu-item-message">Apagar mensagem</Menu.Item>}
         </Menu>
     );
 

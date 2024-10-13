@@ -168,7 +168,6 @@ export function EditUserModal() {
                             onClick={() => setIsEditingName(true)}
                         />
                     </div>
-                    <Typography.Text className="user-code">{user.userCode}</Typography.Text>
                 </div>
                 <TextArea
                     value={bio}
