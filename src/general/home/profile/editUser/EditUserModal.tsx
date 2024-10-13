@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import Modal from "antd/es/modal/Modal";
 import { Button, Input, Upload, message, Typography, Avatar } from "antd";
 import { EditOutlined, UserOutlined } from "@ant-design/icons";
-import { useUser } from "../../../../context/UserContext.tsx";
-import { byteArrayToDataUrl } from "../../../../utils/functions/byteArrayToDataUrl.ts";
-import { useRequest } from "../../../../hook/useRequest.ts";
-import { HttpMethods } from "../../../../utils/IRequest.ts";
-import { Notification } from "../../../../utils/Notification.tsx";
-import { useHomeContext } from "../../context/HomeContext.tsx";
+import { useUser } from "../../../../context/UserContext";
+import { byteArrayToDataUrl } from "../../../../utils/functions/byteArrayToDataUrl";
+import { useRequest } from "../../../../hook/useRequest";
+import { HttpMethods } from "../../../../utils/IRequest";
+import { Notification } from "../../../../utils/Notification";
+import { useHomeContext } from "../../context/HomeContext";
 import "./EditUserModal.css";
 
 const { TextArea } = Input;
@@ -168,7 +168,6 @@ export function EditUserModal() {
                             onClick={() => setIsEditingName(true)}
                         />
                     </div>
-                    <Typography.Text className="user-code">{user.userCode}</Typography.Text>
                 </div>
                 <TextArea
                     value={bio}

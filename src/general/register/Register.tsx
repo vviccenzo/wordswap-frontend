@@ -3,9 +3,9 @@ import { Layout, Form, Input, Button, Upload, message } from 'antd';
 import { DoubleLeftOutlined, DoubleRightOutlined, UploadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
-import img1 from '../../imgs/logo.png';
-import doRequest from '../../utils/Request.ts';
+import doRequest from '../../utils/Request';
 import "./Register.css";
+import { HttpMethods } from '../../utils/IRequest';
 
 const { Content, Sider } = Layout;
 
@@ -32,7 +32,7 @@ export function Register() {
             }
 
             doRequest({
-                method: 'POST',
+                method: HttpMethods.POST,
                 url: '/user',
                 data: formData,
                 successCallback: () => {
@@ -72,9 +72,8 @@ export function Register() {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh', backgroundColor: '#322b6b' }}>
+        <Layout style={{ minHeight: '100vh', backgroundColor: 'white' }}>
             <Sider width="30%" className="sider-register">
-                <img width={200} src={img1} alt="Logo" />
                 <Form
                     name="register"
                     onFinish={onFinish}
@@ -167,7 +166,7 @@ export function Register() {
                             >
                                 <Input placeholder="Confirmar Email" className="register-input" />
                             </Form.Item>
-                            <Form.Item className="register-form-item">
+                            <Form.Item className="register-form-item" name="name">
                                 <Input placeholder="Nome" name="name" className="register-input" />
                             </Form.Item>
                         </>
@@ -177,7 +176,8 @@ export function Register() {
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             {step === 1 && (
                                 <a href="/login">
-                                    <Button type="default" className="register-btn-default" onClick={() => setStep(2)} style={{ width: 100 }}>
+                                    <Button type="default"
+                                        className="register-btn-default" onClick={() => setStep(2)} style={{ width: 100, border: '1px solid grey' }}>
                                         Cancelar
                                     </Button>
                                 </a>
@@ -187,7 +187,7 @@ export function Register() {
                                     type="default"
                                     className="register-btn-default"
                                     onClick={() => setStep(1)}
-                                    style={{ width: 100 }}
+                                    style={{ width: 100, border: '1px solid white' }}
                                 >
                                     <DoubleLeftOutlined />
                                 </Button>
@@ -198,9 +198,8 @@ export function Register() {
                         </div>
                     </Form.Item>
                 </Form>
-
             </Sider>
-            <Content style={{ padding: '50px', backgroundColor: '#8278a3' }} />
+            <Content style={{ padding: '50px', backgroundColor: 'white' }} />
         </Layout>
     );
 }

@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { useUser } from '../../../../context/UserContext.tsx';
-import { useHomeContext } from '../../context/HomeContext.tsx';
-import { useRequest } from "../../../../hook/useRequest.ts";
-import { HttpMethods } from '../../../../utils/IRequest.ts';
-import { Notification } from '../../../../utils/Notification.tsx';
-import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType.ts';
-import { ChatHeader } from './header/ChatHeader.tsx';
-import { ChatBody } from './body/ChatBody.tsx';
-import { ChatFooter } from './footer/ChatFooter.tsx';
+import { useUser } from '../../../../context/UserContext';
+import { useHomeContext } from '../../context/HomeContext';
+import { useRequest } from "../../../../hook/useRequest";
+import { HttpMethods } from '../../../../utils/IRequest';
+import { Notification } from '../../../../utils/Notification';
+import { WebSocketEventType } from '../../../../utils/enum/WebSocketEventType';
+import { ChatHeader } from './header/ChatHeader';
+import { ChatBody } from './body/ChatBody';
+import { ChatFooter } from './footer/ChatFooter';
 
 import './Chat.css';
 
 export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const { user } = useUser();
     const { request } = useRequest();
-    const { selectedConversation, stompClient, conversations } = useHomeContext();
+    const { selectedConversation, stompClient, conversations, translationOptions } = useHomeContext();
+
+    const configUser = selectedConversation.configsUser;
 
     const [combinedMessages, setCombinedMessages] = useState<any[]>([]);
     const [message, setMessage] = useState('');
-    const [popoverVisible, setPopoverVisible] = useState(false);
-    const [languageFrom, setLanguageFrom] = useState<string>('pt');
-    const [translationFrom, setTranslationFrom] = useState<string>('pt');
-    const [translationReceiving, setTranslationReceiving] = useState<boolean>(false);
+    const [isReceivedLanguage, setIsReceivedLanguage] = useState<boolean>(false);
     const [isImprovingText, setIsImprovingText] = useState<boolean>(false);
+    const [receivedLanguage, setReceivedLanguage] = React.useState<any>(buildDefaultValueReceivedLanguage());
 
     const handleSend = () => {
         if (message.trim()) {
@@ -42,12 +42,26 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
         }
     };
 
-    function configurateTranslation() {
+
+    function buildDefaultValueReceivedLanguage() {
+        if (configUser) {
+            const userConfig = selectedConversation.configsUser[user.id];
+            if (userConfig) {
+                return translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt';
+            } else {
+                return 'pt';
+            }
+        } else {
+            return 'pt';
+        }
+    }
+
+    function saveConfiguration() {
         const data = {
             userId: user?.id,
             conversationId: selectedConversation?.id,
-            receivingTranslation: languageFrom,
-            isReceivingTranslation: translationReceiving,
+            receivingTranslation: receivedLanguage,
+            isReceivingTranslation: isReceivedLanguage,
             isImprovingText: isImprovingText
         };
 
@@ -56,12 +70,9 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
             url: '/conversation/configuration',
             data: data,
             successCallback: (data) => {
-                if (data.isReceivingTranslation && translationReceiving) {
-                    setLanguageFrom(translationFrom.split('-')[0]);
-                }
-
+                setIsReceivedLanguage(data.isReceivingTranslation);
+                setReceivedLanguage(data.receivingTranslation);
                 setIsImprovingText(data.isImprovingText);
-                setPopoverVisible(false);
             },
             errorCallback: (error) => {
                 Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
@@ -72,22 +83,29 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     useEffect(() => {
         if (selectedConversation) {
             setCombinedMessages(selectedConversation.messages);
-            if (selectedConversation.isNewConversartion) {
+            if (selectedConversation.isNewConversation) {
                 return;
             }
 
-            const userConfig = selectedConversation.configsUser[user.id];
-            if (userConfig) {
-                setIsImprovingText(userConfig.isImprovingText);
-                setTranslationReceiving(userConfig.isReceivingTranslation);
-
-                if (userConfig.receivingTranslation && userConfig.receivingTranslation != "") {
-                    setTranslationFrom(userConfig.receivingTranslation);
-                    setLanguageFrom(userConfig.receivingTranslation);
+            if (selectedConversation.configsUser) {
+                const userConfig = selectedConversation.configsUser[user.id];
+                if (userConfig) {
+                    setIsImprovingText(userConfig.isImprovingText);
+                    setIsReceivedLanguage(userConfig.isReceivingTranslation);
                 }
             }
         }
     }, [selectedConversation, conversations]);
+
+    useEffect(() => {
+        if (translationOptions.length > 0) {
+            if (configUser && configUser[user.id]) {
+                setReceivedLanguage(translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt');
+            }
+
+            setReceivedLanguage('pt');
+        }
+    }, [translationOptions]);
 
     return (
         <div className="chat-container">
@@ -114,23 +132,16 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
                     setMessage={setMessage}
                     handleSend={handleSend}
 
-                    popoverVisible={popoverVisible}
-                    setPopoverVisible={setPopoverVisible}
+                    receivedLanguage={receivedLanguage}
+                    setReceivedLanguage={setReceivedLanguage}
 
-                    translationFrom={translationFrom}
-
-                    languageFrom={languageFrom}
-                    setLanguageFrom={setLanguageFrom}
-
-                    translationReceiving={translationReceiving}
-                    setTranslationReceiving={setTranslationReceiving}
-
-                    configurateTranslation={configurateTranslation}
-                    setTranslationFrom={setTranslationFrom}
+                    isReceivedLanguage={isReceivedLanguage}
+                    setIsReceivedLanguage={setIsReceivedLanguage}
 
                     isImprovingText={isImprovingText}
                     setIsImprovingText={setIsImprovingText}
-                    scrollPage={scrollPage}
+
+                    saveConfiguration={saveConfiguration}
                 />
             </div>
         </div>

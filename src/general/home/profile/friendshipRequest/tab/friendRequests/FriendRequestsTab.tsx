@@ -1,9 +1,9 @@
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, List, Tooltip } from 'antd';
 import React from 'react';
-import { useHomeContext } from '../../../../context/HomeContext.tsx';
-import { useUser } from '../../../../../../context/UserContext.tsx';
-import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType.ts';
+import { useHomeContext } from '../../../../context/HomeContext';
+import { useUser } from '../../../../../../context/UserContext';
+import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType';
 
 import './FriendRequests.css';
 

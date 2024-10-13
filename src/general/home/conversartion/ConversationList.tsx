@@ -1,15 +1,16 @@
 import { DeleteOutlined, FolderOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Menu, Typography } from 'antd';
 import React, { useEffect } from 'react';
-import { useUser } from '../../../context/UserContext.tsx';
-import { useRequest } from '../../../hook/useRequest.ts';
-import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl.ts';
-import { HttpMethods } from '../../../utils/IRequest.ts';
-import { Notification } from '../../../utils/Notification.tsx';
-import { useHomeContext } from '../context/HomeContext.tsx';
-import mapConversations from '../../../utils/mapper/conversationMapper.ts';
 
-import * as moment from 'moment';
+import { useRequest } from '../../../hook/useRequest';
+import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl';
+import { HttpMethods } from '../../../utils/IRequest';
+import { Notification } from '../../../utils/Notification';
+import { useHomeContext } from '../context/HomeContext';
+import mapConversations from '../../../utils/mapper/conversationMapper';
+
+import { useUser } from '../../../context/UserContext';
+import moment from 'moment';
 
 import './ConversationList.css';
 
@@ -88,8 +89,6 @@ export function ConversationList({ showArchived }) {
                 hasToArchive: hasToArchive
             }
         });
-
-        fetchConversations();
     }
 
     const handleMenuClick = (e, conv) => {

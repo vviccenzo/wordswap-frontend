@@ -1,7 +1,7 @@
-import { useUser } from '../../context/UserContext.tsx';
-import { useHomeContext } from '../../general/home/context/HomeContext.tsx';
-import { WebSocketEventType } from '../enum/WebSocketEventType.ts';
-import mapConversation from '../mapper/conversationMapper.ts';
+import { useUser } from '../../context/UserContext';
+import { useHomeContext } from '../../general/home/context/HomeContext';
+import { WebSocketEventType } from '../enum/WebSocketEventType';
+import mapConversation from '../mapper/conversationMapper';
 
 export function useHandleCallbackWS() {
     const { user } = useUser();
@@ -16,8 +16,7 @@ export function useHandleCallbackWS() {
     const updateSelectedConversation = (conversationsMapped: any[], conversationData: any) => {
         const updatedConversation = conversationData;
         const conversation = conversationsMapped.find((conv: any) =>
-            conv.id === Number(conversationData.id) ||
-            (conversationData.isNewConversation &&
+            conv.id === Number(conversationData.id) || (conversationData.isNewConversation &&
                 Number(conv.senderId) === Number(conversationData.senderId) &&
                 Number(conv.receiverId) === Number(conversationData.receiverId))
         );
@@ -25,6 +24,7 @@ export function useHandleCallbackWS() {
         if (conversation) {
             updatedConversation.messages = conversation.messages;
             updatedConversation.lastMessage = conversation.lastMessage;
+            updatedConversation.configsUser = conversation.configsUser;
         }
 
         handleConversationSelected(updatedConversation);
@@ -40,13 +40,15 @@ export function useHandleCallbackWS() {
                 const conversationsMapped = data.map((conversation: any) => mapConversation(conversation, user.id));
                 handleConversations(conversationsMapped);
 
-                const savedConversation = JSON.parse(localStorage.getItem('conversation') || '{}');
+                const savedConversation = JSON.parse(localStorage.getItem('conversation') || null);
                 if (!selectedConversation && savedConversation) {
                     updateSelectedConversation(conversationsMapped, savedConversation);
+                    break;
                 }
 
                 if (selectedConversation) {
                     updateSelectedConversation(conversationsMapped, selectedConversation);
+                    break;
                 }
 
                 break;

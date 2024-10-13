@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRequest } from "../../../hook/useRequest.ts";
-import { HttpMethods } from "../../../utils/IRequest.ts";
-import { Notification } from "../../../utils/Notification.tsx";
-import { HomeProviderProps } from "./IHomeContext.ts";
+import { useRequest } from "../../../hook/useRequest";
+import { HttpMethods } from "../../../utils/IRequest";
+import { Notification } from "../../../utils/Notification";
+import { HomeProviderProps } from "./IHomeContext";
 
-const HomeContext = createContext<any>({});
+export const HomeContext = createContext<any>({});
 
 export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
 
@@ -26,12 +26,12 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
         const conversationStarted = {
             id: data.conversationId,
             receiverId: data.id,
-            conversationName: data.label,
-            profilePic: data.profilePicture,
-            messages: [],
-            isNewConversartion: true,
             senderId: data.senderId,
-            receiverCode: data.receiverCode,
+            conversationName: data.label,
+            profilePic: data.profilePic,
+            messages: [],
+            isNewConversation: true,
+            receiverCode: data.userCode,
         };
 
         const conversation = conversations.find((c) => c.receiverCode === data.userCode || c.senderCode === data.userCode);
@@ -43,6 +43,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             setSelectedConversation(conversationStarted);
         }
 
+        localStorage.setItem('conversation', JSON.stringify(conversationStarted));
         setIsModalOpen(false);
     }
 

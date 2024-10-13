@@ -1,68 +1,59 @@
-/* Estilos principais */
 .layout-login {
     min-height: 100vh;
-    background-color: #3E3363 !important;
+    background-color: black !important;
 }
 
-/* Estilos do container lateral de login */
 .sider-login {
-    background-color: #3E3363 !important;
+    background-color: black !important;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 10%;
 }
 
-/* Conteúdo central de login */
 .content-login {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #8278a3;
+    background-color: white;
     border-left: 1px black solid;
 }
 
-/* Estilos da imagem */
 .sider-login img {
     margin-bottom: 40px;
     max-width: 100%;
     height: auto;
 }
 
-/* Itens do formulário de login */
 .sider-login .login-form-item {
     margin-bottom: 20px;
 }
 
-/* Inputs de login e senha */
 .sider-login .login-input,
 .sider-login .login-password-input {
-    background-color: #8278a3;
+    background-color: white;
     border: none;
     border-radius: 8px;
     padding: 12px;
     font-size: 16px;
-    color: white;
+    color: black;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Placeholder dos inputs */
 .sider-login .login-input::placeholder,
 .sider-login .login-password-input::placeholder {
     color: #a4a4a4;
 }
 
-/* Foco nos inputs */
 .sider-login .login-input:focus,
 .sider-login .login-password-input:focus {
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     outline: none;
 }
 
-/* Botão de login */
 .sider-login .login-btn {
-    background-color: #8278a3;
+    background-color: grey;
     border: none;
     border-radius: 8px;
     font-size: 16px;
@@ -70,28 +61,23 @@
     transition: background-color 0.3s ease;
 }
 
-/* Hover no botão de login */
 .sider-login .login-btn:hover {
     background-color: #8B77D7;
 }
 
-/* Foco no botão de login */
 .sider-login .login-btn:focus {
     box-shadow: none;
     outline: none;
 }
 
-/* Estilo dos links */
 .sider-login a {
-    color: #cfcfcf;
+    color: black;
 }
 
-/* Hover nos links */
 .sider-login a:hover {
     color: #e2e2e2;
 }
 
-/* Responsividade */
 @media (max-width: 1024px) {
     .sider-login {
         margin-top: 5%;

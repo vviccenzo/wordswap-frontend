@@ -2,16 +2,16 @@ import VirtualList, { ListRef } from 'rc-virtual-list';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Spin } from 'antd';
-import { useUser } from '../../../../../context/UserContext.tsx';
-import { useRequest } from '../../../../../hook/useRequest.ts';
-import { HttpMethods } from '../../../../../utils/IRequest.ts';
-import { useHomeContext } from '../../../context/HomeContext.tsx';
-import { Message } from './../../message/Message.tsx';
-import { ChatBodyProps, GetMessagePayload, Message as MessageType } from './../IChat.ts';
+import { useUser } from '../../../../../context/UserContext';
+import { useRequest } from '../../../../../hook/useRequest';
+import { HttpMethods } from '../../../../../utils/IRequest';
+import { useHomeContext } from '../../../context/HomeContext';
+import { Message } from './../../message/Message';
+import { ChatBodyProps, GetMessagePayload, Message as MessageType } from './../IChat';
 
-import { formatDateForSeparator, shouldShowDateSeparator } from '../../../../../utils/functions/dateUtils.ts';
-import formatTimestamp from '../../../../../utils/functions/formatTimestamp.ts';
-import mapConversations from '../../../../../utils/mapper/conversationMapper.ts';
+import { formatDateForSeparator, shouldShowDateSeparator } from '../../../../../utils/functions/dateUtils';
+import formatTimestamp from '../../../../../utils/functions/formatTimestamp';
+import mapConversations from '../../../../../utils/mapper/conversationMapper';
 
 import './ChatBody.css';
 

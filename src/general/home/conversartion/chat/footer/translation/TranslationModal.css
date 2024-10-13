@@ -47,17 +47,17 @@
 }
 
 .translation-modal .ant-modal-content {
-  background-color: #42397b !important;
+  background-color: black !important;
 }
 
 .translation-modal .ant-modal-title {
   color: white;
-  background-color: #42397b !important;
+  background-color: black !important;
 }
 
 .translation-receiving {
   margin-bottom: 10px;
-  background-color: #938ca9;
+  background-color: grey;
   border-radius: 10px;
 }
 
@@ -67,7 +67,7 @@
 }
 
 .text-improvement {
-  background-color: #938ca9;
+  background-color: grey;
   border-radius: 10px;
 }
 

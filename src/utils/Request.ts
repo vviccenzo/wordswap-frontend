@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-import { HttpMethods, IRequest } from './IRequest.ts';
+import { HttpMethods, IRequest } from './IRequest';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const api = axios.create({
     baseURL: BASE_URL,
