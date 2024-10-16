@@ -1,1 +1,1 @@
-export const BASE_URL_WS: string = "http://localhost:8080/ws";
+export const BASE_URL_WS: string =  process.env.REACT_APP_BASE_URL + "/ws";
