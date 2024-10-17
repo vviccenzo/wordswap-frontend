@@ -25,7 +25,6 @@ export function Profile() {
 
     const menu = (
         <Menu onClick={handleMenuClick}>
-            <Menu.Item key="settings">Configurações</Menu.Item>
             <Menu.Item key="logout">Deslogar</Menu.Item>
         </Menu>
     );
