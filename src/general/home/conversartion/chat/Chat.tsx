@@ -45,15 +45,20 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
 
     function buildDefaultValueReceivedLanguage() {
         if (configUser) {
-            const userConfig = selectedConversation.configsUser[user.id];
+            const userId = user.id;
+            const userConfig = selectedConversation.configsUser[userId];
+            
             if (userConfig) {
-                return translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt';
+                const receivingTranslation = configUser[userId]?.receivingTranslation;
+                const translationOption = translationOptions.find(option => option.name === receivingTranslation);
+                
+                return translationOption?.code || 'pt';
             } else {
                 return 'pt';
             }
         } else {
             return 'pt';
-        }
+        }        
     }
 
     function saveConfiguration() {
