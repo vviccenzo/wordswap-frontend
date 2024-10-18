@@ -22,6 +22,7 @@ export function useHandleCallbackWS() {
         );
 
         if (conversation) {
+            updatedConversation.id = conversation.id;
             updatedConversation.messages = conversation.messages;
             updatedConversation.lastMessage = conversation.lastMessage;
             updatedConversation.configsUser = conversation.configsUser;
