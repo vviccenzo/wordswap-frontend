@@ -106,9 +106,9 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
         if (translationOptions.length > 0) {
             if (configUser && configUser[user.id]) {
                 setReceivedLanguage(translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt');
+            } else {
+                setReceivedLanguage('pt');
             }
-
-            setReceivedLanguage('pt');
         }
     }, [translationOptions]);
 
