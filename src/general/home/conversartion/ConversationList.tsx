@@ -1,4 +1,4 @@
-import { DeleteOutlined, FolderOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FolderOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Menu, Typography } from 'antd';
 import React, { useEffect } from 'react';
 
@@ -156,11 +156,19 @@ export function ConversationList({ showArchived }) {
                     <Menu.Item
                         key={conv.id}
                         icon={
-                            <Avatar
-                                size={48}
-                                className="avatar-conversation"
-                                src={conv.profilePic ? byteArrayToDataUrl(conv.profilePic) : null}
-                            />
+                            conv.profilePic ? (
+                                <Avatar
+                                    size={48}
+                                    className="avatar-conversation"
+                                    src={byteArrayToDataUrl(conv.profilePic)}
+                                />
+                            ) : (
+                                <Avatar
+                                    size={48}
+                                    className="avatar-conversation"
+                                    icon={<UserOutlined />}
+                                />
+                            )
                         }
                         onClick={() => {
                             setScrollPage(1);

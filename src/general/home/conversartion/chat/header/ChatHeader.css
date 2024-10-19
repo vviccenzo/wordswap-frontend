@@ -1,9 +1,10 @@
 .chat-header {
     padding: 8px;
-    background-color: #000000;
+    background-color: grey;
     display: flex;
     align-items: center;
     gap: 20px;
+    border-radius: 5px 5px 0px 0px;
 }
 
 .chat-header .conversation-name {

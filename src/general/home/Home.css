@@ -17,6 +17,13 @@
     text-align: center;
     display: flex;
     border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.folder-button:hover {
+    background-color: #333333 !important;
+    color: black !important;
+    border-color: #f0f0f0 !important;
 }
 
 @media (max-width: 768px) {
