@@ -24,8 +24,6 @@ export const AddFriendTab: React.FC = () => {
         };
 
         stompClient.send('/app/chat/' + user?.id, {}, JSON.stringify(data));
-
-        Notification({ message: 'Convite enviado', description: "Convite enviado com sucesso", placement: 'top', type: 'success' });
         setFriendCode('');
     };
 

@@ -4,6 +4,10 @@
     flex-direction: column;
 }
 
+.avatar-conversation {
+    background-color: grey !important;
+}
+
 .menu {
     border-radius: 10px;
     background-color: #ffffff !important;
