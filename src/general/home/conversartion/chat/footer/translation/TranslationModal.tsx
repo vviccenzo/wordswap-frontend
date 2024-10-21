@@ -51,6 +51,9 @@ export function TranslationModal({
                         }}
                         style={{ width: '100%' }}
                         showSearch
+                        filterOption={(input, option: any) => 
+                            option?.children?.toLowerCase().includes(input.toLowerCase())
+                        }
                     >
                         {translationOptions.map(option => (
                             <Option key={option.code} value={option.code}>
