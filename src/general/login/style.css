@@ -3,6 +3,21 @@
     background-color: black !important;
 }
 
+.title-container {
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+}
+
+.title-word {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.title-swap {
+    font-size: 1.5rem;
+    color: #A28BF6;
+}
+
 .sider-login {
     background-color: black !important;
     display: flex;
@@ -53,7 +68,7 @@
 }
 
 .sider-login .login-btn {
-    background-color: grey;
+    background-color: #A28BF6;
     border: none;
     border-radius: 8px;
     font-size: 16px;
@@ -70,12 +85,44 @@
     outline: none;
 }
 
-.sider-login a {
-    color: black;
-}
-
 .sider-login a:hover {
     color: #e2e2e2;
+}
+
+.register-prompt {
+    color: white;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+.register-link {
+    color: #8B77D7;
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.register-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #8B77D7;
+    left: 0;
+    bottom: -2px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.register-link:hover {
+    color: #A28BF6;
+}
+
+.register-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
 @media (max-width: 1024px) {

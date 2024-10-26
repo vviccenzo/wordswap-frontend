@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Layout, Form, Input, Button, Upload, message } from 'antd';
 import { DoubleLeftOutlined, DoubleRightOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Image, Input, Layout, Upload, message } from 'antd';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { HttpMethods } from '../../utils/IRequest';
 import doRequest from '../../utils/Request';
 import "./Register.css";
-import { HttpMethods } from '../../utils/IRequest';
 
 const { Content, Sider } = Layout;
 
@@ -68,12 +68,17 @@ export function Register() {
             return isJpgOrPng && isLt2M;
         },
         onChange: handleUploadChange,
-        fileList,
+        fileList: fileList.slice(-1),
+        showUploadList: false,
     };
 
     return (
         <Layout style={{ minHeight: '100vh', backgroundColor: 'white' }}>
             <Sider width="30%" className="sider-register">
+                <div className="title-container">
+                    <h1 className="title-word">Word</h1>
+                    <h1 className="title-swap">Swap</h1>
+                </div>
                 <Form
                     name="register"
                     onFinish={onFinish}
@@ -103,25 +108,26 @@ export function Register() {
                                 hasFeedback
                                 className="register-form-item"
                             >
-                                <Input.Password placeholder="Senha" className="register-password-input" />
+                                <Input.Password placeholder="Senha" style={{ height: '40px', width: '500px' }} className="register-password-input" />
                             </Form.Item>
                             <Form.Item
                                 name="confirm"
                                 dependencies={['password']}
                                 hasFeedback
                                 className="register-form-item"
-                                rules={[{
-                                    required: true,
-                                    message: 'Confirme sua senha!',
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if (!value || getFieldValue('password') === value) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('As senhas não conferem!'));
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Confirme sua senha!',
                                     },
-                                }),
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('password') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('As senhas não conferem!'));
+                                        },
+                                    }),
                                 ]}
                             >
                                 <Input.Password placeholder="Confirmar Senha" className="register-password-input" />
@@ -132,7 +138,15 @@ export function Register() {
                     {step === 2 && (
                         <>
                             <Form.Item className="register-form-item">
-                                <Upload {...uploadProps} listType="picture" className="register-upload">
+                                {fileList.length > 0 && (
+                                    <div className="avatar-preview">
+                                        <Image
+                                            src={URL.createObjectURL(fileList[0].originFileObj)}
+                                            style={{ borderRadius: '50%', width: '100px', height: '100px', objectFit: 'cover' }}
+                                        />
+                                    </div>
+                                )}
+                                <Upload {...uploadProps} className="register-upload">
                                     <Button icon={<UploadOutlined />} className="register-btn-default">Carregar Avatar</Button>
                                 </Upload>
                             </Form.Item>
@@ -144,31 +158,48 @@ export function Register() {
                                 ]}
                                 className="register-form-item"
                             >
-                                <Input placeholder="Email" className="register-input" />
+                                <Input
+                                    placeholder="Email"
+                                    className="register-input"
+                                    style={{ height: '40px' }}
+                                />
                             </Form.Item>
+
                             <Form.Item
                                 name="confirmEmail"
                                 dependencies={['email']}
-                                rules={[{
-                                    required: true,
-                                    message: 'Confirme seu email!',
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if (!value || getFieldValue('email') === value) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('Os emails não conferem!'));
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Confirme seu email!',
                                     },
-                                }),
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('email') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('Os emails não conferem!'));
+                                        },
+                                    }),
                                 ]}
                                 className="register-form-item"
                             >
-                                <Input placeholder="Confirmar Email" className="register-input" />
+                                <Input
+                                    placeholder="Confirmar Email"
+                                    className="register-input"
+                                    style={{ height: '40px' }}
+                                />
                             </Form.Item>
+
                             <Form.Item className="register-form-item" name="name">
-                                <Input placeholder="Nome" name="name" className="register-input" />
+                                <Input
+                                    placeholder="Nome"
+                                    name="name"
+                                    className="register-input"
+                                    style={{ height: '40px', width: '500px' }}
+                                />
                             </Form.Item>
+
                         </>
                     )}
 
@@ -176,8 +207,25 @@ export function Register() {
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             {step === 1 && (
                                 <a href="/login">
-                                    <Button type="default"
-                                        className="register-btn-default" onClick={() => setStep(2)} style={{ width: 100, border: '1px solid grey' }}>
+                                    <Button
+                                        type="default"
+                                        className="register-btn-default"
+                                        style={{
+                                            width: 100,
+                                            border: '1px solid grey',
+                                            transition: 'transform 0.2s ease, background-color 0.3s ease',
+                                        }}
+                                        onMouseEnter={(e: any) => {
+                                            e.target.style.transform = 'scale(1.05)';
+                                            e.target.style.backgroundColor = '#A28BF6';
+                                            e.target.style.color = 'white';
+                                        }}
+                                        onMouseLeave={(e: any) => {
+                                            e.target.style.transform = 'scale(1)';
+                                            e.target.style.backgroundColor = 'transparent';
+                                            e.target.style.color = 'white';
+                                        }}
+                                    >
                                         Cancelar
                                     </Button>
                                 </a>
@@ -187,19 +235,63 @@ export function Register() {
                                     type="default"
                                     className="register-btn-default"
                                     onClick={() => setStep(1)}
-                                    style={{ width: 100, border: '1px solid white' }}
+                                    style={{
+                                        width: 100,
+                                        border: '1px solid white',
+                                        transition: 'transform 0.2s ease, background-color 0.3s ease',
+                                    }}
+                                    onMouseEnter={(e: any) => {
+                                        e.target.style.transform = 'scale(1.05)';
+                                        e.target.style.backgroundColor = '#A28BF6';
+                                        e.target.style.color = 'white';
+                                    }}
+                                    onMouseLeave={(e: any) => {
+                                        e.target.style.transform = 'scale(1)';
+                                        e.target.style.backgroundColor = 'transparent';
+                                        e.target.style.color = 'white';
+                                    }}
                                 >
                                     <DoubleLeftOutlined />
                                 </Button>
                             )}
-                            <Button type="primary" htmlType="submit" className="register-btn-primary">
-                                {step === 1 ? <DoubleRightOutlined /> : 'Registrar'}
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                className="register-btn-primary"
+                                style={{
+                                    backgroundColor: step === 1 ? '#4B0082' : '#4B0082',
+                                    borderColor: step === 1 ? '#4B0082' : '#4B0082',
+                                    color: 'white',
+                                    transition: 'transform 0.2s ease, background-color 0.3s ease',
+                                }}
+                                onMouseEnter={(e: any) => {
+                                    e.target.style.transform = 'scale(1.05)';
+                                    e.target.style.backgroundColor = '#4B0082';
+                                    e.target.style.color = 'white';
+                                }}
+                                onMouseLeave={(e: any) => {
+                                    e.target.style.transform = 'scale(1)';
+                                    e.target.style.backgroundColor = step === 1 ? '#4B0082' : '#A28BF6';
+                                    e.target.style.color = 'white';
+                                }}
+                            >
+                                {step === 1 ? <DoubleRightOutlined /> : 'Finalizar'}
                             </Button>
+
                         </div>
                     </Form.Item>
+
                 </Form>
             </Sider>
-            <Content style={{ padding: '50px', backgroundColor: 'white' }} />
+            <Content className='content-login'>
+                <div style={{ color: 'black' }}>
+                    <div style={{ display: 'flex' }}>
+                        <h2 style={{ color: 'black' }}>Crie sua conta no Word</h2>
+                        <h2 style={{ color: '#A28BF6' }}>Swap</h2>
+                    </div>
+                    <p>Por favor, preencha os dados para se cadastrar.</p>
+                </div>
+            </Content>
         </Layout>
     );
 }

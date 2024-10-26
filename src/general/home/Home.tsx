@@ -1,6 +1,5 @@
-import { FolderOutlined } from '@ant-design/icons';
-import { Button, Layout, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Layout, Typography } from 'antd';
+import { useEffect } from 'react';
 
 import { useUser } from '../../context/UserContext';
 import { useRequest } from '../../hook/useRequest';
@@ -12,6 +11,7 @@ import { Chat } from './conversartion/chat/Chat';
 import { ConversationList } from './conversartion/ConversationList';
 import { Profile } from './profile/Profile';
 
+import Paragraph from 'antd/es/typography/Paragraph';
 import './Home.css';
 
 const { Sider, Content } = Layout;
@@ -21,11 +21,6 @@ export function Home() {
     const { user } = useUser();
     const { request } = useRequest();
     const { handleStompClient, selectedConversation, setFriendRequests } = useHomeContext();
-    const [showArchived, setShowArchived] = useState<boolean>(false);
-
-    const toggleView = () => {
-        setShowArchived((prev) => !prev);
-    };
 
     function fetchFriendRequests(userId: number) {
         request({
@@ -52,22 +47,23 @@ export function Home() {
         <Layout>
             <Sider width={300} className="sider">
                 <div className="profile"><Profile /></div>
-                <div className="button-folder">
-                    <Button
-                        icon={<FolderOutlined className='folder-icon' />}
-                        type="default"
-                        className="folder-button"
-                        onClick={toggleView}
-                    >
-                        <Title className="title-folder" level={5}>{showArchived ? 'Mostrar Conversas Ativas' : 'Mostrar Arquivadas'}</Title>
-                    </Button>
-                </div>
-                <ConversationList showArchived={showArchived} />
+                <ConversationList />
             </Sider>
             <Layout className='layout-home'>
                 <Content className="content">
-                    {selectedConversation && (
+                    {selectedConversation ? (
                         <Chat />
+                    ) : (
+                        <>
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                                <Title level={2} style={{ color: 'white', margin: 0 }}>Nenhuma</Title>
+                                <Title level={2} style={{ color: '#A28BF6', margin: 0 }}>conversa</Title>
+                                <Title level={2} style={{ color: 'white', margin: 0 }}>selecionada</Title>
+                            </div>
+                            <Paragraph style={{ color: 'white' }}>
+                                Por favor, selecione uma conversa ou inicie uma nova para começar a trocar mensagens.
+                            </Paragraph>
+                        </>
                     )}
                 </Content>
             </Layout>

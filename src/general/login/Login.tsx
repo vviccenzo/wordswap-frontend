@@ -42,6 +42,10 @@ export function Login() {
     return (
         <Layout className="layout-login">
             <Sider width="30%" className="sider-login">
+                <div className="title-container">
+                    <h1 className="title-word">Word</h1>
+                    <h1 className="title-swap">Swap</h1>
+                </div>
                 <Form
                     name="login"
                     initialValues={{ remember: true }}
@@ -66,12 +70,20 @@ export function Login() {
                             Logar
                         </Button>
                     </Form.Item>
-                    <div style={{ color: 'white' }}>
-                        Ou <a href="/register" style={{ color: 'white' }}> registrar-se!</a>
+                    <div className="register-prompt">
+                        Ou <a href="/register" className="register-link">registrar-se!</a>
                     </div>
                 </Form>
             </Sider>
-            <Content className="content-login" />
+            <Content className="content-login">
+                <div style={{ color: 'black' }}>
+                    <div style={{ display: 'flex' }}>
+                        <h2 style={{ color: 'black' }}>Bem-vindo ao Word</h2>
+                        <h2 style={{ color: '#A28BF6' }}>Swap</h2>
+                    </div>
+                    <p>Por favor, faça login para acessar sua conta.</p>
+                </div>
+            </Content>
         </Layout>
     );
 }
