@@ -1,16 +1,9 @@
 .sider-register {
     background-color: black !important;
-    padding: 40px 20px;
+    padding-top: 10%;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.sider-register img {
-    margin-top: 50px;
-    margin-bottom: 30px;
-    max-width: 100%;
-    height: auto;
 }
 
 .sider-register .register-form {
@@ -61,6 +54,16 @@
     border-radius: 8px;
 }
 
+.register-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
 .sider-register .register-form-item-label>label {
     color: #444;
 }
@@ -77,6 +80,28 @@
 
 .sider-register a:hover {
     color: #322b6b;
+}
+
+.animated-btn {
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.animated-btn:hover {
+    transform: scale(1.05);
+    background-color: #A28BF6;
+    color: white;
+}
+
+.animated-btn:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(162, 139, 246, 0.6);
+}
+
+.avatar-preview {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
 }
 
 @media (max-width: 768px) {

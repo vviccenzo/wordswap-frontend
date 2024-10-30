@@ -1,22 +1,22 @@
 import { DeleteOutlined, FolderOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Menu, Typography } from 'antd';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useRequest } from '../../../hook/useRequest';
 import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl';
 import { HttpMethods } from '../../../utils/IRequest';
+import mapConversations from '../../../utils/mapper/conversationMapper';
 import { Notification } from '../../../utils/Notification';
 import { useHomeContext } from '../context/HomeContext';
-import mapConversations from '../../../utils/mapper/conversationMapper';
 
-import { useUser } from '../../../context/UserContext';
 import moment from 'moment';
+import { useUser } from '../../../context/UserContext';
 
 import './ConversationList.css';
 
 const { Title, Text } = Typography;
 
-export function ConversationList({ showArchived }) {
+export function ConversationList() {
     const { user } = useUser();
     const { request } = useRequest();
     const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, setScrollPage, setTotalMessages } = useHomeContext();
@@ -79,25 +79,9 @@ export function ConversationList({ showArchived }) {
         });
     }
 
-    function handleArchive(conv, hasToArchive) {
-        request({
-            method: HttpMethods.PUT,
-            url: '/conversation/archive-conversation',
-            data: {
-                userId: user.id,
-                id: conv.id,
-                hasToArchive: hasToArchive
-            }
-        });
-    }
-
     const handleMenuClick = (e, conv) => {
         if (e.key === 'delete') {
             handleDelete(conv);
-        } else if (e.key === 'archive') {
-            handleArchive(conv, true);
-        } else if (e.key === 'unarchive') {
-            handleArchive(conv, false);
         }
     };
 
@@ -133,22 +117,12 @@ export function ConversationList({ showArchived }) {
                     const isUserInitiator = conv.senderId === user.id;
                     const isUserReceiver = conv.receiverId === user.id;
 
-                    if (showArchived) {
-                        if (isUserInitiator) {
-                            return conv.isArchivedInitiator;
-                        }
+                    if (isUserInitiator) {
+                        return !conv.isArchivedInitiator;
+                    }
 
-                        if (isUserReceiver) {
-                            return conv.isArchivedRecipient;
-                        }
-                    } else {
-                        if (isUserInitiator) {
-                            return !conv.isArchivedInitiator;
-                        }
-
-                        if (isUserReceiver) {
-                            return !conv.isArchivedRecipient;
-                        }
+                    if (isUserReceiver) {
+                        return !conv.isArchivedRecipient;
                     }
 
                     return true;

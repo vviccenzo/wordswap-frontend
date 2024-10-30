@@ -30,7 +30,7 @@ export function ChatHeader({ profilePicture, conversationName, selectedConversat
                     onClick={() => setIsModalUserVisible(true)}
                 />
             }
-            <Title level={4} className="conversation-name">{conversationName}</Title>
+            <Title level={4} className="conversation-name" style={{ cursor: 'pointer', margin: '0' }}>{conversationName}</Title>
             <ProfileModal
                 user={{
                     selectedConversation,

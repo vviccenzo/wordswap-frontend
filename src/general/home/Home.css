@@ -26,6 +26,21 @@
     border-color: #f0f0f0 !important;
 }
 
+.empty-conversation {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.empty-conversation h2 {
+    color: #A28BF6;
+}
+
+.empty-conversation p {
+    color: white;
+}
+
+
 @media (max-width: 768px) {
     .folder-button {
         max-width: 100%;
