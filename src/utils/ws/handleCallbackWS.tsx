@@ -16,9 +16,11 @@ export function useHandleCallbackWS() {
     const updateSelectedConversation = (conversationsMapped: any[], conversationData: any) => {
         const updatedConversation = conversationData;
         const conversation = conversationsMapped.find((conv: any) =>
-            conv.id === Number(conversationData.id) || (conversationData.isNewConversation &&
-                Number(conv.senderId) === Number(conversationData.senderId) &&
-                Number(conv.receiverId) === Number(conversationData.receiverId))
+            conv.id === Number(conversationData.id) || ((conversationData.isNewConversation &&
+                ((Number(conv.senderId) === Number(conversationData.senderId) &&
+                  Number(conv.receiverId) === Number(conversationData.receiverId)) ||
+                 (Number(conv.senderId) === Number(conversationData.receiverId) &&
+                  Number(conv.receiverId) === Number(conversationData.senderId)))))
         );
 
         if (conversation) {
