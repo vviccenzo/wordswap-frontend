@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TranslationOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined, TranslationOutlined } from '@ant-design/icons';
 import { Button, List, Modal, Select, Switch, Tooltip, message } from 'antd';
 import { useHomeContext } from '../../../../context/HomeContext';
 
@@ -42,6 +42,7 @@ export function TranslationModal({
             title: 'Traduzir ao receber',
             className: 'translation-receiving',
             itemClassName: 'translation-receiving-item',
+            info: 'Selecione o idioma que suas mensagens recebidas serão traduzidas.',
             description: (
                 <div className="translation-options-container">
                     <Select
@@ -51,7 +52,7 @@ export function TranslationModal({
                         }}
                         style={{ width: '100%' }}
                         showSearch
-                        filterOption={(input, option: any) => 
+                        filterOption={(input, option: any) =>
                             option?.children?.toLowerCase().includes(input.toLowerCase())
                         }
                     >
@@ -73,6 +74,7 @@ export function TranslationModal({
             title: 'Melhorar texto com IA',
             className: 'text-improvement',
             itemClassName: 'text-improvement-item',
+            info: 'Ative para melhorar o texto das mensagens recebidas. Exemplo: Correção ortográfica, correção gramatical.',
             description: (
                 <>
                     <Switch checked={isImprovingText} onChange={setIsImprovingText} />
@@ -120,7 +122,10 @@ export function TranslationModal({
                     renderItem={item => (
                         <List.Item className={item.className}>
                             <List.Item.Meta className={item.itemClassName}
-                                title={<Tooltip title={item.title}>{item.title}</Tooltip>}
+                                title={<div style={{ display: 'flex', gap: '10px' }}>
+                                    {item.title}
+                                    <Tooltip title={item.info}><QuestionCircleOutlined /></Tooltip>
+                                </div>}
                                 description={item.description}
                             />
                         </List.Item>

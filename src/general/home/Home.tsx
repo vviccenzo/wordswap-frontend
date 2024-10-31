@@ -61,7 +61,7 @@ export function Home() {
                                 <Title level={2} style={{ color: 'white', margin: 0 }}>selecionada</Title>
                             </div>
                             <Paragraph style={{ color: 'white' }}>
-                                Por favor, selecione uma conversa ou inicie uma nova para começar a trocar mensagens.
+                                Por favor, selecione uma conversa ou inicie uma nova adicionando um amigo e enviando uma mensagem.
                             </Paragraph>
                         </>
                     )}

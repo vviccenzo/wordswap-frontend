@@ -1,5 +1,5 @@
 import { EllipsisOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Dropdown, List, Menu, Space } from 'antd';
+import { Avatar, Dropdown, List, Menu, Space, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useUser } from '../../../../../../context/UserContext';
 import { useRequest } from '../../../../../../hook/useRequest';
@@ -94,7 +94,9 @@ export function FriendsListTab() {
                         className='list-item-meta-friends'
                     />
                     <div className="actions-container">
-                        <MessageOutlined className="message-icon" onClick={() => handleStartConversartion(friend)} />
+                        <Tooltip title="Iniciar uma conversa">
+                            <MessageOutlined className="message-icon" onClick={() => handleStartConversartion(friend)} />
+                        </Tooltip>
                         <Dropdown overlay={menu(friend)} trigger={['click']}>
                             <Space>
                                 <EllipsisOutlined className="dropdown-icon" />
