@@ -101,14 +101,22 @@ export function Register() {
                                     { required: true, message: 'Por favor, insira sua senha!' },
                                     { min: 8, message: 'A senha deve ter pelo menos 8 caracteres!' },
                                     {
-                                        pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/,
-                                        message: 'A senha deve ter uma letra maiúscula, um número e um caractere especial!'
+                                        pattern: /[A-Z]/,
+                                        message: 'A senha deve ter pelo menos uma letra maiúscula!'
+                                    },
+                                    {
+                                        pattern: /\d/,
+                                        message: 'A senha deve ter pelo menos um número!'
+                                    },
+                                    {
+                                        pattern: /[!@#$%^&*]/,
+                                        message: 'A senha deve ter pelo menos um caractere especial!'
                                     },
                                 ]}
                                 hasFeedback
                                 className="register-form-item"
                             >
-                                <Input.Password placeholder="Senha" style={{ height: '40px', width: '500px' }} className="register-password-input" />
+                                <Input.Password placeholder="Senha" style={{ height: '40px' }} className="register-password-input" />
                             </Form.Item>
                             <Form.Item
                                 name="confirm"
