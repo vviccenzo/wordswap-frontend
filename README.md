@@ -1,4 +1,4 @@
-# Como clonar e iniciar o projeto
+# WordSwap - Front-end
 
 ## Pré-requisitos
 
