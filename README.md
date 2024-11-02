@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# Como clonar e iniciar o projeto
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Pré-requisitos
 
-## Available Scripts
+Antes de começar, você precisa ter o Node.js e o npm (Node Package Manager) instalados em sua máquina. Se ainda não os instalou, siga os passos abaixo:
 
-In the project directory, you can run:
+### Passo 1: Instalar o Node.js e o npm
 
-### `npm start`
+1. Acesse o site oficial do Node.js: [https://nodejs.org](https://nodejs.org).
+2. Baixe o instalador para o seu sistema operacional.
+3. Siga as instruções de instalação. O npm é instalado automaticamente junto com o Node.js.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Para verificar se a instalação foi bem-sucedida, execute os seguintes comandos no terminal:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+node -v
+npm -v
+```
 
-### `npm test`
+## Passo 2: Clonar o repositório
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Para começar, clone o repositório do projeto:
 
-### `npm run build`
+```bash
+git clone https://github.com/vviccenzo/wordswap-frontend
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Passo 3: Acessar o diretório do projeto
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Entre na pasta do projeto que você acabou de clonar:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+cd wordswap-frontend
+```
 
-### `npm run eject`
+## Passo 4: Atualizar as dependências
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Para garantir que todas as dependências estejam atualizadas, instale-as usando o comando abaixo:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Passo 5: Iniciar o projeto
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Após instalar as dependências, inicie o servidor de desenvolvimento:
 
-## Learn More
+```bash
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Isso abrirá o projeto automaticamente no navegador. Caso isso não aconteça, você pode acessá-lo manualmente em [http://localhost:3000](http://localhost:3000).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Siga esses passos e o projeto estará pronto para desenvolvimento!
