@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Badge, Dropdown, Menu, Space } from 'antd';
+import { Avatar, Badge, Dropdown, Menu, Space, Tooltip } from 'antd';
 import { SettingOutlined, TeamOutlined, UserOutlined, EditOutlined } from '@ant-design/icons';
 import { useUser } from '../../../context/UserContext';
 import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl';
@@ -47,9 +47,11 @@ export function Profile() {
             </div>
             <div className="space">
                 <div className="badge-container">
-                    <Badge count={friendRequests.length} overflowCount={99} offset={[10, 0]}>
-                        <TeamOutlined className="icon" onClick={() => handleModalStatus(true)} />
-                    </Badge>
+                    <Tooltip title="Comunidade">
+                        <Badge count={friendRequests.length} overflowCount={99} offset={[10, 0]}>
+                            <TeamOutlined className="icon" onClick={() => handleModalStatus(true)} />
+                        </Badge>
+                    </Tooltip>
                 </div>
 
                 <FriendshipRequestModal />
