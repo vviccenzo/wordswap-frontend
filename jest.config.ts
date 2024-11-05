@@ -15,4 +15,8 @@ module.exports = {
         "/node_modules/",
         "\\.(css|less)$",
     ],
+    coverageReporters: [
+        "lcov",
+        "text"
+    ]
 };
