@@ -40,14 +40,21 @@ const doRequest = async ({ method, url, params = {}, data = {}, headers = {}, su
             if (error?.code === "ERR_BAD_REQUEST") {
                 localStorage.clear();
                 const errorMessage = error.response ? error.response.data : error.message;
-                errorCallback(errorMessage);
-
-                setTimeout(() => {
-                    window.location.reload();
-                }, 5000);
+                if(!errorMessage) {
+                    errorCallback("Ocorreu um erro, tente novamente!");
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 5000);
+                } else {
+                    errorCallback(errorMessage);
+                }
             } else {
                 const errorMessage = error.response ? error.response.data : error.message;
-                errorCallback(errorMessage);
+                if(!errorMessage) {
+                    errorCallback("Ocorreu um erro, tente novamente!");
+                } else {
+                    errorCallback(errorMessage);
+                }
             }
         } else {
             throw error.response ? error.response.data : error.message;
