@@ -67,6 +67,12 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
     }
 
     function handleConversationSelected(data: any) {
+        if(data === null) {
+            localStorage.removeItem('conversation');
+            setSelectedConversation(null);
+            setTotalMessages(0);
+            return;
+        }
         localStorage.setItem('conversation', JSON.stringify(data));
         setSelectedConversation(data);
         setTotalMessages(data.totalMessages || 0);

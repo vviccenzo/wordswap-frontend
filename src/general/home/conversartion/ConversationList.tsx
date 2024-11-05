@@ -19,7 +19,7 @@ const { Title, Text } = Typography;
 export function ConversationList() {
     const { user } = useUser();
     const { request } = useRequest();
-    const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, setScrollPage, setTotalMessages } = useHomeContext();
+    const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, setScrollPage, setTotalMessages, selectedConversation } = useHomeContext();
 
     useEffect(() => {
         if (user.id) {
@@ -145,9 +145,15 @@ export function ConversationList() {
                             )
                         }
                         onClick={() => {
-                            setScrollPage(1);
-                            setTotalMessages(conv.totalMessages || 0);
-                            handleConversationSelected(conv);
+                            if(conv.id !== selectedConversation?.id) {
+                                setScrollPage(1);
+                                setTotalMessages(0);
+                                handleConversationSelected(conv);
+                            } else {
+                                setScrollPage(0);
+                                setTotalMessages(0);
+                                handleConversationSelected(null);
+                            }
                         }}
                         className="menu-item"
                         onContextMenu={(e) => e.preventDefault()}
