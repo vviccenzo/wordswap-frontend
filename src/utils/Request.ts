@@ -37,11 +37,17 @@ const doRequest = async ({ method, url, params = {}, data = {}, headers = {}, su
         }
     } catch (error) {
         if (errorCallback) {
-            if (error?.code  === "ERR_BAD_REQUEST") {
+            if (error?.code === "ERR_BAD_REQUEST") {
                 localStorage.clear();
-                window.location.reload();
+                const errorMessage = error.response ? error.response.data : error.message;
+                errorCallback(errorMessage);
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 5000);
             } else {
-                errorCallback(error.response ? error.response.data : error.message);
+                const errorMessage = error.response ? error.response.data : error.message;
+                errorCallback(errorMessage);
             }
         } else {
             throw error.response ? error.response.data : error.message;

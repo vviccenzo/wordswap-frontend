@@ -34,7 +34,7 @@ export function Login() {
                 navigate("/home");
             },
             errorCallback: (error) => {
-                Notification({ message: 'Erro', description: error.error, placement: 'top', type: 'error' });
+                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
             }
         });
     };
