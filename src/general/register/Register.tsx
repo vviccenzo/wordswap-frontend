@@ -204,7 +204,7 @@ export function Register() {
                                     placeholder="Nome"
                                     name="name"
                                     className="register-input"
-                                    style={{ height: '40px', width: '500px' }}
+                                    style={{ height: '40px' }}
                                 />
                             </Form.Item>
 
