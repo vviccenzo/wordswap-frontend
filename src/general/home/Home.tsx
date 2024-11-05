@@ -87,6 +87,33 @@ export function Home() {
                                     </List.Item>
                                 )}
                             />
+                            
+                            <Divider style={{ borderColor: '#A28BF6', color: '#A28BF6', margin: '20px 0' }}>Selecionar Função de IA</Divider>
+
+                            <List
+                                dataSource={[
+                                    {
+                                        title: "Passo 1",
+                                        description: "Clique no botão ao lado esquerdo do input de mensagem.",
+                                    },
+                                    {
+                                        title: "Passo 2",
+                                        description: "Selecione o idioma que as mensagens que você receberá serão traduzidas.",
+                                    },
+                                    {
+                                        title: "Passo 3",
+                                        description: "Clique em ativar para começar a receber as mensagens.",
+                                    },
+                                ]}
+                                renderItem={item => (
+                                    <List.Item>
+                                        <List.Item.Meta
+                                            title={<Text style={{ color: '#A28BF6' }}>{item.title}</Text>}
+                                            description={<Text style={{ color: 'white' }}>{item.description}</Text>}
+                                        />
+                                    </List.Item>
+                                )}
+                            />
                         </Space>
                     )}
                 </Content>
