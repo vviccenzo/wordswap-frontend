@@ -18,15 +18,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          
-      - name: Set timezone to UTC
-        run: sudo timedatectl set-timezone UTC
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests with coverage
-        run: npx jest --coverage
+        run: TZ=UTC npx jest --coverage
 
       - name: Upload coverage report to SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
