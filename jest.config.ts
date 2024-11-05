@@ -3,7 +3,7 @@ module.exports = {
     testEnvironment: 'jsdom',
     transform: {
         '^.+\\.tsx?$': ['ts-jest', {
-            tsconfig: 'tsconfig.json', // Referencie o seu tsconfig aqui
+            tsconfig: 'tsconfig.json',
         }],
     },
     moduleNameMapper: {
