@@ -1,6 +1,6 @@
-import { DeleteOutlined, FolderOutlined, UserOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FolderOutlined, UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Menu, Typography } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRequest } from '../../../hook/useRequest';
 import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl';
@@ -13,6 +13,7 @@ import moment from 'moment';
 import { useUser } from '../../../context/UserContext';
 
 import './ConversationList.css';
+import InviteModal from '../groupModal/InviteModal';
 
 const { Title, Text } = Typography;
 
@@ -20,6 +21,8 @@ export function ConversationList() {
     const { user } = useUser();
     const { request } = useRequest();
     const { conversations, handleConversations, handleConversationSelected, setLoading, scrollPage, setScrollPage, setTotalMessages, selectedConversation } = useHomeContext();
+
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         if (user.id) {
@@ -110,69 +113,111 @@ export function ConversationList() {
         return false;
     }
 
+    function showInviteModal() {
+        setIsModalVisible(true);
+    };
+
+    function handleCloseModal() {
+        setIsModalVisible(false);
+    };
+
     return (
-        <div className="container">
-            <Menu mode="inline" theme="dark" className="menu">
-                {conversations.filter((conv: any) => {
-                    const isUserInitiator = conv.senderId === user.id;
-                    const isUserReceiver = conv.receiverId === user.id;
+        <>
+            <div style={{
+                marginLeft: '15px',
+                marginRight: '15px',
+                marginTop: '10px',
+                borderRadius: '8px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                backgroundColor: '#A28BF6',
+            }}>
+                <span style={{
+                    marginTop: '5px',
+                    marginBottom: '5px',
+                    marginLeft: '10px',
+                    color: 'black',
+                    fontSize: '20px',
+                    fontFamily: 'sans-serif',
+                }}>
+                    Conversas
+                </span>
+                <UsergroupAddOutlined
+                    style={{
+                        marginRight: '10px',
+                        color: 'black',
+                        fontSize: '20px',
+                    }}
+                    onClick={showInviteModal} />
+                <InviteModal
+                    visible={isModalVisible}
+                    onClose={handleCloseModal}
+                />
+            </div>
+            <div className="container">
+                <Menu mode="inline" theme="dark" className="menu">
+                    {conversations.filter((conv: any) => {
+                        const isUserInitiator = conv.senderId === user.id;
+                        const isUserReceiver = conv.receiverId === user.id;
 
-                    if (isUserInitiator) {
-                        return !conv.isArchivedInitiator;
-                    }
-
-                    if (isUserReceiver) {
-                        return !conv.isArchivedRecipient;
-                    }
-
-                    return true;
-                }).map((conv) => (
-                    <Menu.Item
-                        key={conv.id}
-                        icon={
-                            conv.profilePic ? (
-                                <Avatar
-                                    size={48}
-                                    className="avatar-conversation"
-                                    src={byteArrayToDataUrl(conv.profilePic)}
-                                />
-                            ) : (
-                                <Avatar
-                                    size={48}
-                                    className="avatar-conversation"
-                                    icon={<UserOutlined />}
-                                />
-                            )
+                        if (isUserInitiator) {
+                            return !conv.isArchivedInitiator;
                         }
-                        onClick={() => {
-                            if(conv.id !== selectedConversation?.id) {
-                                setScrollPage(1);
-                                setTotalMessages(0);
-                                handleConversationSelected(conv);
-                            } else {
-                                setScrollPage(0);
-                                setTotalMessages(0);
-                                handleConversationSelected(null);
+
+                        if (isUserReceiver) {
+                            return !conv.isArchivedRecipient;
+                        }
+
+                        return true;
+                    }).map((conv) => (
+                        <Menu.Item
+                            key={conv.id}
+                            icon={
+                                conv.profilePic ? (
+                                    <Avatar
+                                        size={48}
+                                        className="avatar-conversation"
+                                        src={byteArrayToDataUrl(conv.profilePic)}
+                                    />
+                                ) : (
+                                    <Avatar
+                                        size={48}
+                                        className="avatar-conversation"
+                                        icon={<UserOutlined />}
+                                    />
+                                )
                             }
-                        }}
-                        className="menu-item"
-                        onContextMenu={(e) => e.preventDefault()}
-                    >
-                        <Dropdown
-                            overlay={menu(conv)}
-                            trigger={['contextMenu']}
+                            onClick={() => {
+                                if (conv.id !== selectedConversation?.id) {
+                                    setScrollPage(1);
+                                    setTotalMessages(0);
+                                    handleConversationSelected(conv);
+                                } else {
+                                    setScrollPage(0);
+                                    setTotalMessages(0);
+                                    handleConversationSelected(null);
+                                }
+                            }}
+                            className="menu-item"
+                            onContextMenu={(e) => e.preventDefault()}
                         >
-                            <div className="menu-title-content">
-                                <div className="title-row">
-                                    <Title level={5} className="title-conversation">{conv.conversationName}</Title>
-                                    <Text type="secondary" className="last-message-time">{getLastTimeMessage(conv)}</Text>
+                            <Dropdown
+                                overlay={menu(conv)}
+                                trigger={['contextMenu']}
+                            >
+                                <div className="menu-title-content">
+                                    <div className="title-row">
+                                        <Title level={5} className="title-conversation">{conv.conversationName}</Title>
+                                        <Text type="secondary" className="last-message-time">{getLastTimeMessage(conv)}</Text>
+                                    </div>
+                                    <Text type="secondary" className="last-message">{getLastMessage(conv)}</Text>
                                 </div>
-                                <Text type="secondary" className="last-message">{getLastMessage(conv)}</Text>
-                            </div>
-                        </Dropdown>
-                    </Menu.Item>
-                ))}
-            </Menu>
-        </div>
+                            </Dropdown>
+                        </Menu.Item>
+                    ))}
+                </Menu>
+            </div>
+        </>
     );
 };

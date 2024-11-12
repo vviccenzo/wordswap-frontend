@@ -14,6 +14,7 @@ import formatTimestamp from '../../../../../utils/functions/formatTimestamp';
 import mapConversations from '../../../../../utils/mapper/conversationMapper';
 
 import './ChatBody.css';
+import { WebSocketEventType } from '../../../../../utils/enum/WebSocketEventType';
 
 let previousDate: any = null;
 const MESSAGES_PER_PAGE = 10;
@@ -21,7 +22,7 @@ const MESSAGES_PER_PAGE = 10;
 export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
     const { user } = useUser();
     const { request } = useRequest();
-    const { loading, setLoading, setScrollPage, scrollPage, handleConversationSelected, totalMessages } = useHomeContext();
+    const { loading, setLoading, setScrollPage, scrollPage, handleConversationSelected, totalMessages, stompClient } = useHomeContext();
 
     const [containerHeight, setContainerHeight] = useState<number>(1000);
 
@@ -77,6 +78,22 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
         return () => window.removeEventListener('resize', updateHeight);
     }, []);
 
+    useEffect(() => {
+        const unviewedMessages = messages.filter(message => message.senderId !== user?.id && !message.viewed);
+        const unviewedMessageIds = unviewedMessages.map(message => message.id);
+
+        if (unviewedMessageIds.length > 0) {
+            const groupData = {
+                action: WebSocketEventType.VIEW_MESSAGE,
+                messageViewDTO: {
+                    messageIds: unviewedMessageIds
+                },
+            };
+    
+            stompClient.send(`/app/chat/${user?.id}`, {}, JSON.stringify(groupData));
+        }
+    }, [messages, user?.id, request]);
+
     return (
         <div className="chat-body">
             {loading && (
@@ -106,13 +123,17 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                                 id: msg.id,
                                 content: msg.content,
                                 avatar: msg.sender === 'me' ? null : selectedConversation?.profilePicture,
-                                senderName: msg.sender === 'me' ? 'You' : selectedConversation?.conversationName,
                                 timestamp: formatTimestamp(msg.timeStamp),
+                                originalContent: msg.originalContent,
                                 isEdited: msg.edited,
                                 isDeleted: msg.deleted,
                                 messageContent: msg.messageContent,
                                 date: msg.timeStamp,
-                                image: msg.image
+                                image: msg.image,
+                                senderName: msg.senderName,
+                                type: selectedConversation?.type,
+                                viewed: msg.viewed,
+                                viewedTime: msg.viewedTime
                             }}
                             isMe={msg.sender === 'me'}
                             showDateSeparator={showDateSeparator}

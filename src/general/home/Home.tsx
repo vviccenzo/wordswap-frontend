@@ -1,5 +1,5 @@
-import { Layout, Typography, Card, Divider, List, Space } from 'antd';
-import { useEffect } from 'react';
+import { Button, Divider, Layout, List, Space, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 
 import { useUser } from '../../context/UserContext';
 import { useRequest } from '../../hook/useRequest';
@@ -11,8 +11,8 @@ import { Chat } from './conversartion/chat/Chat';
 import { ConversationList } from './conversartion/ConversationList';
 import { Profile } from './profile/Profile';
 
-import Paragraph from 'antd/es/typography/Paragraph';
 import './Home.css';
+import InviteModal from './groupModal/InviteModal';
 
 const { Sider, Content } = Layout;
 const { Title, Text } = Typography;
@@ -20,7 +20,7 @@ const { Title, Text } = Typography;
 export function Home() {
     const { user } = useUser();
     const { request } = useRequest();
-    const { handleStompClient, selectedConversation, setFriendRequests } = useHomeContext();
+    const { handleStompClient, selectedConversation, setFriendRequests, setFriendsList } = useHomeContext();
 
     function fetchFriendRequests(userId) {
         request({
@@ -35,10 +35,27 @@ export function Home() {
         });
     }
 
+    function fetchFriends() {
+        request({
+            method: HttpMethods.GET,
+            url: '/user/find-friends?userId=' + user?.id,
+            successCallback: (data) => {
+                setFriendsList(data);
+            },
+            errorCallback: (error) => {
+                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
+            }
+        });
+    }
+
     useEffect(() => {
         if (user.id) {
             fetchFriendRequests(user.id);
         }
+    }, [user?.id]);
+
+    useEffect(() => {
+        fetchFriends();
     }, [user?.id]);
 
     useWebSocket(handleStompClient);
@@ -87,7 +104,7 @@ export function Home() {
                                     </List.Item>
                                 )}
                             />
-                            
+
                             <Divider style={{ borderColor: '#A28BF6', color: '#A28BF6', margin: '20px 0' }}>Selecionar Função de IA</Divider>
 
                             <List

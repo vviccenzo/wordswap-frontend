@@ -1,40 +1,19 @@
 import { EllipsisOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, List, Menu, Space, Tooltip } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useUser } from '../../../../../../context/UserContext';
-import { useRequest } from '../../../../../../hook/useRequest';
-import { HttpMethods } from '../../../../../../utils/IRequest';
-import { Notification } from '../../../../../../utils/Notification';
 import { WebSocketEventType } from '../../../../../../utils/enum/WebSocketEventType';
 import { useHomeContext } from '../../../../context/HomeContext';
 
-import './FriendList.css';
 import { byteArrayToDataUrl } from '../../../../../../utils/functions/byteArrayToDataUrl';
 import { ProfileModal } from '../../../../conversartion/chat/header/ProfileModal/ProfileModal';
+import './FriendList.css';
 
 export function FriendsListTab() {
     const { user } = useUser();
-    const { request } = useRequest();
-    const { handleModalStatus, doStartConversartion, stompClient, friendsList, setFriendsList, selectedConversation } = useHomeContext();
+    const { handleModalStatus, doStartConversartion, stompClient, friendsList, setFriendsList } = useHomeContext();
 
-    const [selectedFriend, setSelectedFriend] = useState<any>(null);  // Guarda o amigo selecionado
-
-    useEffect(() => {
-        fetchFriends();
-    }, [user?.id]);
-
-    function fetchFriends() {
-        request({
-            method: HttpMethods.GET,
-            url: '/user/find-friends?userId=' + user?.id,
-            successCallback: (data) => {
-                setFriendsList(data);
-            },
-            errorCallback: (error) => {
-                Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
-            }
-        });
-    }
+    const [selectedFriend, setSelectedFriend] = useState<any>(null);
 
     function handleDeleteFriend(id: number) {
         const data = {

@@ -34,7 +34,7 @@ export const HomeProvider: React.FC<HomeProviderProps> = ({ children }) => {
             receiverCode: data.userCode,
         };
 
-        const conversation = conversations.find((c) => c.receiverCode === data.userCode || c.senderCode === data.userCode);
+        const conversation = conversations.find((c) => c.id === data.conversationId);
         if(conversation) {
             setSelectedConversation(conversation);
             setTotalMessages(conversation.totalMessages);

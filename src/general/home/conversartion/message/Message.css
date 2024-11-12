@@ -143,3 +143,15 @@
     margin-top: 5px;
     text-align: right;
 }
+
+.message-info-popover p {
+    margin: 0;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    /* Linha divisória */
+}
+
+.message-info-popover p:last-child {
+    border-bottom: none;
+    /* Remove a linha do último item */
+}

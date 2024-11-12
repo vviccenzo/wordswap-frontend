@@ -35,6 +35,11 @@ export interface Message {
     deleted: boolean;
     messageContent: string;
     image: string;
+    originalContent?: string;
+    type: string;
+    senderName: string;
+    viewed: boolean;
+    viewedTime: string;
 }
 
 export interface GetMessagePayload {
