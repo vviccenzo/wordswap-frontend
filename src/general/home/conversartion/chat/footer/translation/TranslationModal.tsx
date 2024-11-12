@@ -1,35 +1,29 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import { QuestionCircleOutlined, TranslationOutlined } from '@ant-design/icons';
 import { Button, List, Modal, Select, Switch, Tooltip, message } from 'antd';
 import { useHomeContext } from '../../../../context/HomeContext';
-
 import './TranslationModal.css';
-import { useUser } from '../../../../../../context/UserContext';
 
 const { Option } = Select;
 
 export function TranslationModal({
     isReceivedLanguage,
     setIsReceivedLanguage,
-
     receivedLanguage,
     setReceivedLanguage,
-
     setIsImprovingText,
     isImprovingText,
-
     saveConfiguration
 }) {
-
     const { translationOptions } = useHomeContext();
-    const [modalVisible, setModalVisible] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const validateAndSave = () => {
-        if (isReceivedLanguage && (!receivedLanguage)) {
-            setErrorMessage('Selecione um idioma para traduzir antes de ativar a tradução.');
-            message.error('Selecione um idioma para traduzir antes de ativar a tradução.');
+        if (isReceivedLanguage && !receivedLanguage) {
+            const error = 'Selecione um idioma para traduzir antes de ativar a tradução.';
+            setErrorMessage(error);
+            message.error(error);
         } else {
             setErrorMessage('');
             setModalVisible(false);
@@ -47,9 +41,7 @@ export function TranslationModal({
                 <div className="translation-options-container">
                     <Select
                         value={receivedLanguage || 'pt'}
-                        onChange={(value, option: any) => {
-                            setReceivedLanguage(option.children);
-                        }}
+                        onChange={(value, option: any) => setReceivedLanguage(option.children)}
                         style={{ width: '100%' }}
                         showSearch
                         filterOption={(input, option: any) =>
@@ -76,9 +68,7 @@ export function TranslationModal({
             itemClassName: 'text-improvement-item',
             info: 'Ative para melhorar o texto das mensagens recebidas. Exemplo: Correção ortográfica, correção gramatical.',
             description: (
-                <>
-                    <Switch checked={isImprovingText} onChange={setIsImprovingText} />
-                </>
+                <Switch checked={isImprovingText} onChange={setIsImprovingText} />
             )
         }
     ];
@@ -109,7 +99,7 @@ export function TranslationModal({
                         type="primary"
                         onClick={validateAndSave}
                         className="translation-button-save"
-                        disabled={isReceivedLanguage && (!receivedLanguage)}
+                        disabled={isReceivedLanguage && !receivedLanguage}
                     >
                         Salvar
                     </Button>
@@ -121,11 +111,16 @@ export function TranslationModal({
                     dataSource={modalOptions}
                     renderItem={item => (
                         <List.Item className={item.className}>
-                            <List.Item.Meta className={item.itemClassName}
-                                title={<div style={{ display: 'flex', gap: '10px' }}>
-                                    {item.title}
-                                    <Tooltip title={item.info}><QuestionCircleOutlined /></Tooltip>
-                                </div>}
+                            <List.Item.Meta
+                                className={item.itemClassName}
+                                title={
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        {item.title}
+                                        <Tooltip title={item.info}>
+                                            <QuestionCircleOutlined />
+                                        </Tooltip>
+                                    </div>
+                                }
                                 description={item.description}
                             />
                         </List.Item>

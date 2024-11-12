@@ -1,9 +1,8 @@
-import React from 'react';
-import { Avatar, Modal } from "antd";
 import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Modal } from "antd";
 
-import './ProfileModal.css';
 import { formatDateForSeparator } from '../../../../../../utils/functions/dateUtils';
+import './ProfileModal.css';
 
 export function ProfileModal({ user, isModalVisible, handleCancel, userInfo }: any) {
 

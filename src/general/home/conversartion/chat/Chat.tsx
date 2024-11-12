@@ -16,13 +16,36 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
     const { request } = useRequest();
     const { selectedConversation, stompClient, conversations, translationOptions } = useHomeContext();
 
-    const configUser = selectedConversation.configsUser;
-
     const [combinedMessages, setCombinedMessages] = useState<any[]>([]);
     const [message, setMessage] = useState('');
     const [isReceivedLanguage, setIsReceivedLanguage] = useState<boolean>(false);
     const [isImprovingText, setIsImprovingText] = useState<boolean>(false);
-    const [receivedLanguage, setReceivedLanguage] = React.useState<any>(buildDefaultValueReceivedLanguage());
+    const [receivedLanguage, setReceivedLanguage] = useState<string>(buildDefaultValueReceivedLanguage());
+
+    useEffect(() => {
+        if (selectedConversation) {
+            setCombinedMessages(selectedConversation.messages);
+            if (selectedConversation.isNewConversation) return;
+
+            const userConfig = selectedConversation.configsUser?.[user.id];
+            if (userConfig) {
+                setIsImprovingText(userConfig.isImprovingText);
+                setIsReceivedLanguage(userConfig.isReceivingTranslation);
+            }
+        }
+    }, [selectedConversation, conversations]);
+
+    useEffect(() => {
+        if (translationOptions.length > 0) {
+            const userConfig = selectedConversation.configsUser?.[user.id];
+            if (userConfig) {
+                const translationOption = translationOptions.find(option => option.name === userConfig.receivingTranslation);
+                setReceivedLanguage(translationOption?.code || 'pt');
+            } else {
+                setReceivedLanguage('pt');
+            }
+        }
+    }, [translationOptions]);
 
     const handleSend = () => {
         if (message.trim()) {
@@ -37,31 +60,21 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
                 }
             };
 
-            stompClient.send('/app/chat/' + user.id, {}, JSON.stringify(messageRequest));
+            stompClient.send(`/app/chat/${user.id}`, {}, JSON.stringify(messageRequest));
             setMessage('');
         }
     };
 
-
     function buildDefaultValueReceivedLanguage() {
-        if (configUser) {
-            const userId = user.id;
-            const userConfig = selectedConversation.configsUser[userId];
-            
-            if (userConfig) {
-                const receivingTranslation = configUser[userId]?.receivingTranslation;
-                const translationOption = translationOptions.find(option => option.name === receivingTranslation);
-                
-                return translationOption?.code || 'pt';
-            } else {
-                return 'pt';
-            }
-        } else {
-            return 'pt';
-        }        
-    }
+        const userConfig = selectedConversation.configsUser?.[user.id];
+        if (userConfig) {
+            const translationOption = translationOptions.find(option => option.name === userConfig.receivingTranslation);
+            return translationOption?.code || 'pt';
+        }
+        return 'pt';
+    };
 
-    function saveConfiguration() {
+    const saveConfiguration = () => {
         const data = {
             userId: user?.id,
             conversationId: selectedConversation?.id,
@@ -83,34 +96,7 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
                 Notification({ message: 'Erro', description: error, placement: 'top', type: 'error' });
             }
         });
-    }
-
-    useEffect(() => {
-        if (selectedConversation) {
-            setCombinedMessages(selectedConversation.messages);
-            if (selectedConversation.isNewConversation) {
-                return;
-            }
-
-            if (selectedConversation.configsUser) {
-                const userConfig = selectedConversation.configsUser[user.id];
-                if (userConfig) {
-                    setIsImprovingText(userConfig.isImprovingText);
-                    setIsReceivedLanguage(userConfig.isReceivingTranslation);
-                }
-            }
-        }
-    }, [selectedConversation, conversations]);
-
-    useEffect(() => {
-        if (translationOptions.length > 0) {
-            if (configUser && configUser[user.id]) {
-                setReceivedLanguage(translationOptions.filter(option => option.name === configUser[user.id].receivingTranslation)[0]?.code || 'pt');
-            } else {
-                setReceivedLanguage('pt');
-            }
-        }
-    }, [translationOptions]);
+    };
 
     return (
         <div className="chat-container">
@@ -136,16 +122,12 @@ export function Chat({ setScrollPage, scrollPage, loading, setLoading }: any) {
                     message={message}
                     setMessage={setMessage}
                     handleSend={handleSend}
-
                     receivedLanguage={receivedLanguage}
                     setReceivedLanguage={setReceivedLanguage}
-
                     isReceivedLanguage={isReceivedLanguage}
                     setIsReceivedLanguage={setIsReceivedLanguage}
-
                     isImprovingText={isImprovingText}
                     setIsImprovingText={setIsImprovingText}
-
                     saveConfiguration={saveConfiguration}
                 />
             </div>

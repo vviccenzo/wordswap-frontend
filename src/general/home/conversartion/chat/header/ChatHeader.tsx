@@ -1,10 +1,10 @@
+import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Typography } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { byteArrayToDataUrl } from '../../../../../utils/functions/byteArrayToDataUrl';
 import { ChatHeaderProps } from '../IChat';
 import './ChatHeader.css';
 import { ProfileModal } from './ProfileModal/ProfileModal';
-import { UserOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 

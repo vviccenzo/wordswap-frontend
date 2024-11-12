@@ -11,19 +11,11 @@ import './ChatFooter.css';
 
 export function ChatFooter({
     message, setMessage, handleSend,
-
-    receivedLanguage,
-    setReceivedLanguage,
-
-    isReceivedLanguage,
-    setIsReceivedLanguage,
-
-    isImprovingText,
-    setIsImprovingText,
-
+    receivedLanguage, setReceivedLanguage,
+    isReceivedLanguage, setIsReceivedLanguage,
+    isImprovingText, setIsImprovingText,
     saveConfiguration
 }) {
-
     const { request } = useRequest();
     const { user } = useUser();
     const { selectedConversation } = useHomeContext();
@@ -35,7 +27,6 @@ export function ChatFooter({
     const handleImageUpload = (file) => {
         setImageFile(file);
         setIsModalVisible(true);
-
         return false;
     };
 
@@ -47,7 +38,7 @@ export function ChatFooter({
 
         const reader = new FileReader();
         reader.onloadend = () => {
-            handleSendRequestForImage(reader);
+            sendImageMessage(reader);
             setIsModalVisible(false);
             setImageFile(null);
             setModalMessage('');
@@ -55,12 +46,12 @@ export function ChatFooter({
         reader.readAsArrayBuffer(imageFile);
     };
 
-    const handleSendRequestForImage = (reader) => {
+    const sendImageMessage = (reader) => {
         if (imageFile) {
             reader.onloadend = () => {
-                const base64data = reader.result.split(',')[1]; // remove o prefixo do tipo
+                const base64data = reader.result.split(',')[1];
                 const messageRequest = {
-                    imageContent: base64data, // aqui é a string base64
+                    imageContent: base64data,
                     imageFileName: imageFile.name,
                     senderId: user?.id,
                     receiverId: user.id === selectedConversation?.receiverId ? selectedConversation?.senderId : selectedConversation?.receiverId,
@@ -72,13 +63,13 @@ export function ChatFooter({
                     method: HttpMethods.POST,
                     url: '/message/send-image',
                     data: messageRequest,
-                    successCallback: (data) => {
+                    successCallback: () => {
                         antdMessage.success('Mensagem enviada com sucesso!');
                     },
                     errorCallback: (error) => {
                         antdMessage.error(error);
                     }
-                })
+                });
             };
             reader.readAsDataURL(imageFile);
         } else {
@@ -91,13 +82,10 @@ export function ChatFooter({
             <TranslationModal
                 isReceivedLanguage={isReceivedLanguage}
                 setIsReceivedLanguage={setIsReceivedLanguage}
-
                 receivedLanguage={receivedLanguage}
                 setReceivedLanguage={setReceivedLanguage}
-
                 isImprovingText={isImprovingText}
                 setIsImprovingText={setIsImprovingText}
-
                 saveConfiguration={saveConfiguration}
             />
             <Input
@@ -109,7 +97,6 @@ export function ChatFooter({
             <Button icon={<SendOutlined />} onClick={handleSend}>
                 Enviar
             </Button>
-
             <Upload
                 beforeUpload={handleImageUpload}
                 showUploadList={false}
@@ -118,7 +105,6 @@ export function ChatFooter({
                     Enviar Imagem
                 </Button>
             </Upload>
-
             <Modal
                 visible={isModalVisible}
                 title="Pré-visualização da Imagem"
