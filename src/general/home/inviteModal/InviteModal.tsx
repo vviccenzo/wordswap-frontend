@@ -1,10 +1,12 @@
 import { UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Checkbox, Image, Input, List, message, Modal, Steps, Upload } from 'antd';
 import { useState } from 'react';
+import { useUser } from '../../../context/UserContext';
 import { WebSocketEventType } from '../../../utils/enum/WebSocketEventType';
 import { byteArrayToDataUrl } from '../../../utils/functions/byteArrayToDataUrl';
 import { useHomeContext } from '../context/HomeContext';
-import { useUser } from '../../../context/UserContext';
+
+import './InviteModal.css';
 
 const { Step } = Steps;
 
@@ -60,7 +62,7 @@ export default function InviteModal({ visible, onClose }) {
         );
     };
 
-    const handleUploadChange = ({ file }: any) => {
+    const handleUploadChange = ({ file, fileList }: any) => {
         if (file && file.originFileObj) {
             const isValidFile = validateFile(file.originFileObj);
             if (!isValidFile) {
@@ -68,7 +70,11 @@ export default function InviteModal({ visible, onClose }) {
                 return;
             }
 
-            setFileList([file]);
+            if(fileList.length > 1) {
+                fileList.shift();
+            }
+
+            setFileList(fileList);
 
             const reader = new FileReader();
             reader.onloadend = () => setGroupPhoto(reader.result as string);
@@ -89,10 +95,12 @@ export default function InviteModal({ visible, onClose }) {
             return true;
         },
         onChange: handleUploadChange,
-        fileList,
-        onRemove: () => {
-            setFileList([]);
-            setGroupPhoto(null);
+        onRemove: (file: any) => {
+            const newFileList = fileList.filter((item: any) => item.uid !== file.uid);
+            setFileList(newFileList);
+            if (newFileList.length === 0) {
+                setGroupPhoto(null);
+            }
         },
         onDrop: () => {
             setFileList([]);
@@ -102,7 +110,7 @@ export default function InviteModal({ visible, onClose }) {
 
     const validateFile = (file: File) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        const isLt2M = file.size / 2048 / 2048 < 4;
+        const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJpgOrPng) message.error('Você só pode enviar arquivos JPG/PNG!');
         if (!isLt2M) message.error('A imagem deve ser menor que 2MB!');
@@ -112,6 +120,7 @@ export default function InviteModal({ visible, onClose }) {
 
     return (
         <Modal
+            className="InviteModal"
             title="Convide Amigos para o Chat em Grupo"
             visible={visible}
             onCancel={onClose}
@@ -127,17 +136,27 @@ export default function InviteModal({ visible, onClose }) {
 
             {currentStep === 0 && (
                 <div style={{ marginBottom: '20px' }} className="avatar-container">
-                    {fileList.length > 0 && (
-                        <div className="avatar-preview">
-                            <Image
-                                src={URL.createObjectURL(fileList[0].originFileObj)}
-                                style={{ borderRadius: '50%', width: '100px', height: '100px', objectFit: 'cover' }}
-                            />
-                        </div>
+                    {fileList.length > 0 ? (
+                        <>
+                            <div className="avatar-preview">
+                                <Image
+                                    src={URL.createObjectURL(fileList[0].originFileObj)}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
+                            </div>
+                            <div>
+                                <Upload {...uploadProps}>
+                                    <Button icon={<UploadOutlined />}>Alterar Foto</Button>
+                                </Upload>
+                            </div>
+                        </>
+                    ) : (
+                        <Upload {...uploadProps}>
+                            <div className="avatar-placeholder">
+                                <UploadOutlined style={{ fontSize: '40px', color: '#6c5ce7', cursor: 'pointer' }} />
+                            </div>
+                        </Upload>
                     )}
-                    <Upload {...uploadProps} className="register-upload">
-                        <Button icon={<UploadOutlined />} className="register-btn-default">Carregar Avatar</Button>
-                    </Upload>
                     <Input
                         placeholder="Nome do grupo"
                         value={groupName}
@@ -169,6 +188,7 @@ export default function InviteModal({ visible, onClose }) {
                             }}
                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                            onClick={() => handleCheckboxChange(friend.id, !selectedFriends.includes(friend.id))}
                         >
                             <Checkbox
                                 checked={selectedFriends.includes(friend.id)}

@@ -1,5 +1,5 @@
-import { Button, Divider, Layout, List, Space, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { Divider, Layout, List, Space, Typography } from 'antd';
+import { useEffect } from 'react';
 
 import { useUser } from '../../context/UserContext';
 import { useRequest } from '../../hook/useRequest';
@@ -12,7 +12,6 @@ import { ConversationList } from './conversartion/ConversationList';
 import { Profile } from './profile/Profile';
 
 import './Home.css';
-import InviteModal from './groupModal/InviteModal';
 
 const { Sider, Content } = Layout;
 const { Title, Text } = Typography;

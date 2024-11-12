@@ -1,0 +1,37 @@
+.InviteModal .ant-btn {
+    background-color: #6c5ce7 !important;
+    border-color: #6c5ce7 !important;
+    color: #fff !important;
+}
+
+.InviteModal .ant-btn:hover,
+.InviteModal .ant-btn:focus {
+    background-color: #5c4dd1 !important;
+    border-color: #5c4dd1 !important;
+}
+
+.InviteModal .ant-steps-item-process .ant-steps-item-icon {
+    background-color: #6c5ce7 !important;
+    border-color: #6c5ce7 !important;
+}
+
+.InviteModal .ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #6c5ce7 !important;
+    border-color: #6c5ce7 !important;
+}
+
+.InviteModal .ant-steps-item-finish .ant-steps-finish-icon {
+    color: white !important;
+}
+
+.avatar-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    font-size: 48px;
+    cursor: pointer;
+}

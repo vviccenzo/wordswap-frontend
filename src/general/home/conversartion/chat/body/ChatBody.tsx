@@ -1,42 +1,49 @@
+import { Spin } from 'antd';
 import VirtualList, { ListRef } from 'rc-virtual-list';
 import React, { useEffect, useRef, useState } from 'react';
-
-import { Spin } from 'antd';
 import { useUser } from '../../../../../context/UserContext';
 import { useRequest } from '../../../../../hook/useRequest';
+import { WebSocketEventType } from '../../../../../utils/enum/WebSocketEventType';
+import { formatDateForSeparator, shouldShowDateSeparator } from '../../../../../utils/functions/dateUtils';
+import formatTimestamp from '../../../../../utils/functions/formatTimestamp';
 import { HttpMethods } from '../../../../../utils/IRequest';
+import mapConversations from '../../../../../utils/mapper/conversationMapper';
 import { useHomeContext } from '../../../context/HomeContext';
 import { Message } from './../../message/Message';
 import { ChatBodyProps, GetMessagePayload, Message as MessageType } from './../IChat';
 
-import { formatDateForSeparator, shouldShowDateSeparator } from '../../../../../utils/functions/dateUtils';
-import formatTimestamp from '../../../../../utils/functions/formatTimestamp';
-import mapConversations from '../../../../../utils/mapper/conversationMapper';
-
 import './ChatBody.css';
-import { WebSocketEventType } from '../../../../../utils/enum/WebSocketEventType';
 
-let previousDate: any = null;
 const MESSAGES_PER_PAGE = 10;
+let previousDate: any = null;
 
 export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
     const { user } = useUser();
     const { request } = useRequest();
     const { loading, setLoading, setScrollPage, scrollPage, handleConversationSelected, totalMessages, stompClient } = useHomeContext();
-
     const [containerHeight, setContainerHeight] = useState<number>(1000);
-
     const listRef = useRef<ListRef>(null);
+
+    useEffect(() => {
+        const updateHeight = () => setContainerHeight(window.innerHeight * 0.8);
+        window.addEventListener('resize', updateHeight);
+        updateHeight();
+        return () => window.removeEventListener('resize', updateHeight);
+    }, []);
+
+    useEffect(() => {
+        markMessagesAsViewed();
+    }, [messages, user?.id]);
 
     const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
         if (e.currentTarget.scrollTop === 0 && !loading && messages.length < totalMessages) {
             setLoading(true);
             setScrollPage(scrollPage + 1);
-            getMessages();
+            fetchMessages();
         }
     };
 
-    function getMessages() {
+    const fetchMessages = () => {
         const data: GetMessagePayload = {
             userId: user?.id,
             conversationId: selectedConversation?.id,
@@ -49,18 +56,9 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
             url: '/message/get-messages',
             data: data,
             successCallback: (data) => {
-                const conv = mapConversations(data, user);
-
-                conv.messages = [
-                    ...selectedConversation.messages,
-                    ...conv.messages.filter(newMessage =>
-                        !selectedConversation.messages.some(oldMessage => oldMessage.id === newMessage.id)
-                    )
-                ];
-
-                conv.messages.sort((a, b) => new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime());
-
-                handleConversationSelected(conv);
+                const updatedConversation = mapConversations(data, user);
+                updatedConversation.messages = mergeMessages(selectedConversation.messages, updatedConversation.messages);
+                handleConversationSelected(updatedConversation);
                 setLoading(false);
             },
             errorCallback: (error) => {
@@ -68,31 +66,28 @@ export function ChatBody({ messages, selectedConversation }: ChatBodyProps) {
                 setLoading(false);
             }
         });
-    }
+    };
 
-    useEffect(() => {
-        const updateHeight = () => setContainerHeight(window.innerHeight * 0.8);
-        window.addEventListener('resize', updateHeight);
-        updateHeight();
+    const mergeMessages = (oldMessages, newMessages) => {
+        const mergedMessages = [
+            ...oldMessages,
+            ...newMessages.filter(newMessage => !oldMessages.some(oldMessage => oldMessage.id === newMessage.id))
+        ];
+        return mergedMessages.sort((a, b) => new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime());
+    };
 
-        return () => window.removeEventListener('resize', updateHeight);
-    }, []);
-
-    useEffect(() => {
+    const markMessagesAsViewed = () => {
         const unviewedMessages = messages.filter(message => message.senderId !== user?.id && !message.viewed);
         const unviewedMessageIds = unviewedMessages.map(message => message.id);
 
         if (unviewedMessageIds.length > 0) {
             const groupData = {
                 action: WebSocketEventType.VIEW_MESSAGE,
-                messageViewDTO: {
-                    messageIds: unviewedMessageIds
-                },
+                messageViewDTO: { messageIds: unviewedMessageIds },
             };
-    
             stompClient.send(`/app/chat/${user?.id}`, {}, JSON.stringify(groupData));
         }
-    }, [messages, user?.id, request]);
+    };
 
     return (
         <div className="chat-body">
